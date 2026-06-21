@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학급약속 연구소 - 모둠 토의 기반 학급규칙 수립 키트</title>
+    <title>학급약속 연구소 - 학년별 학급규칙 수립 프로젝트 키트</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
@@ -52,7 +52,7 @@
             <span class="text-3xl">⚖️</span>
             <div>
                 <h1 class="text-2xl font-black tracking-tight">학급약속 연구소</h1>
-                <p class="text-indigo-100 text-sm mt-1">모둠 토의 기반 학급규칙 수립 키트</p>
+                <p class="text-indigo-100 text-sm mt-1">학년별 학급규칙 수립 프로젝트 키트</p>
             </div>
         </div>
         <div class="flex flex-wrap items-center gap-2 text-sm">
@@ -66,13 +66,17 @@
     <aside class="w-full md:w-80 bg-white rounded-xl shadow-sm p-5 flex flex-col space-y-3 h-fit sticky top-4">
         <p class="text-sm font-semibold text-slate-400 px-3 uppercase tracking-wider mb-1">학급규칙 수립 흐름</p>
         <button onclick="switchTab('diagnosis')" id="btn-diagnosis" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-bold bg-indigo-50 text-indigo-700 flex items-center space-x-3"><span>🧭</span><span>1. 우리 반 진단</span></button>
-        <button onclick="switchTab('student')" id="btn-student" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>👥</span><span>2. 모둠 의견 정리</span></button>
-        <button onclick="switchTab('values')" id="btn-values" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>💬</span><span>3. 가치 집계·의견 분석</span></button>
-        <button onclick="switchTab('rules')" id="btn-rules" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🧩</span><span>4. 약속 카드 설계</span></button>
-        <button onclick="switchTab('agreement')" id="btn-agreement" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🗳️</span><span>5. 토론·투표·합의</span></button>
-        <button onclick="switchTab('lesson')" id="btn-lesson" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🧑‍🏫</span><span>6. 80분 수업안</span></button>
-        <button onclick="switchTab('constitution')" id="btn-constitution" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>📜</span><span>7. 약속/헌법 출력</span></button>
-        <button onclick="switchTab('guidance')" id="btn-guidance" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🛡️</span><span>8. 생활지도 연결</span></button>
+        <button onclick="switchTab('mode')" id="btn-mode" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🎒</span><span>2. 학년별 프로젝트 모드</span></button>
+        <button onclick="switchTab('student')" id="btn-student" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>👥</span><span>3. 모둠 의견 정리</span></button>
+        <button onclick="switchTab('values')" id="btn-values" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>💬</span><span>4. 가치 집계·의견 분석</span></button>
+        <button onclick="switchTab('rules')" id="btn-rules" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🧩</span><span>5. 약속 카드 설계</span></button>
+        <button onclick="switchTab('agreement')" id="btn-agreement" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🗳️</span><span>6. 토론·투표·합의</span></button>
+        <button onclick="switchTab('situation')" id="btn-situation" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🎭</span><span>7. 상황 카드·발문</span></button>
+        <button onclick="switchTab('lesson')" id="btn-lesson" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🧑‍🏫</span><span>8. 80분 수업안</span></button>
+        <button onclick="switchTab('constitution')" id="btn-constitution" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>📜</span><span>9. 약속/헌법 출력</span></button>
+        <button onclick="switchTab('checkup')" id="btn-checkup" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🔎</span><span>10. 중간점검</span></button>
+        <button onclick="switchTab('parent')" id="btn-parent" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>👨‍👩‍👧</span><span>11. 학부모 안내문</span></button>
+        <button onclick="switchTab('guidance')" id="btn-guidance" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3"><span>🛡️</span><span>12. 생활지도 연결</span></button>
         <div class="mt-4 p-4 bg-slate-50 rounded-xl border text-sm text-slate-600 leading-relaxed">
             <b class="text-slate-800">핵심 원칙</b><br>
             AI 호출 없이 DB화된 학년·가치·장면별 추천 자료로 학생 참여형 규칙 수립 과정을 지원합니다.
@@ -110,6 +114,19 @@
                         <div id="diagnosis-summary" class="space-y-3 text-sm"></div>
                         <button onclick="applyRecommendedRules()" class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-3 font-bold">추천 약속 초안 적용</button>
                     </div>
+                </div>
+            </section>
+
+
+            <section id="tab-mode" class="tab-content hidden">
+                <div class="border-b pb-5 mb-6">
+                    <h2 class="text-2xl font-black text-slate-900">🎒 학년별 프로젝트 모드</h2>
+                    <p class="text-base text-slate-500 mt-2">1~2학년, 3~4학년, 5~6학년은 규칙 수립 방식이 다릅니다. 학년군에 맞는 언어·활동·출력물을 자동으로 안내합니다.</p>
+                </div>
+                <div id="grade-mode-cards" class="grid grid-cols-1 lg:grid-cols-3 gap-5"></div>
+                <div class="mt-6 bg-indigo-50 border border-indigo-100 rounded-xl p-5">
+                    <h3 class="font-black text-indigo-900 mb-3">현재 선택된 모드 안내</h3>
+                    <div id="current-mode-guide" class="text-sm text-indigo-900 leading-7"></div>
                 </div>
             </section>
 
@@ -218,7 +235,39 @@
                 </div>
             </section>
 
-            <section id="tab-lesson" class="tab-content hidden">
+            
+
+<section id="tab-situation" class="tab-content hidden">
+<div class="border-b pb-5 mb-6 flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4">
+<div>
+<h2 class="text-2xl font-black text-slate-900">🎭 상황 카드 & 교사용 발문 라이브러리</h2>
+<p class="text-base text-slate-500 mt-2">상황을 먼저 보고 어떤 가치와 약속이 필요한지 찾는 수업용 DB입니다. AI 없이 학년군·가치·장면별 카드가 필터링됩니다.</p>
+</div>
+<button onclick="printComponent('situation-print-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-bold">🖨️ 상황카드 인쇄</button>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+<div class="xl:col-span-4 space-y-4">
+<div class="bg-slate-50 border rounded-xl p-5">
+<h3 class="font-bold text-lg mb-3">필터</h3>
+<label class="block text-sm font-bold text-slate-700 mb-1">학년군</label>
+<select id="situation-band-filter" onchange="renderSituationCards()" class="w-full border rounded-lg px-3 py-2 mb-3"><option value="auto">현재 학년에 맞춤</option><option value="low">1~2학년</option><option value="mid">3~4학년</option><option value="high">5~6학년</option><option value="all">전체</option></select>
+<label class="block text-sm font-bold text-slate-700 mb-1">가치</label>
+<select id="situation-value-filter" onchange="renderSituationCards()" class="w-full border rounded-lg px-3 py-2 mb-3"><option value="all">전체 가치</option><option>존중</option><option>안전</option><option>배움</option><option>책임</option><option>배려</option><option>자치</option></select>
+<label class="block text-sm font-bold text-slate-700 mb-1">검색</label>
+<input id="situation-search" oninput="renderSituationCards()" class="w-full border rounded-lg px-3 py-2" placeholder="예: 복도, 발표, SNS">
+</div>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 text-sm text-amber-900 leading-7">
+<b>수업 활용법</b><br>① 상황카드 제시 → ② 누가 불편한지 찾기 → ③ 필요한 가치 선택 → ④ 우리 반 약속 문장으로 바꾸기 → ⑤ 회복 책임 정하기
+</div>
+</div>
+<div class="xl:col-span-8">
+<div id="situation-card-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[620px] overflow-y-auto pr-2"></div>
+</div>
+</div>
+<div id="situation-print-view" class="hidden"></div>
+</section>
+
+<section id="tab-lesson" class="tab-content hidden">
                 <div class="border-b pb-5 mb-6 flex justify-between items-center">
                     <div><h2 class="text-2xl font-black text-slate-900">🧑‍🏫 80분 학급규칙 수립 수업안</h2><p class="text-base text-slate-500 mt-2">선택한 학년과 약속 후보를 기준으로 바로 수업 가능한 2차시 진행안을 만듭니다.</p></div>
                     <button onclick="printComponent('lesson-plan-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-bold">🖨️ 수업안 인쇄</button>
@@ -238,7 +287,46 @@
                 <div class="bg-slate-200 p-6 rounded-xl flex justify-center"><div id="constitution-view" class="bg-white shadow-xl border-4 border-indigo-600 p-8 w-[620px] min-h-[820px]"></div></div>
             </section>
 
-            <section id="tab-guidance" class="tab-content hidden">
+            
+
+<section id="tab-checkup" class="tab-content hidden">
+<div class="border-b pb-5 mb-6 flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4">
+<div>
+<h2 class="text-2xl font-black text-slate-900">🔎 학급 약속 중간점검</h2>
+<p class="text-base text-slate-500 mt-2">3월에 만든 약속을 1학기·2학기 중간에 다시 점검하고, 수정이 필요한 약속을 표시합니다.</p>
+</div>
+<button onclick="printComponent('checkup-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-bold">🖨️ 점검지 인쇄</button>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+<div class="xl:col-span-4 space-y-4">
+<div class="bg-slate-50 border rounded-xl p-5">
+<h3 class="font-bold text-lg mb-3">점검 시기</h3>
+<select id="checkup-term" onchange="renderCheckup()" class="w-full border rounded-lg px-3 py-2"><option value="1학기 중간점검">1학기 중간점검</option><option value="2학기 중간점검">2학기 중간점검</option><option value="학기말 돌아보기">학기말 돌아보기</option></select>
+</div>
+<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 text-sm text-emerald-900 leading-7"><b>운영 방식</b><br>학생이 손가락 투표·스티커로 실천 정도를 표시하고, 교사가 결과를 숫자로 입력합니다. 서버나 DB가 필요 없습니다.</div>
+</div>
+<div class="xl:col-span-8"><div id="checkup-view" class="bg-white border rounded-xl p-6"></div></div>
+</div>
+</section>
+
+<section id="tab-parent" class="tab-content hidden">
+<div class="border-b pb-5 mb-6 flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4">
+<div>
+<h2 class="text-2xl font-black text-slate-900">👨‍👩‍👧 학부모 안내문 자동 생성</h2>
+<p class="text-base text-slate-500 mt-2">선택·합의된 약속과 회복 책임을 자동 반영해 가정 안내문 초안을 만듭니다.</p>
+</div>
+<button onclick="printComponent('parent-letter-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-bold">🖨️ 안내문 인쇄</button>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+<div class="xl:col-span-4 space-y-4">
+<div class="bg-slate-50 border rounded-xl p-5 text-sm leading-7"><b>안내문 구성</b><br>학생 참여 과정, 핵심 가치, 최종 약속, 회복 책임, 가정 연계 부탁 문구가 자동으로 들어갑니다.</div>
+<button onclick="renderParentLetter()" class="w-full bg-slate-800 text-white rounded-lg py-3 font-bold">안내문 새로고침</button>
+</div>
+<div class="xl:col-span-8"><div id="parent-letter-view" class="bg-white border rounded-xl p-8 min-h-[620px]"></div></div>
+</div>
+</section>
+
+<section id="tab-guidance" class="tab-content hidden">
                 <div class="border-b pb-5 mb-6"><h2 class="text-2xl font-black text-slate-900">🛡️ 생활지도 연결</h2><p class="text-base text-slate-500 mt-2">학급 약속을 실제 생활지도 발화, 회복 질문, 기록 문장으로 연결합니다.</p></div>
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                     <div class="xl:col-span-5 space-y-4">
@@ -479,6 +567,100 @@ function printComponent(divId){
         setTimeout(()=>{ printArea.classList.add('hidden'); }, 300);
     }, 50);
 }
+
+
+// ===== v32 확장 기능: 학년별 모드·상황카드 DB·발문·중간점검·학부모 안내문 =====
+const gradeModeDB = {"low": {"title": "1~2학년: 좋은 교실 약속 만들기", "label": "우리 반 약속", "focus": "그림 카드·짧은 문장·행동 따라하기", "output": "그림 약속 포스터, 색칠 활동지, 손가락 약속"}, "mid": {"title": "3~4학년: 토의로 우리 반 약속 만들기", "label": "우리 반 약속", "focus": "상황 카드·모둠 토의·가치 TOP3", "output": "모둠 기록지, 약속 포스터, 실천 다짐"}, "high": {"title": "5~6학년: 학급헌법 제정 프로젝트", "label": "학급헌법", "focus": "자치·책임·디지털 시민성·조항형 문장", "output": "학급헌법, 서명지, 학부모 안내문"}};
+const situationCardsDB = [{"id": "sc01", "band": "low", "value": "존중", "scene": "친구 발표 중 끼어들기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구 발표 중 끼어들기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc02", "band": "mid", "value": "존중", "scene": "별명으로 친구 부르기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "별명으로 친구 부르기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc03", "band": "high", "value": "존중", "scene": "친구의 실수를 비웃기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구의 실수를 비웃기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc04", "band": "low", "value": "존중", "scene": "모둠에서 한 친구 의견만 무시하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "모둠에서 한 친구 의견만 무시하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc05", "band": "mid", "value": "존중", "scene": "친구 외모를 장난처럼 말하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구 외모를 장난처럼 말하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc06", "band": "high", "value": "존중", "scene": "줄을 서며 앞 친구를 밀치며 재촉하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "줄을 서며 앞 친구를 밀치며 재촉하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc07", "band": "low", "value": "존중", "scene": "쉬는 시간에 혼자 있는 친구를 놀리기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "쉬는 시간에 혼자 있는 친구를 놀리기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc08", "band": "mid", "value": "존중", "scene": "친구 물건을 허락 없이 만지기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구 물건을 허락 없이 만지기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc09", "band": "high", "value": "존중", "scene": "급식 시간에 친구 식습관을 놀리기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "급식 시간에 친구 식습관을 놀리기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc10", "band": "low", "value": "존중", "scene": "새로 온 친구에게 말을 걸지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "새로 온 친구에게 말을 걸지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc11", "band": "mid", "value": "존중", "scene": "상대가 싫다고 했는데 계속 장난하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "상대가 싫다고 했는데 계속 장난하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc12", "band": "high", "value": "존중", "scene": "친구 작품에 나쁜 댓글 달기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구 작품에 나쁜 댓글 달기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc13", "band": "low", "value": "안전", "scene": "복도에서 뛰다가 부딪히기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "복도에서 뛰다가 부딪히기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc14", "band": "mid", "value": "안전", "scene": "계단에서 장난치며 내려가기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "계단에서 장난치며 내려가기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc15", "band": "high", "value": "안전", "scene": "가위를 들고 장난하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "가위를 들고 장난하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc16", "band": "low", "value": "안전", "scene": "체육 시간 줄을 벗어나 뛰기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "체육 시간 줄을 벗어나 뛰기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc17", "band": "mid", "value": "안전", "scene": "교실 문을 세게 열고 닫기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "교실 문을 세게 열고 닫기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc18", "band": "high", "value": "안전", "scene": "의자 뒤로 젖히며 앉기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "의자 뒤로 젖히며 앉기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc19", "band": "low", "value": "안전", "scene": "급식실에서 뛰어가기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "급식실에서 뛰어가기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc20", "band": "mid", "value": "안전", "scene": "비 오는 날 미끄러운 곳에서 장난하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "비 오는 날 미끄러운 곳에서 장난하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc21", "band": "high", "value": "안전", "scene": "공을 교실 안에서 세게 던지기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "공을 교실 안에서 세게 던지기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc22", "band": "low", "value": "안전", "scene": "청소 도구로 칼싸움하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "청소 도구로 칼싸움하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc23", "band": "mid", "value": "안전", "scene": "실험 도구를 허락 없이 만지기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "실험 도구를 허락 없이 만지기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc24", "band": "high", "value": "안전", "scene": "창가에 기대어 장난하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "창가에 기대어 장난하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc25", "band": "low", "value": "배움", "scene": "수업 중 계속 딴 이야기하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "수업 중 계속 딴 이야기하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc26", "band": "mid", "value": "배움", "scene": "모둠 활동에서 역할을 하지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "모둠 활동에서 역할을 하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc27", "band": "high", "value": "배움", "scene": "발표자를 보지 않고 딴청 피우기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "발표자를 보지 않고 딴청 피우기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc28", "band": "low", "value": "배움", "scene": "과제 준비물을 자주 챙기지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "과제 준비물을 자주 챙기지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc29", "band": "mid", "value": "배움", "scene": "친구가 설명할 때 중간에 답을 말하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구가 설명할 때 중간에 답을 말하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc30", "band": "high", "value": "배움", "scene": "수업 시작 후 늦게 자리 앉기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "수업 시작 후 늦게 자리 앉기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc31", "band": "low", "value": "배움", "scene": "활동 안내를 듣지 않고 바로 시작하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "활동 안내를 듣지 않고 바로 시작하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc32", "band": "mid", "value": "배움", "scene": "모둠 결과를 한 사람에게만 맡기기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "모둠 결과를 한 사람에게만 맡기기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc33", "band": "high", "value": "배움", "scene": "질문이 있는데 말하지 않고 포기하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "질문이 있는데 말하지 않고 포기하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc34", "band": "low", "value": "배움", "scene": "정리 시간에도 계속 활동하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "정리 시간에도 계속 활동하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc35", "band": "mid", "value": "배움", "scene": "친구의 학습지를 베끼기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구의 학습지를 베끼기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc36", "band": "high", "value": "배움", "scene": "온라인 학습 중 다른 화면 보기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "온라인 학습 중 다른 화면 보기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc37", "band": "low", "value": "책임", "scene": "쓴 물건을 제자리에 두지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "쓴 물건을 제자리에 두지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc38", "band": "mid", "value": "책임", "scene": "공용 보드마카를 뚜껑 없이 두기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "공용 보드마카를 뚜껑 없이 두기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc39", "band": "high", "value": "책임", "scene": "1인 1역을 잊고 하지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "1인 1역을 잊고 하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc40", "band": "low", "value": "책임", "scene": "청소 시간에 숨어 있기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "청소 시간에 숨어 있기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc41", "band": "mid", "value": "책임", "scene": "사물함을 어지럽게 두기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "사물함을 어지럽게 두기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc42", "band": "high", "value": "책임", "scene": "학급 도서를 제자리에 꽂지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "학급 도서를 제자리에 꽂지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc43", "band": "low", "value": "책임", "scene": "분리수거를 아무 곳에 넣기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "분리수거를 아무 곳에 넣기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc44", "band": "mid", "value": "책임", "scene": "빌린 물건을 돌려주지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "빌린 물건을 돌려주지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc45", "band": "high", "value": "책임", "scene": "교실 불을 켜 둔 채 나가기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "교실 불을 켜 둔 채 나가기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc46", "band": "low", "value": "책임", "scene": "물을 흘리고 그냥 가기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "물을 흘리고 그냥 가기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc47", "band": "mid", "value": "책임", "scene": "모둠 준비물을 챙기지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "모둠 준비물을 챙기지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc48", "band": "high", "value": "책임", "scene": "학급 게시물을 함부로 떼기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "학급 게시물을 함부로 떼기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc49", "band": "low", "value": "배려", "scene": "힘든 친구를 보고도 모른 척하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "힘든 친구를 보고도 모른 척하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc50", "band": "mid", "value": "배려", "scene": "모둠에서 느린 친구를 재촉하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "모둠에서 느린 친구를 재촉하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc51", "band": "high", "value": "배려", "scene": "급식 양보가 필요한 상황에서 다투기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "급식 양보가 필요한 상황에서 다투기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc52", "band": "low", "value": "배려", "scene": "친구가 아플 때 장난치기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구가 아플 때 장난치기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc53", "band": "mid", "value": "배려", "scene": "새 친구에게 활동 방법을 알려주지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "새 친구에게 활동 방법을 알려주지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc54", "band": "high", "value": "배려", "scene": "발표가 어려운 친구를 놀리기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "발표가 어려운 친구를 놀리기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc55", "band": "low", "value": "배려", "scene": "게임에서 진 친구를 탓하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "게임에서 진 친구를 탓하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc56", "band": "mid", "value": "배려", "scene": "혼자 정리하는 친구를 도와주지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "혼자 정리하는 친구를 도와주지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc57", "band": "high", "value": "배려", "scene": "큰 소리로 말해 주변 친구를 힘들게 하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "큰 소리로 말해 주변 친구를 힘들게 하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc58", "band": "low", "value": "배려", "scene": "친구가 싫어하는 장난을 계속하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구가 싫어하는 장난을 계속하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc59", "band": "mid", "value": "배려", "scene": "차례를 양보해야 할 때 다투기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "차례를 양보해야 할 때 다투기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc60", "band": "high", "value": "배려", "scene": "친구의 감정을 묻지 않고 판단하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "친구의 감정을 묻지 않고 판단하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc61", "band": "low", "value": "자치", "scene": "학급회의에서 장난만 치기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "학급회의에서 장난만 치기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc62", "band": "mid", "value": "자치", "scene": "정해진 학급 약속을 일부러 무시하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "정해진 학급 약속을 일부러 무시하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc63", "band": "high", "value": "자치", "scene": "스마트기기로 수업과 다른 것 보기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "스마트기기로 수업과 다른 것 보기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc64", "band": "low", "value": "자치", "scene": "단체방에서 친구 이름을 함부로 언급하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "단체방에서 친구 이름을 함부로 언급하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc65", "band": "mid", "value": "자치", "scene": "투표 결과가 마음에 안 든다고 따르지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "투표 결과가 마음에 안 든다고 따르지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc66", "band": "high", "value": "자치", "scene": "학급 임원에게 모든 일을 미루기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "학급 임원에게 모든 일을 미루기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc67", "band": "low", "value": "자치", "scene": "규칙을 정했지만 지키지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "규칙을 정했지만 지키지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc68", "band": "mid", "value": "자치", "scene": "온라인 댓글에 비꼬는 말 쓰기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "온라인 댓글에 비꼬는 말 쓰기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc69", "band": "high", "value": "자치", "scene": "학급 행사를 준비할 때 역할을 회피하기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "학급 행사를 준비할 때 역할을 회피하지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc70", "band": "low", "value": "자치", "scene": "공동 결정 전 친구 의견을 듣지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "공동 결정 전 친구 의견을 듣지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc71", "band": "mid", "value": "자치", "scene": "휴대폰 사용 시간을 지키지 않기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "휴대폰 사용 시간을 지키지 않기 상황을 줄이기 위해 서로 약속을 지켜요."}, {"id": "sc72", "band": "high", "value": "자치", "scene": "학급 문제를 남 일처럼 여기기", "question": ["누가 불편하거나 위험했을까요?", "이 장면에 필요한 가치는 무엇일까요?", "우리 반 약속으로 바꾸면 어떤 문장이 좋을까요?", "실수했을 때 어떻게 회복하면 좋을까요?"], "promise": "학급 문제를 남 일처럼 여기기 상황을 줄이기 위해 서로 약속을 지켜요."}];
+const teacherQuestionDB = {"존중": ["친구가 존중받는다고 느끼는 순간은 언제일까요?", "말 때문에 속상했던 경험을 약속으로 바꾸면 무엇이 필요할까요?", "장난과 놀림은 어떻게 구별할 수 있을까요?"], "안전": ["안전한 교실은 어떤 행동으로 만들어질까요?", "작은 장난이 사고가 되는 순간은 언제일까요?", "친구의 몸과 마음을 지키는 약속은 무엇일까요?"], "배움": ["모두의 배울 권리를 지키려면 무엇이 필요할까요?", "수업 중 방해받았을 때 어떤 느낌일까요?", "좋은 모둠 활동을 위해 각자 지킬 일은 무엇일까요?"], "책임": ["공용 물건은 왜 함께 책임져야 할까요?", "내 역할을 하지 않으면 누가 어려워질까요?", "우리 반 공간을 아끼는 방법은 무엇일까요?"], "배려": ["친구가 힘들 때 알아차리는 방법은 무엇일까요?", "배려와 양보가 필요한 순간은 언제일까요?", "도움을 주고받는 교실은 어떤 모습일까요?"], "자치": ["우리가 정한 약속은 왜 우리가 지켜야 할까요?", "다수결 이후에도 소수 의견을 존중하려면?", "온라인 공간에서도 학급 약속이 필요한 이유는 무엇일까요?"]};
+
+function gradeBand(g=currentGrade){ return g<=2?'low':(g<=4?'mid':'high'); }
+function gradeBandLabel(b=gradeBand()){ return b==='low'?'1~2학년':(b==='mid'?'3~4학년':'5~6학년'); }
+function currentMode(){ return gradeModeDB[gradeBand()] || gradeModeDB.mid; }
+
+function renderGradeMode(){
+    const cards=document.getElementById('grade-mode-cards');
+    if(cards){
+        cards.innerHTML=Object.entries(gradeModeDB).map(([key,m])=>`<div class="border rounded-2xl p-5 card-hover ${key===gradeBand()?'bg-indigo-50 border-indigo-200':'bg-white'}"><div class="text-3xl mb-2">${key==='low'?'😊':key==='mid'?'💬':'⚖️'}</div><h3 class="font-black text-lg">${m.title}</h3><p class="text-sm text-slate-600 mt-2"><b>핵심 방식</b><br>${m.focus}</p><p class="text-sm text-slate-600 mt-2"><b>결과물</b><br>${m.output}</p><button onclick="setGrade(${key==='low'?1:key==='mid'?3:5})" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold">이 모드로 설정</button></div>`).join('');
+    }
+    const guide=document.getElementById('current-mode-guide');
+    if(guide){ const m=currentMode(); guide.innerHTML=`<b>${m.title}</b><br>명칭은 <b>${m.label}</b> 중심으로 표시됩니다. 수업은 ${m.focus} 방식으로 운영하고, 결과물은 ${m.output} 형태로 정리합니다.`; }
+}
+
+function renderSituationCards(){
+    const list=document.getElementById('situation-card-list');
+    if(!list) return;
+    const bandSelect=document.getElementById('situation-band-filter')?.value || 'auto';
+    const value=document.getElementById('situation-value-filter')?.value || 'all';
+    const q=(document.getElementById('situation-search')?.value || '').trim();
+    const band=bandSelect==='auto'?gradeBand():bandSelect;
+    let rows=situationCardsDB.filter(c=>(band==='all'||c.band===band) && (value==='all'||c.value===value) && (!q || (c.scene+c.value+c.promise).includes(q)));
+    list.innerHTML=rows.map(c=>`<div class="bg-white border rounded-2xl p-4 card-hover"><div class="flex justify-between items-start gap-3"><div><span class="inline-block text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full font-bold">${gradeBandLabel(c.band)} · ${c.value}</span><h3 class="font-black text-base mt-2">${c.scene}</h3><p class="text-xs text-slate-500 mt-2">추천 약속: ${c.promise}</p></div><button onclick="addSituationAsRule('${c.id}')" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">약속 추가</button></div><div class="mt-3 bg-slate-50 rounded-lg p-3 text-xs leading-6"><b>교사용 발문</b><br>${(teacherQuestionDB[c.value]||c.question).slice(0,3).map(x=>'• '+x).join('<br>')}</div></div>`).join('') || '<p class="text-sm text-slate-400">조건에 맞는 상황 카드가 없습니다.</p>';
+    const print=document.getElementById('situation-print-view');
+    if(print){ print.innerHTML=`<div class="print-page"><h2 class="text-2xl font-black mb-4">상황 카드 활동지</h2><p class="text-sm text-slate-500 mb-4">${gradeBandLabel(band==='all'?gradeBand():band)} · ${value==='all'?'전체 가치':value}</p><div class="grid grid-cols-1 gap-3">${rows.slice(0,12).map(c=>`<div class="border rounded-lg p-3"><b>${c.scene}</b><p class="text-xs mt-1">가치: ${c.value}</p><p class="text-xs mt-1">질문: ${(teacherQuestionDB[c.value]||c.question)[0]}</p><div class="border-b mt-4 h-6 text-slate-300 text-xs">우리 반 약속으로 바꾸기:</div></div>`).join('')}</div></div>`; }
+}
+
+function addSituationAsRule(id){
+    const c=situationCardsDB.find(x=>x.id===id); if(!c) return;
+    const category=c.value==='안전'?'safety':c.value==='배움'?'class':c.value==='책임'?'environment':c.value==='자치'?'digital':'relation';
+    selectedRules.push(ruleWithRestorative({id:'sit_'+id+'_'+Date.now(), value:c.value, category, text:c.promise, law:'학급 약속 및 학생생활규정 참고', why:`${c.scene} 상황을 예방하고 ${c.value}의 가치를 실천하기 위해 필요합니다.`}));
+    updateAll(); switchTab('rules');
+}
+
+function renderCheckup(){
+    const view=document.getElementById('checkup-view'); if(!view) return;
+    const term=document.getElementById('checkup-term')?.value || '1학기 중간점검';
+    const label=currentMode().label;
+    view.innerHTML=`<div class="print-page"><div class="text-center border-b pb-4 mb-5"><h3 class="text-xl font-black">${term}: ${label} 실천 돌아보기</h3><p class="text-xs text-slate-400 mt-1">____ 학년 ____ 반 / 이름: __________</p></div><div class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 text-xs leading-6 mb-4"><b>점검 방법</b><br>각 약속을 읽고 우리 반이 얼마나 잘 지켰는지 표시합니다. 개선이 필요한 약속은 문장을 바꾸거나 실천 방법을 다시 정합니다.</div><div class="space-y-3">${selectedRules.map((r,i)=>`<div class="border rounded-lg p-4"><b>${i+1}. ${r.text}</b><p class="text-xs text-slate-500 mt-1">가치: ${r.value} · 회복 책임: ${r.recovery}</p><div class="grid grid-cols-3 gap-2 text-xs mt-3"><div class="border rounded p-2 text-center">😀 잘 지킴<br>___명</div><div class="border rounded p-2 text-center">🙂 보통<br>___명</div><div class="border rounded p-2 text-center">😢 개선 필요<br>___명</div></div><div class="border-b h-8 mt-3 text-xs text-slate-300">수정 의견:</div></div>`).join('') || '<p class="text-sm text-slate-400 text-center py-8">선택된 약속이 없습니다.</p>'}</div><div class="mt-5 border rounded-lg p-4 text-xs"><b>우리 반 다음 실천 목표</b><div class="border-b h-8 mt-3 text-slate-300">이번 달에는 __________________________ 을/를 더 잘 실천하겠습니다.</div></div></div>`;
+}
+
+function renderParentLetter(){
+    const view=document.getElementById('parent-letter-view'); if(!view) return;
+    const approved=selectedRules.filter(r=>(votes[r.id]??Math.ceil((parseInt(document.getElementById('student-count')?.value||24))*2/3))>=Math.ceil((parseInt(document.getElementById('student-count')?.value||24))*2/3));
+    const rules=(approved.length?approved:selectedRules).slice(0,6);
+    const top=topValues(3);
+    const label=currentMode().label;
+    view.innerHTML=`<div class="print-page"><div class="text-center border-b pb-4 mb-5"><h3 class="text-2xl font-black">${label} 수립 안내</h3><p class="text-sm text-slate-500 mt-2">학생 참여형 학급규칙 수립 활동 결과 안내</p></div><div class="space-y-4 text-sm leading-7"><p>학부모님께, 안녕하십니까? 우리 반은 학생들이 함께 생활할 교실의 모습을 생각하고, 모둠 토의와 투표를 거쳐 ${label}을 만들었습니다.</p><div class="bg-slate-50 border rounded-lg p-4"><b>우리 반 핵심 가치</b><br>${top.map(v=>`<span class="inline-block bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full mr-1 mt-2 text-xs font-bold">${v}</span>`).join('') || '존중, 안전, 책임'}</div><div class="border rounded-lg p-4"><b>학생들과 함께 정한 주요 약속</b><ol class="list-decimal ml-5 mt-2 leading-8">${rules.map(r=>`<li><b>${r.text}</b><br><span class="text-xs text-slate-500">실수했을 때 회복 책임: ${r.recovery}</span></li>`).join('') || '<li>아직 선택된 약속이 없습니다.</li>'}</ol></div><p>이 약속은 교사가 일방적으로 정한 규칙이 아니라, 학생들이 생활 장면을 살펴보고 우리 반에 필요한 가치를 이야기한 뒤 정한 공동의 약속입니다.</p><p>가정에서도 아이가 우리 반 약속을 기억하고 실천할 수 있도록 격려해 주시면 감사하겠습니다. 학교에서도 처벌보다 회복과 성장에 초점을 두고 생활교육을 이어가겠습니다.</p><div class="text-right mt-8">담임교사 드림</div></div></div>`;
+}
+
+// 기존 함수 보강
+const originalUpdateAll = updateAll;
+updateAll = function(doSave=true){ originalUpdateAll(doSave); renderGradeMode(); renderSituationCards(); renderCheckup(); renderParentLetter(); };
+
+const originalSwitchTab = switchTab;
+switchTab = function(tabId){
+    document.querySelectorAll('.tab-content').forEach(el=>el.classList.add('hidden'));
+    const target=document.getElementById(`tab-${tabId}`); if(target) target.classList.remove('hidden');
+    document.querySelectorAll('.tab-btn').forEach(el=>{el.classList.remove('bg-indigo-50','text-indigo-700','font-bold'); el.classList.add('text-slate-600','hover:bg-slate-50','font-medium');});
+    const btn=document.getElementById(`btn-${tabId}`); if(btn){ btn.classList.add('bg-indigo-50','text-indigo-700','font-bold'); btn.classList.remove('text-slate-600','hover:bg-slate-50','font-medium'); }
+    if(tabId==='mode') renderGradeMode();
+    if(tabId==='situation') renderSituationCards();
+    if(tabId==='agreement') renderVoteBoard();
+    if(tabId==='lesson') renderLessonPlan();
+    if(tabId==='constitution') renderConstitution();
+    if(tabId==='checkup') renderCheckup();
+    if(tabId==='parent') renderParentLetter();
+    const i=tabsOrder.indexOf(tabId);
+    const next=document.getElementById('next-step-btn');
+    if(next){ next.innerHTML=i<0||i===tabsOrder.length-1?'🔄 처음 단계로 이동':`${i+2}. ${tabNext[tabId]||'다음'} 단계로 이동 ➔`; }
+    window.scrollTo({top:0,behavior:'smooth'});
+};
+
+goToNextStep = function(){ const current=tabsOrder.find(id=>!document.getElementById(`tab-${id}`)?.classList.contains('hidden')); const idx=tabsOrder.indexOf(current); switchTab(idx===tabsOrder.length-1?'diagnosis':tabsOrder[idx+1]); };
+
+const originalPrintComponent = printComponent;
+printComponent = function(divId){
+    if(divId==='situation-print-view') renderSituationCards();
+    if(divId==='checkup-view') renderCheckup();
+    if(divId==='parent-letter-view') renderParentLetter();
+    originalPrintComponent(divId);
+};
+
+// 탭 순서 재정렬
+while(tabsOrder.length) tabsOrder.pop();
+['diagnosis','mode','student','values','rules','agreement','situation','lesson','constitution','checkup','parent','guidance'].forEach(x=>tabsOrder.push(x));
+Object.assign(tabNext,{diagnosis:'학년별 프로젝트 모드',mode:'모둠 의견 정리',student:'가치 집계·의견 분석',values:'약속 카드 설계',rules:'토론·투표·합의',agreement:'상황 카드·발문',situation:'80분 수업안',lesson:'약속/헌법 출력',constitution:'중간점검',checkup:'학부모 안내문',parent:'생활지도 연결',guidance:'처음 단계'});
+
 window.addEventListener('DOMContentLoaded', init);
 window.addEventListener('beforeunload', e=>{ e.preventDefault(); e.returnValue=''; });
 </script>
