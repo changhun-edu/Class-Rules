@@ -64,7 +64,7 @@
             transition: opacity .2s, transform .2s;
         }
         #floating-next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,70,229,.4); }
-        @media print { #floating-next-btn { display:none !important; } }
+        @media print { #floating-next-btn { display:none !important; } #classroom-exit-btn { display:none !important; } }
 
         /* 스크롤 박스 하단 페이드 */
         .scroll-fade { position: relative; }
@@ -125,12 +125,14 @@
             <b class="text-slate-800">핵심 원칙</b><br>
             AI 호출 없이 DB화된 학년·가치·장면별 추천 자료로 학생 참여형 규칙 수립 과정을 지원합니다.
         </div>
+        <button onclick="toggleClassroomMode()" id="classroom-mode-btn"
+            class="mt-2 w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-3 rounded-xl transition-all text-sm">
+            <span>📺</span><span id="classroom-mode-label">수업 모드로 전환</span>
+        </button>
     </aside>
 
     <main class="flex-1 bg-white rounded-xl shadow-sm p-6 lg:p-8 min-h-[760px] flex flex-col justify-between" id="main-content">
-        <div class="flex justify-end mb-2 no-print">
-            <button onclick="toggleClassroomMode()" id="classroom-mode-btn" class="text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 transition-all">📺 수업 모드</button>
-        </div>
+
         <div class="content-body">
             <section id="tab-diagnosis" class="tab-content">
                 <div class="border-b pb-5 mb-6">
@@ -138,7 +140,7 @@
                     <p class="text-base text-slate-500 mt-2">학년과 학급 상황을 먼저 입력하면, 우선적으로 다룰 생활 영역과 약속 후보를 추천합니다.</p>
                 </div>
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    <div class="xl:col-span-7 space-y-6">
+                    <div class="xl:col-span-5 space-y-6">
                         <div class="bg-slate-50 rounded-xl p-5 border">
                             <h3 class="font-bold text-lg mb-4">① 기본 정보</h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -161,7 +163,7 @@
                             <p class="text-sm text-amber-800 leading-relaxed">이 도구는 학생생활규정과 고시를 참고해 학급 약속과 생활지도 절차를 정리하지만, 법적 판단이나 면책을 보장하지 않습니다. 실제 조치는 비례성, 학생 상황, 절차, 기록을 함께 고려해야 합니다.</p>
                         </div>
                     </div>
-                    <div class="xl:col-span-5 bg-indigo-50 rounded-xl p-5 border border-indigo-100">
+                    <div class="xl:col-span-7 bg-indigo-50 rounded-xl p-5 border border-indigo-100">
                         <h3 class="font-black text-indigo-900 text-lg mb-3">DB 추천 요약</h3>
                         <div id="diagnosis-summary" class="space-y-3 text-sm"></div>
                         <button onclick="applyRecommendedRules()" class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-3 font-bold">추천 약속 초안 적용</button>
@@ -172,7 +174,7 @@
 
             <section id="tab-mode" class="tab-content hidden">
                 <div class="border-b pb-5 mb-6">
-                    <h2 class="text-2xl font-black text-slate-900">🎒 학년별 프로젝트 모드</h2>
+                    <h2 class="text-2xl font-black text-slate-900">📋 학년별 프로젝트 모드</h2>
                     <p class="text-base text-slate-500 mt-2">1~2학년, 3~4학년, 5~6학년은 규칙 수립 방식이 다릅니다. 학년군에 맞는 언어·활동·출력물을 자동으로 안내합니다.</p>
                 </div>
                 <div id="grade-mode-cards" class="grid grid-cols-1 lg:grid-cols-3 gap-5"></div>
@@ -191,7 +193,7 @@
                     <div class="bg-slate-100 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-700"><b>운영 방식</b> 종이 활동지·스티커 투표 → 교사가 결과만 입력</div>
                 </div>
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    <div class="xl:col-span-7 space-y-4">
+                    <div class="xl:col-span-5 space-y-4">
                         <div class="bg-slate-50 rounded-xl p-5 border">
                             <div class="flex justify-between items-center mb-3">
                                 <h3 class="font-bold text-lg">모둠별 토의 결과 입력</h3>
@@ -210,7 +212,7 @@
                             </ol>
                         </div>
                     </div>
-                    <div class="xl:col-span-5 space-y-4">
+                    <div class="xl:col-span-7 space-y-4">
                         <div class="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
                             <h3 class="font-bold text-lg mb-3">모둠 가치 집계</h3>
                             <div id="group-value-summary" class="space-y-3"></div>
@@ -225,18 +227,18 @@
 
             <section id="tab-values" class="tab-content hidden">
                 <div class="border-b pb-5 mb-6">
-                    <h2 class="text-2xl font-black text-slate-900">💬 가치 집계·의견 분석</h2>
+                    <h2 class="text-2xl font-black text-slate-900">📊 가치 집계·의견 분석</h2>
                     <p class="text-base text-slate-500 mt-2">모둠 토의 결과와 대표 의견을 바탕으로 우리 반 핵심 가치 TOP3를 확정합니다.</p>
                 </div>
-                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    <div class="xl:col-span-6 space-y-4">
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:flex xl:flex-row-reverse">
+                    <div class="xl:w-1/2 space-y-4">
                         <div class="bg-slate-50 rounded-xl p-5 border">
                             <h3 class="font-bold text-lg mb-3">교사용 대표 의견 추가/수정</h3>
                             <div class="flex gap-2"><input id="student-voice-input" placeholder="예: 서로 비웃지 않는 교실이 좋아요" class="flex-1 border rounded-lg px-3 py-2.5"><button onclick="addStudentVoice()" class="bg-slate-800 text-white px-4 rounded-lg font-bold">추가</button></div>
                         </div>
                         <div id="student-voice-list" class="space-y-2 scroll-fade max-h-[460px] overflow-y-auto pr-2"></div>
                     </div>
-                    <div class="xl:col-span-6 space-y-4">
+                    <div class="xl:w-1/2 space-y-4">
                         <div class="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
                             <h3 class="font-bold text-lg mb-3">핵심 가치 분석</h3>
                             <div id="value-analysis" class="space-y-3"></div>
@@ -753,7 +755,7 @@ function combinedValueCounts(){ const counts={...valueVotes}; studentVoices.forE
 function topValues(n=3){ return Object.entries(combinedValueCounts()).sort((a,b)=>b[1]-a[1]).slice(0,n).map(x=>x[0]); }
 function renderValueAnalysis(){ const counts=combinedValueCounts(); const total=Object.values(counts).reduce((a,b)=>a+b,0)||1; document.getElementById('value-analysis').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,c],idx)=>`<div class="${idx<3?'bg-white border p-3 rounded-lg':''}"><div class="flex justify-between text-sm font-bold mb-1"><span>${idx<3?'🏅 ':''}${k}</span><span>${c}점 · ${Math.round(c/total*100)}%</span></div><div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-indigo-500" style="width:${c/total*100}%"></div></div></div>`).join('')||'<p class="text-sm text-slate-400">학생 의견을 추가해 주세요.</p>'; }
 function generateValueStatement(){ const top=topValues(3); document.getElementById('value-statement').value=`우리 반은 ${top.join(', ')}을(를) 소중히 여기는 공동체입니다. 우리는 서로의 배움과 안전을 지키기 위해 함께 정한 약속을 실천하고, 실수했을 때는 벌을 받는 데서 끝내지 않고 공동체를 회복하는 책임을 다합니다.`; saveToStorage(); renderConstitution(); }
-function renderLibraryPool(){ document.querySelectorAll('.grade-chip').forEach(b=>{b.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200';}); const gb=document.getElementById(`grade-btn-${currentGrade}`); if(gb) gb.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-indigo-600 text-white shadow-sm'; const container=document.getElementById('library-pool-container'); const pool=ruleLibrary[currentGrade]||[]; container.innerHTML=pool.map(rule=>{ const added=selectedRules.some(r=>r.id===rule.id); const m=valueMeta[rule.value]||valueMeta['존중']; return `<div class="border ${m.color} rounded-2xl p-4 card-hover"><div class="flex justify-between gap-3"><div><div class="text-3xl mb-2">${m.emoji}</div><h4 class="font-black text-base leading-snug">${rule.text}</h4><p class="text-xs mt-2 opacity-80"><b>왜 필요할까요?</b><br>${rule.why}</p><p class="text-[11px] mt-2 opacity-70">가치: ${rule.value} · 참고 근거: ${rule.law}</p></div><button onclick="toggleRule('${rule.id}')" class="self-start px-3 py-1.5 text-xs font-bold rounded-md whitespace-nowrap ${added?'bg-white/80 text-rose-700 border border-rose-200':'bg-white/90 text-indigo-700 border'}">${added?'제거':'선택'}</button></div></div>`; }).join('') + `<div class="md:col-span-2 bg-slate-50 border rounded-2xl p-4"><h4 class="font-black mb-3">📊 교사 추천 베스트 규칙 DB 예시</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${bestPracticeRules.map((r,i)=>`<div class="bg-white border rounded-lg p-3"><b>${i+1}. ${r.text}</b><p class="text-xs text-slate-500 mt-1">${r.grade} · ${r.reason}</p></div>`).join('')}</div></div>`; }
+function renderLibraryPool(){ document.querySelectorAll('.grade-chip').forEach(b=>{b.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200';}); const gb=document.getElementById(`grade-btn-${currentGrade}`); if(gb) gb.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-indigo-600 text-white shadow-sm'; const container=document.getElementById('library-pool-container'); const pool=ruleLibrary[currentGrade]||[]; container.innerHTML=pool.map(rule=>{ const added=selectedRules.some(r=>r.id===rule.id); const m=valueMeta[rule.value]||valueMeta['존중']; return `<div class="border ${m.color} rounded-2xl p-4 card-hover"><div class="flex justify-between gap-3"><div><div class="text-2xl mb-1">${m.emoji}</div><h4 class="font-black text-base leading-snug">${rule.text}</h4><p class="text-xs mt-2 opacity-80"><b>왜 필요할까요?</b><br>${rule.why}</p><p class="text-[11px] mt-2 opacity-70">가치: ${rule.value} · 참고 근거: ${rule.law}</p></div><button onclick="toggleRule('${rule.id}')" class="self-start px-3 py-1.5 text-xs font-bold rounded-md whitespace-nowrap ${added?'bg-white/80 text-rose-700 border border-rose-200':'bg-white/90 text-indigo-700 border'}">${added?'제거':'선택'}</button></div></div>`; }).join('') + `<div class="md:col-span-2 bg-slate-50 border rounded-2xl p-4"><h4 class="font-black mb-3">📊 교사 추천 베스트 규칙 DB 예시</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${bestPracticeRules.map((r,i)=>`<div class="bg-white border rounded-lg p-3"><b>${i+1}. ${r.text}</b><p class="text-xs text-slate-500 mt-1">${r.grade} · ${r.reason}</p></div>`).join('')}</div></div>`; }
 function toggleRule(id){ const idx=selectedRules.findIndex(r=>r.id===id); if(idx>-1) selectedRules.splice(idx,1); else { const target=(ruleLibrary[currentGrade]||[]).find(r=>r.id===id); if(target) selectedRules.push(ruleWithRestorative(target)); } updateAll(); }
 function addCustomRule(){ const input=document.getElementById('custom-rule-input'); if(!input.value.trim()) return; const text=input.value.trim(); const category=/폰|스마트|SNS|온라인|기기/.test(text)?'digital':/욕|친구|놀림|비웃|따돌/.test(text)?'relation':/뛰|안전|밀|장난/.test(text)?'safety':/청소|정리|물건/.test(text)?'environment':'class'; selectedRules.push(ruleWithRestorative({id:'custom_'+Date.now(), value:detectValue(text), category, text, law: category==='digital'?'제11조 정보통신망 이용':category==='relation'?'제10조 상호 존중':'학생생활규정 및 고시 참고', why:'우리 반 상황에 맞게 학생들과 필요성을 함께 이야기해 보세요.'})); input.value=''; updateAll(); }
 function updateRuleWarning(){ const box=document.getElementById('rule-warning'); if(!box) return; if(selectedRules.length>5){ box.classList.remove('hidden'); box.innerHTML=`⚠️ 현재 약속이 <b>${selectedRules.length}개</b>입니다. 초등학생이 기억하고 실천하기에는 많을 수 있습니다. 3~5개 이하를 권장합니다. 중복되는 약속은 하나의 가치로 묶어 주세요.`; } else { box.classList.add('hidden'); box.innerHTML=''; } }
@@ -973,21 +975,34 @@ function selectRecoveryCard(btn, type, recovery){
     if(el) el.querySelector('.record-text').textContent = recordText;
 }
 
-/* ── 5순위: 수업 모드 ── */
+/* ── 5순위(v36→v37): 수업 모드 — 사이드바 하단 버튼 ── */
 let classroomMode = false;
 function toggleClassroomMode(){
     classroomMode = !classroomMode;
     const aside = document.querySelector('aside');
+    const label = document.getElementById('classroom-mode-label');
     const btn = document.getElementById('classroom-mode-btn');
     const main = document.getElementById('main-content');
     if(classroomMode){
         aside.classList.add('hidden');
         if(main){ main.classList.remove('p-6','lg:p-8'); main.classList.add('p-4'); }
-        if(btn){ btn.innerHTML='🔙 일반 모드'; btn.className='text-xs font-bold px-3 py-1.5 rounded-lg border border-indigo-300 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-all'; }
+        /* 버튼 자체는 aside 안에 있으므로 aside가 숨겨지면 보이지 않음
+           → 화면 우하단에 복귀 버튼을 동적으로 삽입 */
+        let exitBtn = document.getElementById('classroom-exit-btn');
+        if(!exitBtn){
+            exitBtn = document.createElement('button');
+            exitBtn.id = 'classroom-exit-btn';
+            exitBtn.className = 'fixed top-4 left-4 z-50 bg-slate-700 text-white text-xs font-bold px-3 py-2 rounded-lg shadow-lg hover:bg-slate-600 no-print';
+            exitBtn.innerHTML = '🔙 일반 모드로';
+            exitBtn.onclick = toggleClassroomMode;
+            document.body.appendChild(exitBtn);
+        }
+        exitBtn.style.display = 'block';
     } else {
         aside.classList.remove('hidden');
         if(main){ main.classList.remove('p-4'); main.classList.add('p-6','lg:p-8'); }
-        if(btn){ btn.innerHTML='📺 수업 모드'; btn.className='text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 transition-all'; }
+        const exitBtn = document.getElementById('classroom-exit-btn');
+        if(exitBtn) exitBtn.style.display = 'none';
     }
 }
 
@@ -1031,7 +1046,7 @@ function currentMode(){ return gradeModeDB[gradeBand()] || gradeModeDB.mid; }
 function renderGradeMode(){
     const cards=document.getElementById('grade-mode-cards');
     if(cards){
-        cards.innerHTML=Object.entries(gradeModeDB).map(([key,m])=>`<div class="border rounded-2xl p-5 card-hover ${key===gradeBand()?'bg-indigo-50 border-indigo-200':'bg-white'}"><div class="text-3xl mb-2">${key==='low'?'😊':key==='mid'?'💬':'⚖️'}</div><h3 class="font-black text-lg">${m.title}</h3><p class="text-sm text-slate-600 mt-2"><b>핵심 방식</b><br>${m.focus}</p><p class="text-sm text-slate-600 mt-2"><b>결과물</b><br>${m.output}</p><button onclick="setGrade(${key==='low'?1:key==='mid'?3:5})" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold">이 모드로 설정</button></div>`).join('');
+        cards.innerHTML=Object.entries(gradeModeDB).map(([key,m])=>`<div class="border rounded-2xl p-5 card-hover ${key===gradeBand()?'bg-indigo-50 border-indigo-200':'bg-white'}"><div class="text-xl mb-2">${key==='low'?'😊':key==='mid'?'💬':'⚖️'}</div><h3 class="font-black text-lg">${m.title}</h3><p class="text-sm text-slate-600 mt-2"><b>핵심 방식</b><br>${m.focus}</p><p class="text-sm text-slate-600 mt-2"><b>결과물</b><br>${m.output}</p><button onclick="setGrade(${key==='low'?1:key==='mid'?3:5})" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold">이 모드로 설정</button></div>`).join('');
     }
     const guide=document.getElementById('current-mode-guide');
     if(guide){ const m=currentMode(); guide.innerHTML=`<b>${m.title}</b><br>명칭은 <b>${m.label}</b> 중심으로 표시됩니다. 수업은 ${m.focus} 방식으로 운영하고, 결과물은 ${m.output} 형태로 정리합니다.`; }
