@@ -3,705 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학급약속 연구소 - 학급 규칙 & 생활지도 매니저</title>
-    <!-- Tailwind CSS CDN -->
+    <title>학급약속 연구소 - 참여형 학급헌법 & 생활지도 OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        body { 
-            font-family: 'Noto Sans KR', sans-serif; 
-            font-size: 16px; 
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; font-size: 16px; }
         @media print {
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
             #print-area { position: absolute; left: 0; top: 0; width: 100%; }
             .no-print { display: none !important; }
         }
-        /* 스크롤바 커스텀 */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .card-hover { transition: all .18s ease; }
+        .card-hover:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,23,42,.08); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- 상단 헤더 -->
-    <header class="bg-indigo-600 text-white shadow-md no-print">
-        <div class="container mx-auto px-6 py-5 flex justify-between items-center">
-            <div onclick="switchTab('library')" class="flex items-center space-x-3 cursor-pointer hover:opacity-90 transition-opacity select-none" title="홈으로 이동">
-                <span class="text-3xl">⚖️</span>
-                <h1 class="text-2xl font-bold tracking-tight">학급약속 연구소 <span class="text-base font-normal bg-indigo-500 px-2 py-1 rounded ml-2">학급 규칙 & 생활지도 매니저</span></h1>
-            </div>
-            <div class="text-base bg-indigo-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
-                <span>📍 교육부 고시 완벽 매핑</span>
-                <span id="save-indicator" class="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded animate-pulse">자동저장 활성</span>
+<header class="bg-indigo-700 text-white shadow-md no-print">
+    <div class="container mx-auto px-6 py-5 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
+        <div onclick="switchTab('diagnosis')" class="flex items-center space-x-3 cursor-pointer hover:opacity-90 transition-opacity select-none" title="홈으로 이동">
+            <span class="text-3xl">⚖️</span>
+            <div>
+                <h1 class="text-2xl font-black tracking-tight">학급약속 연구소</h1>
+                <p class="text-indigo-100 text-sm mt-1">학생 참여형 학급헌법 & 생활지도 OS</p>
             </div>
         </div>
-    </header>
-
-    <!-- 메인 컨테이너 -->
-    <div class="container mx-auto px-4 py-8 flex-1 flex flex-col md:flex-row gap-6 no-print">
-        
-        <!-- 사이드바 내비게이션 -->
-        <aside class="w-full md:w-72 bg-white rounded-xl shadow-sm p-5 flex flex-col space-y-3 h-fit">
-            <p class="text-sm font-semibold text-slate-400 px-3 uppercase tracking-wider mb-1">메뉴 목록</p>
-            <button onclick="switchTab('library')" id="btn-library" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium bg-indigo-50 text-indigo-700 flex items-center space-x-3">
-                <span>📚</span> <span>1. 규칙 라이브러리 설정</span>
-            </button>
-            <button onclick="switchTab('worksheet')" id="btn-worksheet" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>📝</span> <span>2. 민주적 활동지 인쇄</span>
-            </button>
-            <button onclick="switchTab('mapping')" id="btn-mapping" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>🔗</span> <span>3. 법적 근거 검증 테이블</span>
-            </button>
-            <button onclick="switchTab('guide')" id="btn-guide" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>🛡️</span> <span>4. 교사용 지도 매뉴얼</span>
-            </button>
-            <button onclick="switchTab('poster')" id="btn-poster" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>🖨️</span> <span>5. 약속 & 책임 포스터</span>
-            </button>
-        </aside>
-
-        <!-- 메인 콘텐츠 영역 -->
-        <main class="flex-1 bg-white rounded-xl shadow-sm p-8 min-h-[650px] flex flex-col justify-between">
-            
-            <div class="content-body">
-                <!-- TAB 1: 규칙 라이브러리 (대폭 확충 및 카테고리화) -->
-                <div id="tab-library" class="tab-content">
-                    <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">📚 4대 생활 영역별 규칙 및 책임 설계</h2>
-                        <p class="text-base text-slate-500 mt-2">교실에서 실제로 필요한 영역별 규칙을 선택하고, 어겼을 때 따르는 민주적 책임 조항을 페어링하세요.</p>
-                    </div>
-
-                    <!-- 학년군 선택 대형 컨트롤러 -->
-                    <div class="flex space-x-3 mb-6">
-                        <button onclick="filterGrade('low')" id="btn-grade-low" class="grade-btn bg-indigo-600 text-white px-5 py-2.5 rounded-full text-base font-medium shadow-sm">1~2학년군 (직관과 안심)</button>
-                        <button onclick="filterGrade('mid')" id="btn-grade-mid" class="grade-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-5 py-2.5 rounded-full text-base font-medium">3~4학년군 (관계와 존중)</button>
-                        <button onclick="filterGrade('high')" id="btn-grade-high" class="grade-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-5 py-2.5 rounded-full text-base font-medium">5~6학년군 (자치와 의무)</button>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <!-- 왼쪽: 4대 영역별 확장 풀 -->
-                        <div class="lg:col-span-7 space-y-6 max-h-[550px] overflow-y-auto pr-2" id="library-pool-container">
-                            <!-- JS를 통해 영역별 카테고리 헤더와 아이템 리스트가 동적 생성됩니다 -->
-                        </div>
-
-                        <!-- 오른쪽: 선택된 규칙 및 책임 상세 매칭기 -->
-                        <div class="lg:col-span-5 bg-slate-50 rounded-xl p-5 border border-slate-100 flex flex-col justify-between">
-                            <div>
-                                <h3 class="text-base font-bold text-slate-700 mb-3 flex justify-between items-center">
-                                    <span>📋 구성중인 우리 반 조항</span>
-                                    <span id="rule-count" class="bg-indigo-100 text-indigo-700 text-sm px-3 py-1 rounded-full font-bold">0개</span>
-                                </h3>
-                                <div id="my-rules" class="space-y-3 overflow-y-auto max-h-[350px] pr-1"></div>
-                            </div>
-
-                            <div class="mt-5 pt-4 border-t border-slate-200">
-                                <div class="flex gap-2">
-                                    <input type="text" id="custom-rule-input" placeholder="직접 약속 입력 (예: 스마트폰 무단 사용 안 하기)" class="flex-1 text-sm border rounded-lg px-3 py-2.5 focus:outline-indigo-600">
-                                    <button onclick="addCustomRule()" class="bg-slate-800 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-700 whitespace-nowrap">직접 추가</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 2: 활동지 자동 생성 -->
-                <div id="tab-worksheet" class="tab-content hidden">
-                    <div class="border-b pb-5 mb-6 flex justify-between items-center">
-                        <div>
-                            <h2 class="text-2xl font-bold text-slate-900">📝 민주적 규칙 만들기 활동지 자동 생성</h2>
-                            <p class="text-base text-slate-500 mt-2">선택한 학년성에 최적화된 토론 및 합의용 컬러링/기록 서식을 출력합니다.</p>
-                        </div>
-                        <button onclick="printComponent('worksheet-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg text-base font-medium hover:bg-indigo-700 flex items-center space-x-2">
-                            <span>🖨️</span> <span>활동지 인쇄하기</span>
-                        </button>
-                    </div>
-                    <div id="worksheet-view" class="border border-slate-300 rounded-xl p-10 max-w-2xl mx-auto bg-white shadow-sm"></div>
-                </div>
-
-                <!-- TAB 3: 고시 연계 & 검증 -->
-                <div id="tab-mapping" class="tab-content hidden">
-                    <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">🔗 학생생활규정 및 교육부 고시 검증 시스템</h2>
-                        <p class="text-base text-slate-500 mt-2">학급약속과 합의된 책임 조항이 고시 범위 내에 존재하는지 법률 매핑 상태를 보여줍니다.</p>
-                    </div>
-                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-6 flex items-start space-x-4">
-                        <span class="text-2xl">✅</span>
-                        <div class="text-base text-emerald-800">
-                            <p class="font-bold">법적 면책 및 보호 권한 작동 중</p>
-                            <p class="mt-1 text-emerald-700 leading-relaxed">매칭된 책임 조항을 어길 시 적용되는 분리 및 훈육 수단은 교육부 생활지도 가이드라인 및 고시 권한과 완벽히 호환됩니다.</p>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-base border-collapse">
-                            <thead>
-                                <tr class="bg-slate-100 text-slate-700 border-b">
-                                    <th class="p-4 font-semibold">학급 약속</th>
-                                    <th class="p-4 font-semibold">위반 시 이행할 책임</th>
-                                    <th class="p-4 font-semibold">연계 고시 근거</th>
-                                    <th class="p-4 font-semibold w-24 text-center">보호 여부</th>
-                                </tr>
-                            </thead>
-                            <tbody id="mapping-table-body" class="divide-y text-slate-600"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 4: 생활지도 대응 가이드 -->
-                <div id="tab-guide" class="tab-content hidden">
-                    <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">🛡️ 고시 기반 단계별 생활지도 대응 매뉴얼</h2>
-                        <p class="text-base text-slate-500 mt-2">약속 위반 및 책임 거부 상황 발생 시, 법적 분쟁을 방지하는 행정 조치 매뉴얼입니다.</p>
-                    </div>
-                    <div class="space-y-5">
-                        <div class="border rounded-xl p-5 bg-amber-50 border-amber-200">
-                            <h3 class="font-bold text-amber-900 text-lg flex items-center space-x-2">
-                                <span class="bg-amber-500 text-white text-sm px-2.5 py-0.5 rounded">1단계</span>
-                                <span>구두 조언 및 규칙-책임 확인 (고시 제10조)</span>
-                            </h3>
-                            <p class="text-base text-amber-800 mt-2">강압적 지시 대신 학기 초에 직접 투표하고 조율했던 약속과 매칭된 책임 문구를 상기시킵니다.</p>
-                            <div class="bg-white/70 p-4 rounded-lg text-sm font-mono mt-3 text-slate-700 border border-amber-100">
-                                💬 <strong>권장 발화 예시:</strong> "[학생 이름]아, 우리가 지난 3월 회의 때 평화로운 수업을 위해 '발표 시 손들고 대기하기'로 약속했고, 깜빡했을 때는 '바른 대기 선언문 읽기'라는 책임을 다하기로 다 같이 사인했었지? 약속을 기억하고 책임을 멋지게 실천해 주겠니?"
-                            </div>
-                        </div>
-                        <div class="border rounded-xl p-5 bg-orange-50 border-orange-200">
-                            <h3 class="font-bold text-orange-900 text-lg flex items-center space-x-2">
-                                <span class="bg-orange-500 text-white text-sm px-2.5 py-0.5 rounded">2단계</span>
-                                <span>합의된 후속 조치 강제 및 교실 내 분리 (고시 제12조)</span>
-                            </h3>
-                            <p class="text-base text-orange-800 mt-2">정당한 지시 및 후속 책임을 고의적으로 거부하며 수업 분위기를 지속적으로 방해할 경우, 지정된 교실 내 성찰 공간으로 즉시 격리 조치하여 자가 성찰 기록지를 작성하게 합니다.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 5: 교실 게시용 포스터 출력 (약속 & 책임 세트 바인딩) -->
-                <div id="tab-poster" class="tab-content hidden">
-                    <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">🖨️ 약속 & 책임 연계형 교실 게시용 포스터 출력</h2>
-                        <p class="text-base text-slate-500 mt-2">단순 금지어가 아닌 권리와 책임이 유기적으로 연계된 우리 학급 헌법을 시각화합니다.</p>
-                    </div>
-
-                    <!-- 포스터 커스텀 가젯 인터페이스 -->
-                    <div class="bg-slate-100 p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">포스터 대타이틀 문구 변경</label>
-                            <input type="text" id="poster-title-control" oninput="updatePosterText()" value="서로 존중하고 의무를 다하는 우리 반 학급 헌법" class="w-full text-base border rounded-lg px-3 py-2 focus:outline-indigo-600">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">인테리어 조화형 감성 테마 선택</label>
-                            <div class="flex space-x-2">
-                                <button onclick="changePosterTheme('indigo')" class="w-8 h-8 rounded-full bg-indigo-600 border-2 border-white ring-2 ring-indigo-600" title="모던 인디고"></button>
-                                <button onclick="changePosterTheme('emerald')" class="w-8 h-8 rounded-full bg-emerald-600 border-2 border-white" title="내추럴 에메랄드"></button>
-                                <button onclick="changePosterTheme('amber')" class="w-8 h-8 rounded-full bg-amber-500 border-2 border-white" title="클래식 앰버"></button>
-                                <button onclick="changePosterTheme('rose')" class="w-8 h-8 rounded-full bg-rose-500 border-2 border-white" title="차분한 로즈"></button>
-                                <button onclick="printComponent('poster-view')" class="ml-auto bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-base font-medium hover:bg-indigo-700">🖨️ 포스터 인쇄</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-200 p-8 rounded-xl flex justify-center">
-                        <div id="poster-view" class="bg-white shadow-xl border-4 border-indigo-600 p-10 w-[550px] min-h-[750px] flex flex-col justify-between text-left transition-all duration-300">
-                            <div>
-                                <div id="poster-badge" class="text-sm font-bold tracking-widest uppercase mb-1 text-center text-indigo-600">서로를 지키는 약속과 책임</div>
-                                <h2 id="poster-title" class="text-2xl font-black text-slate-900 border-b-2 border-indigo-600 pb-4 mb-6 text-center">행복한 우리 반 학급 규칙</h2>
-                                <div id="poster-rules-list" class="space-y-4 px-2"></div>
-                            </div>
-                            <div class="mt-8 pt-4 border-t border-slate-100 text-center text-[11px] text-slate-400 leading-relaxed">
-                                본 학급 규칙과 조치 사항은 학급 구성원 전체가 민주적으로 합의하여 서약하였으며,<br>교원의 학생생활지도에 관한 고시(교육부 고시)에 의거하여 정당한 법적 보호를 받습니다.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 스텝 네비게이션 가이드 바 -->
-            <div class="mt-8 pt-5 border-t flex justify-end">
-                <button id="next-step-btn" onclick="goToNextStep()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl text-base font-bold shadow-md hover:bg-indigo-700 flex items-center space-x-2">
-                    <span>2단계 활동지 생성으로 이동</span> <span>➔</span>
-                </button>
-            </div>
-
-        </main>
+        <div class="flex flex-wrap items-center gap-2 text-sm">
+            <span class="bg-indigo-600 px-3 py-2 rounded-lg">📍 진단 → 참여 → 합의 → 운영</span>
+            <span id="save-indicator" class="bg-emerald-500 text-white px-3 py-2 rounded-lg animate-pulse">자동저장 활성</span>
+        </div>
     </div>
+</header>
 
-    <div id="print-area" class="hidden"></div>
+<div class="container mx-auto px-4 py-8 flex-1 flex flex-col md:flex-row gap-6 no-print">
+    <aside class="w-full md:w-80 bg-white rounded-xl shadow-sm p-5 flex flex-col space-y-3 h-fit sticky top-4">
+        <p class="text-sm font-semibold text-slate-400 px-3 uppercase tracking-wider mb-1">학급규칙 수립 흐름</p>
+        <button onclick="switchTab('diagnosis')" id="btn-diagnosis" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-bold bg-indigo-50 text-indigo-700 flex items-center space-x-3">
+            <span>🧭</span><span>1. 우리 반 진단</span>
+        </button>
+        <button onclick="switchTab('values')" id="btn-values" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
+            <span>💬</span><span>2. 학생 의견 수집</span>
+        </button>
+        <button onclick="switchTab('rules')" id="btn-rules" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
+            <span>📚</span><span>3. 핵심 규칙 설계</span>
+        </button>
+        <button onclick="switchTab('agreement')" id="btn-agreement" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
+            <span>🗳️</span><span>4. 토론·투표·합의</span>
+        </button>
+        <button onclick="switchTab('constitution')" id="btn-constitution" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
+            <span>📜</span><span>5. 학급헌법 출력</span>
+        </button>
+        <button onclick="switchTab('guidance')" id="btn-guidance" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
+            <span>🛡️</span><span>6. 생활지도 기록</span>
+        </button>
+        <div class="mt-4 p-4 bg-slate-50 rounded-xl border text-sm text-slate-600 leading-relaxed">
+            <b class="text-slate-800">핵심 원칙</b><br>
+            규칙은 교사가 고르는 목록이 아니라, 학생 의견을 모아 가치·행동·회복 책임으로 합의하는 과정입니다.
+        </div>
+    </aside>
 
-    <!-- 푸터 -->
-    <footer class="bg-slate-100 border-t py-6 text-center text-sm text-slate-500 no-print flex flex-col items-center justify-center space-y-1">
-        <p>© 2026 학급약속 연구소. 대한민국 초등 교사들의 안전하고 체계적인 생활지도를 응원합니다.</p>
-        <p class="text-slate-400/70 text-xs font-normal">만든이 2026 최창훈</p>
-    </footer>
-
-    <script>
-        // 4대 생활 카테고리 정의 테이블
-        const categories = {
-            class: "📚 배움 및 수업 집중",
-            safety: "🚨 교실 안전 및 이동 규칙",
-            relation: "💬 관계 조화 및 바른 언어",
-            environment: "🌱 학급 환경 및 물품 관리"
-        };
-
-        // 민주적 후속 조치(책임 조항) 옵션 풀
-        const consequenceOptions = [
-            "💡 스스로 자가 성찰 기록지 작성 및 다짐",
-            "🤝 피해를 입은 구성원에게 사과/칭찬의 마음 표현하기",
-            "🧹 교실 환경 정돈 및 1일 환경 도우미 참여",
-            "📢 학급 자치 회의(해결 서클) 안건으로 제안하여 토론",
-            "📵 당일 스마트 기기 교탁 보관 후 방과 후 수령",
-            "💬 바른 행동 수칙을 조용히 소리 내어 읽고 입실하기"
-        ];
-
-        // [대폭 확충] 초등 교실 밀착형 실시간 규칙 데이터 라이브러리
-        const ruleLibrary = {
-            low: [
-                // 배움
-                { id: 'lo_c1', category: 'class', text: "선생님이 말씀하실 때는 눈을 맞추고 경청해요.", law: "제10조 (인성/학업)", authority: "조언 및 주의" },
-                { id: 'lo_c2', category: 'class', text: "나의 의견을 발표하고 싶을 때는 예쁘게 손을 들고 기다려요.", law: "제7조 (학업 수행권)", authority: "주의 및 조언" },
-                { id: 'lo_c3', category: 'class', text: "공부 시간과 놀이 시간을 구별하여 준비물을 챙겨요.", law: "제10조 (기본생활습관)", authority: "조언" },
-                // 안전
-                { id: 'lo_s1', category: 'safety', text: "교실과 복도에서는 사뿐사뿐 걸어 다녀요.", law: "제8조 (안전 보장)", authority: "주의 및 물리적 제지" },
-                { id: 'lo_s2', category: 'safety', text: "급식을 먹을 때는 자리에 바르게 앉아서 꼭꼭 씹어 먹어요.", law: "제8조 (교실 위생/안전)", authority: "주의 조치" },
-                { id: 'lo_s3', category: 'safety', text: "가위나 학용품을 가지고 장난치거나 칼싸움을 하지 않아요.", law: "제8조 (위험 예방)", authority: "물품 수거 및 주의" },
-                // 관계
-                { id: 'lo_r1', category: 'relation', text: "친구에게 따뜻한 고운 말, 예쁜 말을 사용해요.", law: "제10조 (품위 유지)", authority: "훈육 및 조언" },
-                { id: 'lo_r2', category: 'relation', text: "친구의 실수나 틀린 답변을 비웃지 않고 '괜찮아'라고 말해줘요.", law: "제10조 (상호 존중)", authority: "훈계 및 조언" },
-                // 생활
-                { id: 'lo_e1', category: 'environment', text: "내가 사용한 학용품과 놀잇감은 스스로 바구니에 정리해요.", law: "제11조 (물품 관리)", authority: "정리 명령" },
-                { id: 'lo_e2', category: 'environment', text: "쓰레기는 바닥에 던지지 않고 쓰레기통에 쏙 넣어요.", law: "제11조 (환경 위생)", authority: "원상복구 지시" }
-            ],
-            mid: [
-                // 배움
-                { id: 'mi_c1', category: 'class', text: "모둠 활동이나 협동 과제를 할 때 내 역할을 책임감 있게 완수해요.", law: "제9조 (협동 연대)", authority: "조언 및 과제 재부과" },
-                { id: 'mi_c2', category: 'class', text: "다른 친구가 발표할 때 딴청 피우지 않고 경청하며 반응해요.", law: "제7조 (학업 분위기)", authority: "주의 조치" },
-                { id: 'mi_c3', category: 'class', text: "수업 중 화장실이나 이동이 필요할 땐 조용히 수신호로 소통해요.", law: "제7조 (교실 질서)", authority: "조언" },
-                // 안전
-                { id: 'mi_s1', category: 'safety', text: "계단과 통로를 이동할 때는 우측통행으로 줄을 서서 안전하게 가요.", law: "제8조 (통행 안전)", authority: "이동 제한 및 주의" },
-                { id: 'mi_s2', category: 'safety', text: "장난치며 친구를 밀치거나 옷을 잡아당기는 위험한 장난을 하지 않아요.", law: "제8조 (신체 안전)", authority: "물리적 분리 조치" },
-                // 관계
-                { id: 'mi_r1', category: 'relation', text: "친구가 싫어하는 나쁜 별명이나 외모 비하성 놀림을 일절 하지 않아요.", law: "제10조 및 학폭법", authority: "즉시 분리 및 훈육" },
-                { id: 'mi_r2', category: 'relation', text: "인터넷 줄임말이나 비속어 대신 올바른 표준 우리말을 쓰도록 노력해요.", law: "제10조 (언어 윤리)", authority: "성찰 과제 부과" },
-                // 생활
-                { id: 'mi_e1', category: 'environment', text: "학급 공용 보드마카나 도서를 소중히 다루고 사용 즉시 제자리에 두어요.", law: "제11조 (공공 물품)", authority: "원상복구 명령" },
-                { id: 'mi_e2', category: 'environment', text: "나에게 맡겨진 1인 1역 교실 자치 활동을 매일 성실히 실천해요.", law: "제6조 (학생 자치 권리)", authority: "이행 촉구 조언" }
-            ],
-            high: [
-                // 배움
-                { id: 'hi_c1', category: 'class', text: "수업 시작 소리가 들리면 자리에 앉아 교과서와 필기구를 셋팅하고 대기한다.", law: "제7조 (학업 분위기 조성)", authority: "주의 및 교실 내 분리" },
-                { id: 'hi_c2', category: 'class', text: "모둠 토의 중 내 의견과 다르더라도 상대방의 발언권을 가로막지 않는다.", law: "제7조 (토론 질서 유지)", authority: "발언권 조절 조언" },
-                { id: 'hi_c3', category: 'class', text: "과제물 및 수행 결과물은 정해진 기한 내에 성실히 작성하여 제출한다.", law: "제7조 (학업 책임)", authority: "방과후 이행 지도" },
-                // 안전
-                { id: 'hi_s1', category: 'safety', text: "체육 시간이나 특별실 이동 시 장난치지 않고 전담 교사의 안전 지시를 따른다.", law: "제8조 (실험/실습 안전)", authority: "수업 참여 일시 제한" },
-                { id: 'hi_s2', category: 'safety', text: "위험물(커터칼 오용, 인화물질 등)을 허가 없이 교실 내부로 반입하지 않는다.", law: "제11조 (위험물 관리)", authority: "즉시 소지품 수거 및 보관" },
-                // 관계
-                { id: 'hi_r1', category: 'relation', text: "학급 단톡방이나 SNS 등 온라인 공간 내에서의 언어폭력과 따돌림을 엄격히 금지한다.", law: "제10조 및 학교폭력예방법", authority: "학폭위 보고 및 격리 조치" },
-                { id: 'hi_r2', category: 'relation', text: "서로의 다름과 인종, 외모의 다양성을 인정하며 혐오성 표현을 절대 사용하지 않는다.", law: "제10조 (상호 존중 의무)", authority: "특별 인성 교육 이수 지시" },
-                // 생활
-                { id: 'hi_e1', category: 'environment', text: "스마트 패드 및 개인 휴대폰은 수업 목적 외에 사적인 목적(게임, SNS)으로 조작하지 않는다.", law: "제11조 (정보통신망 이용)", authority: "일과 중 기기 압수 및 수거" },
-                { id: 'hi_e2', category: 'environment', text: "교실 전기 자원(에어컨, 전등)과 학급 예산 물품을 아끼며 제자리에 정돈한다.", law: "제11조 (공공재 관리)", authority: "환경 정화 책임 과제 부과" }
-            ]
-        };
-
-        const tabsOrder = ['library', 'worksheet', 'mapping', 'guide', 'poster'];
-        const tabNames = { library: "민주적 활동지 인쇄", worksheet: "법적 근거 검증", mapping: "교사용 지도 매뉴얼", guide: "약속 & 책임 포스터", poster: "처음 단계로" };
-
-        let currentGrade = 'low';
-        let selectedRules = [];
-        let currentPosterColor = 'indigo';
-
-        // -------------------------------------------------------------
-        // 자동 저장 및 실시간 상태 복구 메커니즘
-        // -------------------------------------------------------------
-        function triggerSaveIndicator() {
-            const ind = document.getElementById('save-indicator');
-            ind.innerText = "데이터 보존 완료";
-            ind.className = "text-xs bg-blue-500 text-white px-2 py-0.5 rounded animate-pulse";
-            setTimeout(() => {
-                ind.innerText = "자동저장 활성";
-                ind.className = "text-xs bg-emerald-500 text-white px-2 py-0.5 rounded animate-pulse";
-            }, 8000);
-        }
-
-        function saveToStorage() {
-            localStorage.setItem('lab_v2_rules', JSON.stringify(selectedRules));
-            localStorage.setItem('lab_v2_grade', currentGrade);
-            localStorage.setItem('lab_v2_title', document.getElementById('poster-title-control').value);
-            localStorage.setItem('lab_v2_color', currentPosterColor);
-            triggerSaveIndicator();
-        }
-
-        function loadFromStorage() {
-            const savedGrade = localStorage.getItem('lab_v2_grade');
-            const savedRules = localStorage.getItem('lab_v2_rules');
-            const savedTitle = localStorage.getItem('lab_v2_title');
-            const savedColor = localStorage.getItem('lab_v2_color');
-
-            if(savedGrade) currentGrade = savedGrade;
-            if(savedRules) {
-                selectedRules = JSON.parse(savedRules);
-            } else {
-                selectedRules = [
-                    { ...ruleLibrary[currentGrade][0], consequence: consequenceOptions[0] },
-                    { ...ruleLibrary[currentGrade][3], consequence: consequenceOptions[2] }
-                ];
-            }
-            if(savedTitle) document.getElementById('poster-title-control').value = savedTitle;
-            if(savedColor) currentPosterColor = savedColor;
-
-            applyGradeButtonUI();
-        }
-
-        window.addEventListener('beforeunload', (e) => { e.preventDefault(); e.returnValue = ''; });
-        window.addEventListener('DOMContentLoaded', () => {
-            history.pushState(null, null, window.location.href);
-            loadFromStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        });
-        window.addEventListener('popstate', () => {
-            if (confirm("학급약속 연구소를 정말 이탈하시겠습니까? 데이터는 로컬 브라우저에 임시 안전 보존 중입니다.")) {
-                history.go(-1);
-            } else {
-                history.pushState(null, null, window.location.href);
-            }
-        });
-
-        // -------------------------------------------------------------
-        // 자연어 기반 고시 조항 매핑 엔진
-        // -------------------------------------------------------------
-        function analyzeRuleLaw(text) {
-            if (/폰|스마트|패드|태블릿|기기|노트북|인터넷|게임|SNS/.test(text)) {
-                return { law: "제11조 (정보통신망 이용)", authority: "기기 검수 및 수업 방해 시 즉시 압수" };
-            }
-            if (/때리|욕|싸움|따돌림|괴롭|놀리|비방|폭력|단톡/.test(text)) {
-                return { law: "제10조 및 학교폭력예방법", authority: "즉시 행위 제한 및 가해 학생 공간 격리" };
-            }
-            if (/물건|청소|정리|낙서|파손|부수|쓰레기|사물함/.test(text)) {
-                return { law: "제11조 (물품 관리)", authority: "물품 오용 방지 및 원상복구 명령" };
-            }
-            if (/떠들|장난|지각|수업|돌아|소란|발표|경청/.test(text)) {
-                return { law: "제7조 (학업 분위기 조성)", authority: "교실 내 분리조치 및 반성문 부여" };
-            }
-            return { law: "제10조 (학생생활지도 자율권)", authority: "교사 재량 기반 조언 및 훈육 조치 권한" };
-        }
-
-        // -------------------------------------------------------------
-        // UI 렌더링 스크립트 엔진
-        // -------------------------------------------------------------
-        function renderLibraryPool() {
-            const container = document.getElementById('library-pool-container');
-            container.innerHTML = '';
-
-            // 카테고리별로 규칙을 유목화하여 렌더링 (가독성/내용 획기적 증가)
-            Object.keys(categories).forEach(catKey => {
-                const catRules = ruleLibrary[currentGrade].filter(r => r.category === catKey);
-                
-                let catSection = document.createElement('div');
-                catSection.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-2xs";
-                catSection.innerHTML = `<h4 class="font-bold text-slate-800 text-base mb-3 pb-1 border-b text-indigo-600">${categories[catKey]}</h4>`;
-                
-                let itemsList = document.createElement('div');
-                itemsList.className = "space-y-2.5";
-
-                catRules.forEach(rule => {
-                    const isAdded = selectedRules.some(r => r.id === rule.id);
-                    itemsList.innerHTML += `
-                        <div class="p-3 border rounded-lg bg-slate-50/50 flex justify-between items-center text-sm">
-                            <div class="flex-1 pr-3">
-                                <p class="font-medium text-slate-800">${rule.text}</p>
-                                <p class="text-[11px] text-slate-400 mt-0.5">⚖️ 고시 근거: ${rule.law}</p>
-                            </div>
-                            <button onclick="toggleRule('${rule.id}')" class="px-3 py-1.5 text-xs font-semibold rounded-md whitespace-nowrap ${isAdded ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100'}">
-                                ${isAdded ? '제거' : '선택'}
-                            </button>
-                        </div>
-                    `;
-                });
-                
-                catSection.appendChild(itemsList);
-                container.appendChild(catSection);
-            });
-        }
-
-        function toggleRule(id) {
-            const index = selectedRules.findIndex(r => r.id === id);
-            if (index > -1) {
-                selectedRules.splice(index, 1);
-            } else {
-                // 원본 데이터를 복사해서 들고 오고 기본 책임 조항 0번 바인딩
-                const target = ruleLibrary[currentGrade].find(r => r.id === id);
-                if(target) {
-                    selectedRules.push({ ...target, consequence: consequenceOptions[0] });
-                }
-            }
-            saveToStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        }
-
-        function addCustomRule() {
-            const input = document.getElementById('custom-rule-input');
-            if(!input.value.trim()) return;
-
-            const analyzed = analyzeRuleLaw(input.value.trim());
-            const newRule = {
-                id: 'custom_' + Date.now(),
-                category: 'class',
-                text: input.value.trim(),
-                law: analyzed.law,
-                authority: analyzed.authority,
-                consequence: consequenceOptions[0] // 기본 책임 바인딩
-            };
-            selectedRules.push(newRule);
-            input.value = '';
-            saveToStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        }
-
-        // 후속 책임 조항 실시간 셀렉트 매칭 업데이터
-        updateConsequence = (ruleId, newConsequence) => {
-            const rule = selectedRules.find(r => r.id === ruleId);
-            if(rule) {
-                rule.consequence = newConsequence;
-                saveToStorage();
-            }
-        };
-
-        function updateMyRulesView() {
-            const myRulesEl = document.getElementById('my-rules');
-            document.getElementById('rule-count').innerText = `${selectedRules.length}개`;
-            
-            if(selectedRules.length === 0) {
-                myRulesEl.innerHTML = '<p class="text-sm text-slate-400 text-center py-12">아직 선택된 규칙이 없습니다.<br>왼쪽에서 우리 반 규칙을 추가해 주세요.</p>';
-                return;
-            }
-
-            myRulesEl.innerHTML = '';
-            selectedRules.forEach((rule, idx) => {
-                let optionsHtml = consequenceOptions.map(opt => 
-                    `<option value="${opt}" ${rule.consequence === opt ? 'selected' : ''}>${opt}</option>`
-                ).join('');
-
-                myRulesEl.innerHTML += `
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-3xs text-sm">
-                        <div class="flex justify-between items-start">
-                            <span class="font-semibold text-slate-700 flex-1 leading-relaxed"><b class="text-indigo-600 mr-1">${idx+1}.</b> ${rule.text}</span>
-                            <button onclick="deleteSelectedRule('${rule.id}')" class="text-slate-400 hover:text-rose-500 font-bold ml-2 text-base">×</button>
-                        </div>
-                        <div class="mt-2">
-                            <label class="block text-[11px] font-bold text-amber-600 mb-0.5">⚠️ 위반 시 아이들이 이행할 책임 조항 선택</label>
-                            <select onchange="updateConsequence('${rule.id}', this.value)" class="text-xs border rounded p-1.5 bg-amber-50/50 text-slate-700 w-full focus:outline-amber-400">
-                                ${optionsHtml}
-                            </select>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function deleteSelectedRule(id) {
-            selectedRules = selectedRules.filter(r => r.id !== id);
-            saveToStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        }
-
-        // -------------------------------------------------------------
-        // 스텝 제어 및 기타 화면단 연계 로직
-        // -------------------------------------------------------------
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('bg-indigo-50', 'text-indigo-700');
-                el.classList.add('text-slate-600', 'hover:bg-slate-50');
-            });
-            document.getElementById(`btn-${tabId}`).classList.add('bg-indigo-50', 'text-indigo-700');
-            document.getElementById(`btn-${tabId}`).classList.remove('text-slate-600', 'hover:bg-slate-50');
-
-            if(tabId === 'worksheet') renderWorksheet();
-            if(tabId === 'mapping') renderMappingTable();
-            if(tabId === 'poster') renderPoster();
-            
-            const currentIndex = tabsOrder.indexOf(tabId);
-            const nextBtn = document.getElementById('next-step-btn');
-            if(currentIndex === tabsOrder.length - 1) {
-                nextBtn.innerHTML = `<span>🔄 처음 단계로 이동</span>`;
-            } else {
-                nextBtn.innerHTML = `<span>${currentIndex + 2}. ${tabNames[tabId]} 단계로 이동</span> <span>➔</span>`;
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function goToNextStep() {
-            const currentTab = tabsOrder.find(id => !document.getElementById(`tab-${id}`).classList.contains('hidden'));
-            const currentIndex = tabsOrder.indexOf(currentTab);
-            if(currentIndex === tabsOrder.length - 1) {
-                switchTab('library');
-            } else {
-                switchTab(tabsOrder[currentIndex + 1]);
-            }
-        }
-
-        function applyGradeButtonUI() {
-            document.querySelectorAll('.grade-btn').forEach(el => {
-                el.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
-                el.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
-            });
-            const eventBtn = document.getElementById(`btn-grade-${currentGrade}`);
-            if(eventBtn){
-                eventBtn.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
-                eventBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
-            }
-        }
-
-        function filterGrade(grade) {
-            currentGrade = grade;
-            applyGradeButtonUI();
-            selectedRules = [
-                { ...ruleLibrary[currentGrade][0], consequence: consequenceOptions[0] },
-                { ...ruleLibrary[currentGrade][1], consequence: consequenceOptions[1] }
-            ];
-            saveToStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        }
-
-        function renderWorksheet() {
-            const container = document.getElementById('worksheet-view');
-            let title = ""; let guideText = ""; let questionHtml = "";
-
-            if (currentGrade === 'low') {
-                title = "🎨 그림으로 나누는 우리 교실 약속 (1~2학년용)";
-                guideText = "아래 안심 상자 속 행동 가이드를 살펴보고, 우리가 함께 지켜나갈 이쁜 약속 모양을 선택해 멋지게 색칠해 보아요!";
-                questionHtml = `
-                    <div class="space-y-5 text-base text-slate-700">
-                        <div class="grid grid-cols-2 gap-4 my-4">
-                            <div class="border-2 border-slate-300 rounded-lg p-4 text-center">
-                                <span class="text-3xl block mb-1">🤫</span>
-                                <span class="text-sm font-bold block text-slate-600">1. 예쁜 경청 상자</span>
-                                <div class="w-full h-12 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
-                            </div>
-                            <div class="border-2 border-slate-300 rounded-lg p-4 text-center">
-                                <span class="text-3xl block mb-1">🏃</span>
-                                <span class="text-sm font-bold block text-slate-600">2. 복도 안전 상자</span>
-                                <div class="w-full h-12 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
-                            </div>
-                        </div>
-                        <p class="font-bold">✏️ 내가 꼭 지키고 싶은 약속 딱 하나만 적어보기:</p>
-                        <div class="border-b-2 border-slate-400 h-10 w-full"></div>
-                    </div>
-                `;
-            } else {
-                title = "⚖️ 우리 반 약속과 책임 수립을 위한 토론 의제";
-                guideText = "우리가 합의한 약속을 성실히 이행하고, 실수로 약속을 어겼을 때 공동체를 복구하기 위해 수행할 민주적 책임을 토의해 봅시다.";
-                questionHtml = `
-                    <div class="space-y-4 text-sm text-slate-700">
-                        <p class="font-bold">📋 토의할 약속 리스트 개요</p>
-                        <div class="bg-slate-50 p-3 rounded border text-xs text-slate-600 space-y-1">
-                            ${selectedRules.map((r,i) => `<div><b>${i+1}.</b> ${r.text}</div>`).join('')}
-                        </div>
-                        <p class="font-bold">✍️ 우리 모둠이 생각하는 가장 정의로운 책임(후속 조치) 조항 기술:</p>
-                        <div class="border border-slate-300 rounded p-4 h-24 text-slate-300 text-xs">약속을 어겼을 때 어떻게 행동을 회복할 것인가에 대해 논의 후 적어보세요.</div>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = `
-                <div class="text-center mb-4">
-                    <h3 class="text-xl font-black text-slate-900">${title}</h3>
-                    <p class="text-xs text-slate-400 mt-1">____ 학년 ____ 반  /  이름: ______________</p>
+    <main class="flex-1 bg-white rounded-xl shadow-sm p-6 lg:p-8 min-h-[720px] flex flex-col justify-between">
+        <div class="content-body">
+            <section id="tab-diagnosis" class="tab-content">
+                <div class="border-b pb-5 mb-6">
+                    <h2 class="text-2xl font-black text-slate-900">🧭 우리 반 진단부터 시작하기</h2>
+                    <p class="text-base text-slate-500 mt-2">학년과 학급 상황을 먼저 입력하면, 우선적으로 다룰 생활 영역과 규칙 후보를 추천합니다.</p>
                 </div>
-                <div class="bg-indigo-50/50 border border-indigo-100 rounded-lg p-3.5 mb-4 text-xs leading-relaxed text-slate-600">
-                    💡 <strong>민주적 합의 안내:</strong> ${guideText}
-                </div>
-                ${questionHtml}
-            `;
-        }
-
-        function renderMappingTable() {
-            const tbody = document.getElementById('mapping-table-body');
-            if(selectedRules.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 text-sm">약속 설정 탭에서 규칙을 먼저 지정해 주세요.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = '';
-            selectedRules.forEach(rule => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 text-sm">
-                        <td class="p-4 font-medium text-slate-800">${rule.text}</td>
-                        <td class="p-4 text-xs text-amber-700 font-medium">${rule.consequence}</td>
-                        <td class="p-4 text-xs font-semibold text-indigo-600">${rule.law}</td>
-                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full">검증안심</span></td>
-                    </tr>
-                `;
-            });
-        }
-
-        const colorThemes = {
-            indigo: { border: 'border-indigo-600', text: 'text-indigo-600', badge: 'bg-indigo-100 text-indigo-700', bar: 'border-indigo-600' },
-            emerald: { border: 'border-emerald-600', text: 'text-emerald-600', badge: 'bg-emerald-100 text-emerald-700', bar: 'border-emerald-600' },
-            amber: { border: 'border-amber-500', text: 'text-amber-500', badge: 'bg-amber-100 text-amber-800', bar: 'border-amber-500' },
-            rose: { border: 'border-rose-500', text: 'text-rose-500', badge: 'bg-rose-100 text-rose-700', bar: 'border-rose-500' }
-        };
-
-        function changePosterTheme(color) {
-            currentPosterColor = color;
-            saveToStorage();
-            renderPoster();
-        }
-
-        function updatePosterText() {
-            const ctrlVal = document.getElementById('poster-title-control').value;
-            document.getElementById('poster-title').innerText = ctrlVal || "우리 반 학급 헌법";
-            localStorage.setItem('lab_v2_title', ctrlVal);
-        }
-
-        function renderPoster() {
-            const listEl = document.getElementById('poster-rules-list');
-            const badge = document.getElementById('poster-badge');
-            const title = document.getElementById('poster-title');
-            const viewFrame = document.getElementById('poster-view');
-            
-            const theme = colorThemes[currentPosterColor] || colorThemes['indigo'];
-            
-            viewFrame.className = `bg-white shadow-xl border-4 ${theme.border} p-8 w-[550px] min-h-[720px] flex flex-col justify-between text-left transition-all duration-300`;
-            badge.className = `text-sm ${theme.text} font-bold tracking-widest uppercase mb-2 text-center`;
-            title.className = `text-2xl font-black text-slate-900 border-b-2 ${theme.bar} pb-4 mb-6 text-center`;
-            
-            badge.innerText = currentGrade === 'low' ? "🎈 우리들의 약속과 이쁜 책임 🎈" : "⚖️ CLASS CONSTITUTION (약속과 책임) ⚖️";
-            title.innerText = document.getElementById('poster-title-control').value || "우리 반 학급 규칙";
-
-            if(selectedRules.length === 0) {
-                listEl.innerHTML = '<p class="text-sm text-slate-400 text-center py-12">선택된 약속 조항이 없습니다.</p>';
-                return;
-            }
-
-            listEl.innerHTML = '';
-            selectedRules.forEach((rule, idx) => {
-                listEl.innerHTML += `
-                    <div class="py-2 border-b border-slate-50 last:border-0">
-                        <div class="flex items-start space-x-3">
-                            <span class="flex-shrink-0 w-6 h-6 rounded-full ${theme.badge} flex items-center justify-center font-bold text-xs shadow-3xs">${idx+1}</span>
-                            <div class="flex-1">
-                                <p class="text-sm font-bold text-slate-800 leading-snug">${rule.text}</p>
-                                <p class="text-xs text-amber-600 font-medium mt-1 pl-0.5">↳ 위반 시 책임: ${rule.consequence}</p>
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    <div class="xl:col-span-7 space-y-6">
+                        <div class="bg-slate-50 rounded-xl p-5 border">
+                            <h3 class="font-bold text-lg mb-4">① 기본 정보</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <label class="block"><span class="text-sm font-bold text-slate-600">학년</span><select id="grade-select" onchange="updateDiagnosis()" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option value="1">1학년</option><option value="2">2학년</option><option value="3">3학년</option><option value="4">4학년</option><option value="5">5학년</option><option value="6">6학년</option></select></label>
+                                <label class="block"><span class="text-sm font-bold text-slate-600">학생 수</span><input id="student-count" oninput="updateDiagnosis()" type="number" value="24" min="1" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
+                                <label class="block"><span class="text-sm font-bold text-slate-600">학급 특성</span><select id="class-type" onchange="updateDiagnosis()" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option>일반학급</option><option>과밀학급</option><option>소규모학급</option><option>다문화 학생 포함</option><option>통합학급</option></select></label>
                             </div>
                         </div>
+                        <div class="bg-slate-50 rounded-xl p-5 border">
+                            <h3 class="font-bold text-lg mb-4">② 걱정되는 생활 장면</h3>
+                            <div id="concern-checks" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                            <h3 class="font-bold text-amber-900 mb-2">⚠️ 법적 표현 주의</h3>
+                            <p class="text-sm text-amber-800 leading-relaxed">이 도구는 학생생활규정과 고시를 참고해 생활지도 절차를 정리하지만, “완벽한 면책”이나 “자동 법적 보호”를 보장하지 않습니다. 실제 조치는 비례성, 학생 상황, 절차, 기록을 함께 고려해야 합니다.</p>
+                        </div>
                     </div>
-                `;
-            });
-        }
+                    <div class="xl:col-span-5 bg-indigo-50 rounded-xl p-5 border border-indigo-100">
+                        <h3 class="font-black text-indigo-900 text-lg mb-3">AI 설계 요약</h3>
+                        <div id="diagnosis-summary" class="space-y-3 text-sm"></div>
+                        <button onclick="applyRecommendedRules()" class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-3 font-bold">추천 규칙 초안 적용</button>
+                    </div>
+                </div>
+            </section>
 
-        function printComponent(divId) {
-            const printContent = document.getElementById(divId).innerHTML;
-            const printArea = document.getElementById('print-area');
-            printArea.innerHTML = printContent;
-            window.print();
-        }
-    </script>
+            <section id="tab-values" class="tab-content hidden">
+                <div class="border-b pb-5 mb-6 flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900">💬 학생 의견 수집</h2>
+                        <p class="text-base text-slate-500 mt-2">학생들이 원하는 교실의 모습을 모으고, 핵심 가치를 정리합니다.</p>
+                    </div>
+                    <div class="bg-slate-100 rounded-lg px-4 py-3 text-sm text-slate-600">학생용 접속 코드: <b id="class-code" class="text-indigo-700 text-lg">PROMISE-25</b></div>
+                </div>
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    <div class="xl:col-span-6 space-y-4">
+                        <div class="bg-slate-50 rounded-xl p-5 border">
+                            <h3 class="font-bold text-lg mb-3">학생 의견 직접 입력</h3>
+                            <p class="text-sm text-slate-500 mb-3">실제 서비스에서는 QR로 학생들이 입력하고, 여기서는 교사가 대표 의견을 추가할 수 있습니다.</p>
+                            <div class="flex gap-2"><input id="student-voice-input" placeholder="예: 서로 비웃지 않는 교실이 좋아요" class="flex-1 border rounded-lg px-3 py-2.5"><button onclick="addStudentVoice()" class="bg-slate-800 text-white px-4 rounded-lg font-bold">추가</button></div>
+                        </div>
+                        <div id="student-voice-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-2"></div>
+                    </div>
+                    <div class="xl:col-span-6 space-y-4">
+                        <div class="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
+                            <h3 class="font-bold text-lg mb-3">핵심 가치 분석</h3>
+                            <div id="value-analysis" class="space-y-3"></div>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 border">
+                            <h3 class="font-bold text-lg mb-3">우리 반 가치 선언문</h3>
+                            <textarea id="value-statement" oninput="saveToStorage()" class="w-full h-32 border rounded-lg p-3 text-sm leading-relaxed"></textarea>
+                            <button onclick="generateValueStatement()" class="mt-3 bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold text-sm">가치 선언문 자동 정리</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-rules" class="tab-content hidden">
+                <div class="border-b pb-5 mb-6">
+                    <h2 class="text-2xl font-black text-slate-900">📚 핵심 규칙 설계</h2>
+                    <p class="text-base text-slate-500 mt-2">규칙은 5개 내외로 줄이고, 각 규칙을 가치·구체 행동·회복 책임으로 연결합니다.</p>
+                </div>
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    <div class="xl:col-span-7 space-y-5">
+                        <div class="flex flex-wrap gap-2 mb-1" id="grade-buttons"></div>
+                        <div id="library-pool-container" class="space-y-5 max-h-[600px] overflow-y-auto pr-2"></div>
+                    </div>
+                    <div class="xl:col-span-5 bg-slate-50 rounded-xl p-5 border flex flex-col">
+                        <h3 class="text-base font-bold text-slate-700 mb-3 flex justify-between items-center"><span>📋 우리 반 핵심 규칙</span><span id="rule-count" class="bg-indigo-100 text-indigo-700 text-sm px-3 py-1 rounded-full font-bold">0개</span></h3>
+                        <div id="my-rules" class="space-y-3 overflow-y-auto max-h-[440px] pr-1"></div>
+                        <div class="mt-5 pt-4 border-t border-slate-200">
+                            <div class="flex gap-2"><input type="text" id="custom-rule-input" placeholder="직접 규칙 입력" class="flex-1 text-sm border rounded-lg px-3 py-2.5"><button onclick="addCustomRule()" class="bg-slate-800 text-white px-4 py-2.5 rounded-lg text-sm font-bold">추가</button></div>
+                            <button onclick="compressRules()" class="mt-3 w-full bg-amber-500 text-white rounded-lg py-2.5 font-bold text-sm">중복 줄이고 5개 핵심 규칙으로 정리</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-agreement" class="tab-content hidden">
+                <div class="border-b pb-5 mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900">🗳️ 토론·투표·합의</h2>
+                        <p class="text-base text-slate-500 mt-2">학생들과 토론한 뒤 규칙별 찬성 수를 기록하고 합의 여부를 확인합니다.</p>
+                    </div>
+                    <button onclick="printComponent('worksheet-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-bold">🖨️ 활동지 인쇄</button>
+                </div>
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    <div class="xl:col-span-7"><div id="vote-board" class="space-y-3"></div></div>
+                    <div class="xl:col-span-5 space-y-5">
+                        <div id="worksheet-view" class="border rounded-xl p-6 bg-white shadow-sm"></div>
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 text-sm text-emerald-900 leading-relaxed"><b>합의 기준 예시</b><br>전체 학생의 2/3 이상이 동의한 규칙만 최종 학급헌법에 포함합니다. 낮은 동의율의 규칙은 표현을 바꾸거나 학생 의견을 다시 반영하세요.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-constitution" class="tab-content hidden">
+                <div class="border-b pb-5 mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-900">📜 학급헌법 자동 생성</h2>
+                        <p class="text-base text-slate-500 mt-2">학생 의견과 합의된 규칙을 바탕으로 학급헌법, 서명지, 교실 포스터를 만듭니다.</p>
+                    </div>
+                    <button onclick="printComponent('constitution-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-bold">🖨️ 헌법 인쇄</button>
+                </div>
+                <div class="bg-slate-100 p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label><span class="block text-sm font-bold text-slate-700 mb-1">학급헌법 제목</span><input type="text" id="constitution-title-control" oninput="renderConstitution(); saveToStorage();" value="서로 존중하고 책임지는 우리 반 학급헌법" class="w-full border rounded-lg px-3 py-2"></label>
+                    <label><span class="block text-sm font-bold text-slate-700 mb-1">교실 분위기 테마</span><select id="theme-select" onchange="renderConstitution(); saveToStorage();" class="w-full border rounded-lg px-3 py-2"><option value="indigo">모던 인디고</option><option value="emerald">내추럴 에메랄드</option><option value="amber">클래식 앰버</option><option value="rose">차분한 로즈</option></select></label>
+                </div>
+                <div class="bg-slate-200 p-6 rounded-xl flex justify-center"><div id="constitution-view" class="bg-white shadow-xl border-4 border-indigo-600 p-8 w-[620px] min-h-[820px]"></div></div>
+            </section>
+
+            <section id="tab-guidance" class="tab-content hidden">
+                <div class="border-b pb-5 mb-6">
+                    <h2 class="text-2xl font-black text-slate-900">🛡️ 생활지도 기록 지원</h2>
+                    <p class="text-base text-slate-500 mt-2">학급헌법을 실제 생활지도 발화, 회복 질문, 기록 문장으로 연결합니다.</p>
+                </div>
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    <div class="xl:col-span-5 space-y-4">
+                        <label class="block"><span class="text-sm font-bold text-slate-700">상황 입력</span><textarea id="incident-input" class="mt-1 w-full h-36 border rounded-lg p-3" placeholder="예: 수업 중 친구 발표를 비웃고 반복적으로 방해함"></textarea></label>
+                        <button onclick="generateGuidanceRecord()" class="w-full bg-indigo-600 text-white rounded-lg py-3 font-bold">생활지도 문안 생성</button>
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 leading-relaxed"><b>주의</b><br>기록은 사실 중심으로 작성하고, 감정적 표현·낙인 표현은 피하세요. 학교 규정과 관리자 지침을 함께 확인해야 합니다.</div>
+                    </div>
+                    <div class="xl:col-span-7"><div id="guidance-result" class="bg-slate-50 border rounded-xl p-5 min-h-[420px]"></div></div>
+                </div>
+            </section>
+        </div>
+        <div class="mt-8 pt-5 border-t flex justify-end no-print"><button id="next-step-btn" onclick="goToNextStep()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl text-base font-bold shadow-md hover:bg-indigo-700">2. 학생 의견 수집 단계로 이동 ➔</button></div>
+    </main>
+</div>
+
+<div id="print-area" class="hidden"></div>
+
+<footer class="bg-slate-100 border-t py-6 text-center text-sm text-slate-500 no-print flex flex-col items-center justify-center space-y-1">
+    <p>© 2026 학급약속 연구소. 대한민국 초등 교사들의 안전하고 체계적인 생활지도를 응원합니다.</p>
+    <p class="text-slate-400/70 text-xs font-normal">만든이 2026 최창훈</p>
+</footer>
+
+<script>
+const categories = { class: '📚 배움 및 수업 집중', safety: '🚨 안전한 생활', relation: '💬 관계와 존중', environment: '🌱 환경과 책임', digital: '📱 디지털 시민성' };
+const values = ['존중','안전','배움','책임','배려','자치'];
+const concerns = [
+    {id:'noise', label:'수업 중 소란·자리 이탈', value:'배움'}, {id:'tease', label:'놀림·비속어·관계 갈등', value:'존중'},
+    {id:'safety', label:'복도·교실 안전사고 우려', value:'안전'}, {id:'clean', label:'정리정돈·물품 관리 부족', value:'책임'},
+    {id:'digital', label:'스마트기기·온라인 갈등', value:'자치'}, {id:'passive', label:'1인 1역·모둠 역할 소극적', value:'책임'}
+];
+const restorativeOptions = {
+    class: ['놓친 학습 내용 3줄 정리하기','방해받은 친구에게 경청 약속 말하기','수업 참여 준비 루틴 다시 실행하기'],
+    safety: ['위험했던 장면과 안전 대안 쓰기','안전 이동 연습 후 다시 참여하기','피해 가능성이 있던 친구에게 사과하기'],
+    relation: ['피해를 받은 친구의 마음 듣기','회복 대화 후 사과와 재발방지 약속하기','관계 회복 카드 작성하기'],
+    environment: ['사용한 물건 원상복구하기','공용 물품 관리 도우미 참여하기','다음 사용자를 위한 정리 점검하기'],
+    digital: ['기기 사용 목적 다시 확인하기','수업 종료까지 기기 보관 후 회복 대화하기','온라인 언어 사용 성찰문 쓰기']
+};
+const ruleLibrary = {
+  1: [
+    { id:'g1_c1', value:'배움', category:'class', text:'선생님과 친구가 말할 때 눈과 귀로 들어요.', law:'제10조 조언·주의' },
+    { id:'g1_s1', value:'안전', category:'safety', text:'교실과 복도에서는 걸어서 이동해요.', law:'제8조 안전' },
+    { id:'g1_r1', value:'존중', category:'relation', text:'친구에게 고운 말로 이야기해요.', law:'제10조 품위·존중' },
+    { id:'g1_e1', value:'책임', category:'environment', text:'쓴 물건은 제자리에 정리해요.', law:'제11조 물품 관리' }
+  ],
+  2: [
+    { id:'g2_c1', value:'배움', category:'class', text:'발표하고 싶을 때 손을 들고 차례를 기다려요.', law:'제7조 학업 분위기' },
+    { id:'g2_s1', value:'안전', category:'safety', text:'장난으로 친구를 밀거나 잡아당기지 않아요.', law:'제8조 신체 안전' },
+    { id:'g2_r1', value:'배려', category:'relation', text:'친구의 실수에 “괜찮아”라고 말해요.', law:'제10조 상호 존중' },
+    { id:'g2_e1', value:'책임', category:'environment', text:'내 자리와 사물함을 스스로 정리해요.', law:'제11조 환경 위생' }
+  ],
+  3: [
+    { id:'g3_c1', value:'배움', category:'class', text:'모둠 활동에서 내 역할을 끝까지 해요.', law:'제9조 협동' },
+    { id:'g3_s1', value:'안전', category:'safety', text:'계단과 복도에서는 우측통행으로 이동해요.', law:'제8조 통행 안전' },
+    { id:'g3_r1', value:'존중', category:'relation', text:'싫어하는 별명이나 외모 놀림을 하지 않아요.', law:'제10조 및 학교폭력예방법' },
+    { id:'g3_e1', value:'책임', category:'environment', text:'학급 공용 물건을 쓰고 바로 돌려놓아요.', law:'제11조 공공 물품' }
+  ],
+  4: [
+    { id:'g4_c1', value:'배움', category:'class', text:'토의 중 상대의 말을 끝까지 듣고 반응해요.', law:'제7조 토론 질서' },
+    { id:'g4_s1', value:'안전', category:'safety', text:'장난이 위험해질 수 있음을 알고 몸으로 괴롭히지 않아요.', law:'제8조 신체 안전' },
+    { id:'g4_r1', value:'존중', category:'relation', text:'비속어 대신 서로를 존중하는 말을 사용해요.', law:'제10조 언어 윤리' },
+    { id:'g4_e1', value:'자치', category:'environment', text:'1인 1역과 학급 자치 활동을 성실히 실천해요.', law:'제6조 학생 자치' }
+  ],
+  5: [
+    { id:'g5_c1', value:'책임', category:'class', text:'수업 시작 전에 필요한 준비물을 갖추고 대기한다.', law:'제7조 학업 분위기' },
+    { id:'g5_r1', value:'존중', category:'relation', text:'다름, 외모, 문화에 대한 혐오 표현을 사용하지 않는다.', law:'제10조 상호 존중' },
+    { id:'g5_d1', value:'자치', category:'digital', text:'스마트기기는 수업 목적에 맞게만 사용한다.', law:'제11조 정보통신망 이용' },
+    { id:'g5_e1', value:'책임', category:'environment', text:'학급 물품과 전기 자원을 아끼고 정돈한다.', law:'제11조 공공재 관리' }
+  ],
+  6: [
+    { id:'g6_c1', value:'배움', category:'class', text:'토론 중 상대의 발언권을 침해하지 않고 근거를 들어 말한다.', law:'제7조 토론 질서' },
+    { id:'g6_r1', value:'존중', category:'relation', text:'온라인과 오프라인에서 따돌림과 언어폭력을 하지 않는다.', law:'제10조 및 학교폭력예방법' },
+    { id:'g6_d1', value:'자치', category:'digital', text:'학급 단톡방과 SNS에서 개인정보와 명예를 존중한다.', law:'제11조 정보통신망 이용' },
+    { id:'g6_e1', value:'책임', category:'environment', text:'졸업 전까지 학급과 학교 공간을 책임 있게 사용한다.', law:'제11조 물품 관리' }
+  ]
+};
+const tabsOrder = ['diagnosis','values','rules','agreement','constitution','guidance'];
+const tabNext = { diagnosis:'학생 의견 수집', values:'핵심 규칙 설계', rules:'토론·투표·합의', agreement:'학급헌법 출력', constitution:'생활지도 기록', guidance:'처음 단계' };
+let currentGrade = 1;
+let selectedConcerns = ['noise','tease','safety'];
+let selectedRules = [];
+let studentVoices = ['친구를 비웃지 않는 교실이면 좋겠어요.','복도에서 뛰지 않았으면 좋겠어요.','수업 시간에는 서로 집중하면 좋겠어요.','내 물건과 학급 물건을 잘 정리하면 좋겠어요.'];
+let votes = {};
+
+function triggerSaveIndicator(){ const ind=document.getElementById('save-indicator'); ind.innerText='데이터 보존 완료'; ind.className='bg-blue-500 text-white px-3 py-2 rounded-lg animate-pulse'; setTimeout(()=>{ind.innerText='자동저장 활성'; ind.className='bg-emerald-500 text-white px-3 py-2 rounded-lg animate-pulse';},1500); }
+function saveToStorage(){
+    const data={currentGrade,selectedConcerns,selectedRules,studentVoices,votes,valueStatement:document.getElementById('value-statement')?.value||'',constitutionTitle:document.getElementById('constitution-title-control')?.value||'',theme:document.getElementById('theme-select')?.value||'indigo'};
+    localStorage.setItem('class_promise_lab_v3', JSON.stringify(data)); triggerSaveIndicator();
+}
+function loadFromStorage(){
+    const raw=localStorage.getItem('class_promise_lab_v3');
+    if(raw){ try{ const d=JSON.parse(raw); currentGrade=d.currentGrade||1; selectedConcerns=d.selectedConcerns||selectedConcerns; selectedRules=d.selectedRules||[]; studentVoices=d.studentVoices||studentVoices; votes=d.votes||{}; setTimeout(()=>{ if(document.getElementById('value-statement')) document.getElementById('value-statement').value=d.valueStatement||''; if(document.getElementById('constitution-title-control')) document.getElementById('constitution-title-control').value=d.constitutionTitle||'서로 존중하고 책임지는 우리 반 학급헌법'; if(document.getElementById('theme-select')) document.getElementById('theme-select').value=d.theme||'indigo'; },0); }catch(e){} }
+    if(selectedRules.length===0) applyRecommendedRules(false);
+}
+function init(){ renderConcernChecks(); renderGradeButtons(); loadFromStorage(); document.getElementById('grade-select').value=currentGrade; updateDiagnosis(false); renderStudentVoices(); renderLibraryPool(); updateMyRulesView(); renderWorksheet(); renderVoteBoard(); renderConstitution(); document.getElementById('guidance-result').innerHTML='<p class="text-slate-400 text-sm">상황을 입력하면 권장 발화, 회복 질문, 기록 문장이 생성됩니다.</p>'; }
+function renderConcernChecks(){ const el=document.getElementById('concern-checks'); el.innerHTML=concerns.map(c=>`<label class="flex items-center gap-3 bg-white border rounded-lg p-3 card-hover"><input type="checkbox" value="${c.id}" onchange="toggleConcern('${c.id}', this.checked)"><span class="text-sm font-medium">${c.label}</span><span class="ml-auto text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded">${c.value}</span></label>`).join(''); }
+function toggleConcern(id, checked){ selectedConcerns = checked ? [...new Set([...selectedConcerns,id])] : selectedConcerns.filter(x=>x!==id); updateDiagnosis(); }
+function updateDiagnosis(doSave=true){ currentGrade=parseInt(document.getElementById('grade-select').value||currentGrade); document.querySelectorAll('#concern-checks input').forEach(i=>i.checked=selectedConcerns.includes(i.value)); const picked=concerns.filter(c=>selectedConcerns.includes(c.id)); const priority=[...new Set(picked.map(c=>c.value))]; const count=document.getElementById('student-count').value||24; const type=document.getElementById('class-type').value||'일반학급'; document.getElementById('diagnosis-summary').innerHTML=`<div class="bg-white p-4 rounded-lg border"><b>${currentGrade}학년 ${count}명 · ${type}</b><br><span class="text-slate-500">발달 단계: ${gradeDevelopmentText(currentGrade)}</span></div><div class="bg-white p-4 rounded-lg border"><b>우선 가치</b><div class="mt-2 flex flex-wrap gap-2">${priority.map(v=>`<span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs font-bold">${v}</span>`).join('')||'<span class="text-slate-400">선택된 걱정 장면 없음</span>'}</div></div><div class="bg-white p-4 rounded-lg border"><b>추천 흐름</b><ol class="list-decimal ml-5 mt-2 text-slate-600 leading-7"><li>학생 의견을 먼저 수집</li><li>핵심 가치를 3개 이하로 압축</li><li>규칙은 5개 내외로 합의</li><li>위반 시 처벌보다 회복 책임 연결</li></ol></div>`; if(doSave) saveToStorage(); }
+function gradeDevelopmentText(g){ return g<=1?'그림·행동 중심, 짧고 긍정적인 문장 필요':g==2?'그림과 간단한 이유 설명 병행':g==3?'모둠 토론과 공동체 개념 시작':g==4?'합의와 책임 개념을 구체화 가능':g==5?'자치와 디지털 시민성 규칙 필요':'학급헌법형 규칙과 학생 자치 운영 가능'; }
+function applyRecommendedRules(doSave=true){ const picked=concerns.filter(c=>selectedConcerns.includes(c.id)).map(c=>c.value); const pool=ruleLibrary[currentGrade]||ruleLibrary[1]; selectedRules=pool.filter(r=>picked.includes(r.value)||picked.includes('자치')&&r.category==='digital').slice(0,5).map(ruleWithRestorative); if(selectedRules.length<3) selectedRules=pool.slice(0,4).map(ruleWithRestorative); updateMyRulesView(); renderLibraryPool(); renderVoteBoard(); renderConstitution(); if(doSave) saveToStorage(); }
+function ruleWithRestorative(r){ const options=restorativeOptions[r.category]||restorativeOptions.class; return {...r, recovery: options[0], approved:false}; }
+function renderGradeButtons(){ const el=document.getElementById('grade-buttons'); el.innerHTML=[1,2,3,4,5,6].map(g=>`<button onclick="setGrade(${g})" id="grade-btn-${g}" class="grade-chip px-4 py-2 rounded-full text-sm font-bold">${g}학년</button>`).join(''); }
+function setGrade(g){ currentGrade=g; document.getElementById('grade-select').value=g; applyRecommendedRules(false); renderLibraryPool(); updateMyRulesView(); updateDiagnosis(); }
+function renderStudentVoices(){ const list=document.getElementById('student-voice-list'); list.innerHTML=studentVoices.map((v,i)=>`<div class="bg-white border rounded-lg p-3 flex gap-3 card-hover"><span class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-black">${i+1}</span><p class="flex-1 text-sm text-slate-700">${v}</p><button onclick="deleteVoice(${i})" class="text-slate-400 hover:text-rose-500 font-bold">×</button></div>`).join(''); renderValueAnalysis(); }
+function addStudentVoice(){ const input=document.getElementById('student-voice-input'); if(!input.value.trim()) return; studentVoices.push(input.value.trim()); input.value=''; renderStudentVoices(); saveToStorage(); }
+function deleteVoice(i){ studentVoices.splice(i,1); renderStudentVoices(); saveToStorage(); }
+function detectValue(text){ if(/비웃|놀림|욕|존중|말|친구|따돌/.test(text)) return '존중'; if(/안전|뛰|다치|밀|복도/.test(text)) return '안전'; if(/수업|공부|집중|발표|경청/.test(text)) return '배움'; if(/정리|물건|청소|역할/.test(text)) return '책임'; if(/도와|배려|괜찮/.test(text)) return '배려'; return '자치'; }
+function renderValueAnalysis(){ const counts={}; studentVoices.forEach(v=>{ const key=detectValue(v); counts[key]=(counts[key]||0)+1; }); const total=studentVoices.length||1; document.getElementById('value-analysis').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,c])=>`<div><div class="flex justify-between text-sm font-bold mb-1"><span>${k}</span><span>${Math.round(c/total*100)}%</span></div><div class="h-3 bg-white rounded-full overflow-hidden"><div class="h-full bg-indigo-500" style="width:${c/total*100}%"></div></div></div>`).join('')||'<p class="text-sm text-slate-400">학생 의견을 추가해 주세요.</p>'; }
+function generateValueStatement(){ const top=[...studentVoices.reduce((m,v)=>{const k=detectValue(v);m.set(k,(m.get(k)||0)+1);return m;},new Map())].sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]); document.getElementById('value-statement').value=`우리 반은 ${top.join(', ')}을(를) 소중히 여기는 공동체입니다. 우리는 서로의 배움과 안전을 지키기 위해 함께 정한 약속을 실천하고, 실수했을 때는 벌을 받는 데서 끝내지 않고 공동체를 회복하는 책임을 다합니다.`; saveToStorage(); }
+function renderLibraryPool(){ document.querySelectorAll('.grade-chip').forEach(b=>{b.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200';}); const gb=document.getElementById(`grade-btn-${currentGrade}`); if(gb) gb.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-indigo-600 text-white shadow-sm'; const container=document.getElementById('library-pool-container'); const pool=ruleLibrary[currentGrade]||[]; container.innerHTML=Object.keys(categories).map(cat=>{ const rules=pool.filter(r=>r.category===cat); if(!rules.length) return ''; return `<div class="bg-white p-4 rounded-xl border"><h4 class="font-bold text-indigo-700 mb-3 pb-1 border-b">${categories[cat]}</h4><div class="space-y-2.5">${rules.map(rule=>{ const added=selectedRules.some(r=>r.id===rule.id); return `<div class="p-3 border rounded-lg bg-slate-50/70 flex justify-between gap-3 items-center text-sm"><div><p class="font-medium text-slate-800">${rule.text}</p><p class="text-[11px] text-slate-400 mt-0.5">가치: ${rule.value} · 참고 근거: ${rule.law}</p></div><button onclick="toggleRule('${rule.id}')" class="px-3 py-1.5 text-xs font-bold rounded-md whitespace-nowrap ${added?'bg-rose-100 text-rose-700':'bg-indigo-50 text-indigo-700'}">${added?'제거':'선택'}</button></div>`; }).join('')}</div></div>`; }).join(''); }
+function toggleRule(id){ const idx=selectedRules.findIndex(r=>r.id===id); if(idx>-1) selectedRules.splice(idx,1); else { const target=(ruleLibrary[currentGrade]||[]).find(r=>r.id===id); if(target) selectedRules.push(ruleWithRestorative(target)); } renderLibraryPool(); updateMyRulesView(); renderVoteBoard(); renderConstitution(); saveToStorage(); }
+function addCustomRule(){ const input=document.getElementById('custom-rule-input'); if(!input.value.trim()) return; const text=input.value.trim(); const category=/폰|스마트|SNS|온라인|기기/.test(text)?'digital':/욕|친구|놀림|비웃|따돌/.test(text)?'relation':/뛰|안전|밀|장난/.test(text)?'safety':/청소|정리|물건/.test(text)?'environment':'class'; selectedRules.push(ruleWithRestorative({id:'custom_'+Date.now(), value:detectValue(text), category, text, law: category==='digital'?'제11조 정보통신망 이용':category==='relation'?'제10조 상호 존중':'학생생활규정 및 고시 참고'})); input.value=''; renderLibraryPool(); updateMyRulesView(); renderVoteBoard(); renderConstitution(); saveToStorage(); }
+function updateMyRulesView(){ document.getElementById('rule-count').innerText=`${selectedRules.length}개`; const el=document.getElementById('my-rules'); if(!selectedRules.length){ el.innerHTML='<p class="text-sm text-slate-400 text-center py-12">선택된 규칙이 없습니다.</p>'; return; } el.innerHTML=selectedRules.map((r,i)=>{ const opts=(restorativeOptions[r.category]||restorativeOptions.class).map(o=>`<option ${r.recovery===o?'selected':''}>${o}</option>`).join(''); return `<div class="bg-white p-3 rounded-lg border text-sm"><div class="flex justify-between gap-2"><span class="font-bold text-slate-700"><b class="text-indigo-600">${i+1}.</b> ${r.text}</span><button onclick="deleteSelectedRule('${r.id}')" class="text-slate-400 hover:text-rose-500 font-bold">×</button></div><div class="mt-2 flex flex-wrap gap-1"><span class="text-[11px] bg-indigo-50 text-indigo-700 px-2 py-1 rounded">${r.value}</span><span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded">${r.law}</span></div><label class="block mt-2 text-[11px] font-bold text-amber-700">회복 책임</label><select onchange="updateRecovery('${r.id}', this.value)" class="w-full text-xs border rounded p-1.5 bg-amber-50">${opts}</select></div>`; }).join(''); }
+function updateRecovery(id,val){ const r=selectedRules.find(x=>x.id===id); if(r) r.recovery=val; renderVoteBoard(); renderConstitution(); saveToStorage(); }
+function deleteSelectedRule(id){ selectedRules=selectedRules.filter(r=>r.id!==id); renderLibraryPool(); updateMyRulesView(); renderVoteBoard(); renderConstitution(); saveToStorage(); }
+function compressRules(){ const byValue=[]; selectedRules.forEach(r=>{ if(!byValue.some(x=>x.value===r.value)) byValue.push(r); }); selectedRules=byValue.slice(0,5); updateMyRulesView(); renderLibraryPool(); renderVoteBoard(); renderConstitution(); saveToStorage(); }
+function renderWorksheet(){ const g=currentGrade; document.getElementById('worksheet-view').innerHTML=`<div class="text-center mb-4"><h3 class="text-xl font-black">${g<=2?'🎨 그림으로 정하는 우리 반 약속':'⚖️ 우리 반 약속과 책임 토론지'}</h3><p class="text-xs text-slate-400 mt-1">____ 학년 ____ 반 / 이름: __________</p></div><div class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 mb-4 text-xs leading-relaxed">1. 우리 반에서 가장 필요한 가치를 고릅니다. 2. 지킬 수 있는 행동으로 바꿉니다. 3. 실수했을 때 어떻게 회복할지 정합니다.</div><div class="space-y-3 text-sm">${selectedRules.map((r,i)=>`<div class="border rounded-lg p-3"><b>${i+1}. ${r.text}</b><br><span class="text-amber-700 text-xs">회복 책임: ${r.recovery}</span><div class="mt-2 border-b h-8 text-slate-300 text-xs">우리 모둠 의견:</div></div>`).join('')}</div>`; }
+function renderVoteBoard(){ renderWorksheet(); const total=parseInt(document.getElementById('student-count')?.value||24); const pass=Math.ceil(total*2/3); const el=document.getElementById('vote-board'); el.innerHTML=selectedRules.map((r,i)=>{ const v=votes[r.id]??Math.max(pass, total-2-i); const ok=v>=pass; return `<div class="bg-white border rounded-xl p-4"><div class="flex justify-between gap-3"><div><b>${i+1}. ${r.text}</b><p class="text-xs text-slate-500 mt-1">가치 ${r.value} · 회복 책임 ${r.recovery}</p></div><span class="${ok?'bg-emerald-100 text-emerald-800':'bg-amber-100 text-amber-800'} px-2 py-1 rounded-full text-xs font-bold h-fit">${ok?'합의':'재토론'}</span></div><div class="mt-3 flex items-center gap-3"><input type="range" min="0" max="${total}" value="${v}" oninput="setVote('${r.id}', this.value)" class="flex-1"><span id="vote-${r.id}" class="font-black text-indigo-700 w-16 text-right">${v}/${total}</span></div><p class="text-xs text-slate-400 mt-1">합의 기준: ${pass}명 이상</p></div>`; }).join(''); }
+function setVote(id,val){ votes[id]=parseInt(val); const total=parseInt(document.getElementById('student-count')?.value||24); document.getElementById(`vote-${id}`).innerText=`${val}/${total}`; saveToStorage(); renderConstitution(); }
+function renderConstitution(){ const view=document.getElementById('constitution-view'); if(!view) return; const total=parseInt(document.getElementById('student-count')?.value||24); const pass=Math.ceil(total*2/3); const approved=selectedRules.filter(r=>(votes[r.id]??pass)>=pass); const theme=document.getElementById('theme-select')?.value||'indigo'; const themeMap={indigo:['border-indigo-600','text-indigo-700','bg-indigo-100'],emerald:['border-emerald-600','text-emerald-700','bg-emerald-100'],amber:['border-amber-500','text-amber-700','bg-amber-100'],rose:['border-rose-500','text-rose-700','bg-rose-100']}; const t=themeMap[theme]; view.className=`bg-white shadow-xl border-4 ${t[0]} p-8 w-[620px] min-h-[820px]`; const title=document.getElementById('constitution-title-control')?.value||'서로 존중하고 책임지는 우리 반 학급헌법'; view.innerHTML=`<div class="text-center"><div class="text-sm font-black ${t[1]} tracking-widest">CLASS CONSTITUTION</div><h2 class="text-2xl font-black text-slate-900 mt-2 pb-4 border-b-2 ${t[0]}">${title}</h2><p class="text-xs text-slate-400 mt-2">학생 의견 수집과 토론·투표를 거쳐 합의한 약속입니다.</p></div><div class="mt-6 bg-slate-50 rounded-lg p-4 text-sm leading-relaxed"><b>전문</b><br>${document.getElementById('value-statement')?.value||'우리 반은 서로의 배움과 안전을 지키기 위해 함께 정한 약속을 실천합니다.'}</div><div class="mt-6 space-y-4">${approved.map((r,i)=>`<div class="pb-3 border-b"><div class="flex gap-3"><span class="w-7 h-7 rounded-full ${t[2]} ${t[1]} font-black text-xs flex items-center justify-center">${i+1}</span><div><p class="font-black text-slate-800">제${i+1}조 ${r.value}</p><p class="text-sm mt-1">${r.text}</p><p class="text-xs text-amber-700 mt-1">실수했을 때의 회복 책임: ${r.recovery}</p><p class="text-[11px] text-slate-400 mt-1">참고 근거: ${r.law}</p></div></div></div>`).join('')||'<p class="text-center text-slate-400 py-10">합의된 규칙이 없습니다.</p>'}</div><div class="mt-8 pt-4 border-t text-center"><p class="text-sm font-bold">우리 반 모두는 위 약속을 함께 만들었으며, 서로의 성장을 위해 실천합니다.</p><div class="mt-6 grid grid-cols-3 gap-3 text-xs text-slate-400">${Array.from({length:9}).map(()=>'<div class="border-b pb-6">서명</div>').join('')}</div></div>`; }
+function generateGuidanceRecord(){ const text=document.getElementById('incident-input').value.trim(); if(!text){alert('상황을 입력해 주세요.');return;} const category=/폰|스마트|SNS|온라인|기기/.test(text)?'digital':/욕|놀림|비웃|따돌|친구|폭력/.test(text)?'relation':/뛰|밀|위험|안전/.test(text)?'safety':/청소|정리|물건|파손/.test(text)?'environment':'class'; const related=selectedRules.find(r=>r.category===category)||selectedRules[0]; const recovery=related?.recovery || (restorativeOptions[category]||restorativeOptions.class)[0]; document.getElementById('guidance-result').innerHTML=`<h3 class="font-black text-lg text-slate-900 mb-4">생활지도 지원 문안</h3><div class="space-y-4 text-sm"><div class="bg-white border rounded-lg p-4"><b>관련 학급헌법</b><p class="mt-1 text-slate-700">${related?related.text:'관련 규칙을 먼저 설정하세요.'}</p></div><div class="bg-white border rounded-lg p-4"><b>권장 발화</b><p class="mt-1 text-slate-700">“우리가 함께 만든 약속을 기억해 보자. 지금 행동은 어떤 친구의 배움이나 안전에 영향을 주었을까? 어떻게 회복하면 좋을까?”</p></div><div class="bg-white border rounded-lg p-4"><b>복원 질문</b><ol class="list-decimal ml-5 mt-1 leading-7"><li>누가 영향을 받았나요?</li><li>어떤 불편이나 피해가 생겼나요?</li><li>다시 공동체로 돌아오기 위해 어떤 책임을 실천할 수 있나요?</li></ol></div><div class="bg-white border rounded-lg p-4"><b>권장 회복 책임</b><p class="mt-1 text-amber-700 font-bold">${recovery}</p></div><div class="bg-slate-800 text-white rounded-lg p-4"><b>기록 예시</b><p class="mt-2 leading-relaxed">${new Date().toLocaleDateString('ko-KR')} 생활지도 상황: ${text}. 학생에게 학급에서 합의한 약속을 상기시키고, 행위가 공동체에 미친 영향을 확인하도록 조언함. 학생은 회복 책임으로 ‘${recovery}’을(를) 안내받았으며, 이후 동일 상황 예방을 위한 약속을 확인함.</p></div></div>`; }
+function switchTab(tabId){ document.querySelectorAll('.tab-content').forEach(el=>el.classList.add('hidden')); document.getElementById(`tab-${tabId}`).classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(el=>{el.classList.remove('bg-indigo-50','text-indigo-700','font-bold'); el.classList.add('text-slate-600','hover:bg-slate-50','font-medium');}); const btn=document.getElementById(`btn-${tabId}`); btn.classList.add('bg-indigo-50','text-indigo-700','font-bold'); btn.classList.remove('text-slate-600','hover:bg-slate-50','font-medium'); if(tabId==='agreement') renderVoteBoard(); if(tabId==='constitution') renderConstitution(); const i=tabsOrder.indexOf(tabId); document.getElementById('next-step-btn').innerHTML=i===tabsOrder.length-1?'🔄 처음 단계로 이동':`${i+2}. ${tabNext[tabId]} 단계로 이동 ➔`; window.scrollTo({top:0,behavior:'smooth'}); }
+function goToNextStep(){ const current=tabsOrder.find(id=>!document.getElementById(`tab-${id}`).classList.contains('hidden')); const idx=tabsOrder.indexOf(current); switchTab(idx===tabsOrder.length-1?'diagnosis':tabsOrder[idx+1]); }
+function printComponent(divId){ const content=document.getElementById(divId).innerHTML; const printArea=document.getElementById('print-area'); printArea.innerHTML=content; window.print(); }
+window.addEventListener('DOMContentLoaded', init);
+window.addEventListener('beforeunload', e=>{ e.preventDefault(); e.returnValue=''; });
+</script>
 </body>
 </html>
