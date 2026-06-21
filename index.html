@@ -243,6 +243,34 @@
         let currentGrade = 'low';
         let selectedRules = [...ruleLibrary['low']]; 
 
+        // -------------------------------------------------------------
+        // [새로고침 / 뒤로가기 방지 시스템]
+        // -------------------------------------------------------------
+        
+        // 1. 새로고침, 탭 닫기, 주소창 입력 이동 차단
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = ''; // 최신 브라우저 공통 표준 경고창 팝업 트리거
+        });
+
+        // 2. 브라우저 '뒤로가기' 버튼 클릭 차단 (History API 적용)
+        window.addEventListener('DOMContentLoaded', () => {
+            // 초기 접속 시 가짜 히스토리 스택을 한 단계 앞에 생성하여 가두기 생성
+            history.pushState(null, null, window.location.href);
+        });
+
+        window.addEventListener('popstate', function (event) {
+            // 사용자가 브라우저 뒤로가기를 눌렀을 때 실행
+            if (confirm("학급약속 연구소를 종료하시겠습니까?\n확인을 누르면 이전 페이지로 이동하며, 작성 중이던 모든 데이터는 삭제됩니다.")) {
+                // 정말 나간다고 승인하면 모듈을 해제하고 원래 스택으로 복귀
+                history.go(-1);
+            } else {
+                // 취소를 누르면 현재 페이지 레이아웃을 임의 유지하기 위해 다시 히스토리 기록 추가
+                history.pushState(null, null, window.location.href);
+            }
+        });
+        // -------------------------------------------------------------
+
         // 탭 전환 기능
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -259,7 +287,6 @@
             if(tabId === 'mapping') renderMappingTable();
             if(tabId === 'poster') renderPoster();
             
-            // 상단으로 부드럽게 스크롤
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -398,7 +425,7 @@
                 `;
             } else {
                 title = "⚖️ 우리 반 학급 헌법 제정 소통지 (5~6학년용)";
-                guideText = "교육부 학생생활지도 고시를 기반으로, 학생의 정당한 권리를 누리기 위한 '책임과 의무'가 담긴 우리 학급 헌법을 설계해 봅시다.";
+                guideText = "교육부 학생생활지도 고시를 기반으로, 학생의 정당한 권리를 누리기 위한 '책임และ 의무'가 담긴 우리 학급 헌법을 설계해 봅시다.";
                 questionHtml = `
                     <div class="space-y-5 text-base text-slate-700">
                         <div class="grid grid-cols-2 gap-4">
