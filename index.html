@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>학급약속 연구소 - 학급 규칙 & 생활지도 매니저</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -17,10 +18,15 @@
             #print-area { position: absolute; left: 0; top: 0; width: 100%; }
             .no-print { display: none !important; }
         }
+        /* 스크롤바 커스텀 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
+    <!-- 상단 헤더 -->
     <header class="bg-indigo-600 text-white shadow-md no-print">
         <div class="container mx-auto px-6 py-5 flex justify-between items-center">
             <div onclick="switchTab('library')" class="flex items-center space-x-3 cursor-pointer hover:opacity-90 transition-opacity select-none" title="홈으로 이동">
@@ -28,75 +34,85 @@
                 <h1 class="text-2xl font-bold tracking-tight">학급약속 연구소 <span class="text-base font-normal bg-indigo-500 px-2 py-1 rounded ml-2">학급 규칙 & 생활지도 매니저</span></h1>
             </div>
             <div class="text-base bg-indigo-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
-                <span>📍 교육부 고시 반영</span>
+                <span>📍 교육부 고시 완벽 매핑</span>
                 <span id="save-indicator" class="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded animate-pulse">자동저장 활성</span>
             </div>
         </div>
     </header>
 
+    <!-- 메인 컨테이너 -->
     <div class="container mx-auto px-4 py-8 flex-1 flex flex-col md:flex-row gap-6 no-print">
         
+        <!-- 사이드바 내비게이션 -->
         <aside class="w-full md:w-72 bg-white rounded-xl shadow-sm p-5 flex flex-col space-y-3 h-fit">
             <p class="text-sm font-semibold text-slate-400 px-3 uppercase tracking-wider mb-1">메뉴 목록</p>
             <button onclick="switchTab('library')" id="btn-library" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium bg-indigo-50 text-indigo-700 flex items-center space-x-3">
-                <span>📚</span> <span>1. 규칙 라이브러리</span>
+                <span>📚</span> <span>1. 규칙 라이브러리 설정</span>
             </button>
             <button onclick="switchTab('worksheet')" id="btn-worksheet" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>📝</span> <span>2. 활동지 자동 생성</span>
+                <span>📝</span> <span>2. 민주적 활동지 인쇄</span>
             </button>
             <button onclick="switchTab('mapping')" id="btn-mapping" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>🔗</span> <span>3. 고시 연계 & 검증</span>
+                <span>🔗</span> <span>3. 법적 근거 검증 테이블</span>
             </button>
             <button onclick="switchTab('guide')" id="btn-guide" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>🛡️</span> <span>4. 생활지도 대응 가이드</span>
+                <span>🛡️</span> <span>4. 교사용 지도 매뉴얼</span>
             </button>
             <button onclick="switchTab('poster')" id="btn-poster" class="tab-btn w-full text-left px-4 py-3.5 rounded-lg text-base font-medium text-slate-600 hover:bg-slate-50 flex items-center space-x-3">
-                <span>🖨️</span> <span>5. 교실 게시용 출력</span>
+                <span>🖨️</span> <span>5. 약속 & 책임 포스터</span>
             </button>
         </aside>
 
+        <!-- 메인 콘텐츠 영역 -->
         <main class="flex-1 bg-white rounded-xl shadow-sm p-8 min-h-[650px] flex flex-col justify-between">
             
             <div class="content-body">
+                <!-- TAB 1: 규칙 라이브러리 (대폭 확충 및 카테고리화) -->
                 <div id="tab-library" class="tab-content">
                     <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">📚 학년군별 추천 규칙 라이브러리</h2>
-                        <p class="text-base text-slate-500 mt-2">학년군에 맞는 규칙을 선택하여 우리 학급의 규칙 목록을 구성해보세요.</p>
+                        <h2 class="text-2xl font-bold text-slate-900">📚 4대 생활 영역별 규칙 및 책임 설계</h2>
+                        <p class="text-base text-slate-500 mt-2">교실에서 실제로 필요한 영역별 규칙을 선택하고, 어겼을 때 따르는 민주적 책임 조항을 페어링하세요.</p>
                     </div>
 
+                    <!-- 학년군 선택 대형 컨트롤러 -->
                     <div class="flex space-x-3 mb-6">
-                        <button onclick="filterGrade('low')" id="btn-grade-low" class="grade-btn bg-indigo-600 text-white px-5 py-2.5 rounded-full text-base font-medium shadow-sm">1~2학년군 (직관/긍정)</button>
-                        <button onclick="filterGrade('mid')" id="btn-grade-mid" class="grade-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-5 py-2.5 rounded-full text-base font-medium">3~4학년군 (관계/협동)</button>
-                        <button onclick="filterGrade('high')" id="btn-grade-high" class="grade-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-5 py-2.5 rounded-full text-base font-medium">5~6학년군 (자치/민주)</button>
+                        <button onclick="filterGrade('low')" id="btn-grade-low" class="grade-btn bg-indigo-600 text-white px-5 py-2.5 rounded-full text-base font-medium shadow-sm">1~2학년군 (직관과 안심)</button>
+                        <button onclick="filterGrade('mid')" id="btn-grade-mid" class="grade-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-5 py-2.5 rounded-full text-base font-medium">3~4학년군 (관계와 존중)</button>
+                        <button onclick="filterGrade('high')" id="btn-grade-high" class="grade-btn bg-slate-100 text-slate-600 hover:bg-slate-200 px-5 py-2.5 rounded-full text-base font-medium">5~6학년군 (자치와 의무)</button>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="text-base font-bold text-slate-700 mb-3">🌟 시스템 추천 규칙 리스트</h3>
-                            <div id="library-pool" class="space-y-3 max-h-[450px] overflow-y-auto pr-2"></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- 왼쪽: 4대 영역별 확장 풀 -->
+                        <div class="lg:col-span-7 space-y-6 max-h-[550px] overflow-y-auto pr-2" id="library-pool-container">
+                            <!-- JS를 통해 영역별 카테고리 헤더와 아이템 리스트가 동적 생성됩니다 -->
                         </div>
-                        <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
-                            <h3 class="text-base font-bold text-slate-700 mb-3 flex justify-between items-center">
-                                <span>📋 선택된 우리 학급 규칙</span>
-                                <span id="rule-count" class="bg-indigo-100 text-indigo-700 text-sm px-3 py-1 rounded-full font-bold">0개</span>
-                            </h3>
-                            <div id="my-rules" class="space-y-2.5"></div>
-                            <div class="mt-5 pt-5 border-t border-slate-200">
+
+                        <!-- 오른쪽: 선택된 규칙 및 책임 상세 매칭기 -->
+                        <div class="lg:col-span-5 bg-slate-50 rounded-xl p-5 border border-slate-100 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-700 mb-3 flex justify-between items-center">
+                                    <span>📋 구성중인 우리 반 조항</span>
+                                    <span id="rule-count" class="bg-indigo-100 text-indigo-700 text-sm px-3 py-1 rounded-full font-bold">0개</span>
+                                </h3>
+                                <div id="my-rules" class="space-y-3 overflow-y-auto max-h-[350px] pr-1"></div>
+                            </div>
+
+                            <div class="mt-5 pt-4 border-t border-slate-200">
                                 <div class="flex gap-2">
-                                    <input type="text" id="custom-rule-input" placeholder="직접 규칙 입력 (예: 스마트폰 무단 사용 금지)" class="flex-1 text-base border rounded-lg px-4 py-2.5 focus:outline-indigo-600">
-                                    <button onclick="addCustomRule()" class="bg-slate-800 text-white px-5 py-2.5 rounded-lg text-base font-medium hover:bg-slate-700 whitespace-nowrap">추가</button>
+                                    <input type="text" id="custom-rule-input" placeholder="직접 약속 입력 (예: 스마트폰 무단 사용 안 하기)" class="flex-1 text-sm border rounded-lg px-3 py-2.5 focus:outline-indigo-600">
+                                    <button onclick="addCustomRule()" class="bg-slate-800 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-700 whitespace-nowrap">직접 추가</button>
                                 </div>
-                                <p class="text-xs text-slate-400 mt-1.5 pl-1">💡 입력 문장에 맞춰 연계 고시 조항이 스마트 텍스트 매핑 엔진을 통해 자동 검증됩니다.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- TAB 2: 활동지 자동 생성 -->
                 <div id="tab-worksheet" class="tab-content hidden">
                     <div class="border-b pb-5 mb-6 flex justify-between items-center">
                         <div>
                             <h2 class="text-2xl font-bold text-slate-900">📝 민주적 규칙 만들기 활동지 자동 생성</h2>
-                            <p class="text-base text-slate-500 mt-2">선택한 학년군에 최적화된 토론 및 의견 수렴용 활동지를 출력합니다.</p>
+                            <p class="text-base text-slate-500 mt-2">선택한 학년성에 최적화된 토론 및 합의용 컬러링/기록 서식을 출력합니다.</p>
                         </div>
                         <button onclick="printComponent('worksheet-view')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-lg text-base font-medium hover:bg-indigo-700 flex items-center space-x-2">
                             <span>🖨️</span> <span>활동지 인쇄하기</span>
@@ -105,26 +121,27 @@
                     <div id="worksheet-view" class="border border-slate-300 rounded-xl p-10 max-w-2xl mx-auto bg-white shadow-sm"></div>
                 </div>
 
+                <!-- TAB 3: 고시 연계 & 검증 -->
                 <div id="tab-mapping" class="tab-content hidden">
                     <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">🔗 학생생활규정 및 고시 자동 연결 & 검증</h2>
-                        <p class="text-base text-slate-500 mt-2">우리 학급 규칙이 '교원의 학생생활지도에 관한 고시' 몇 조와 연결되는지 법적 근거를 자동 매핑합니다.</p>
+                        <h2 class="text-2xl font-bold text-slate-900">🔗 학생생활규정 및 교육부 고시 검증 시스템</h2>
+                        <p class="text-base text-slate-500 mt-2">학급약속과 합의된 책임 조항이 고시 범위 내에 존재하는지 법률 매핑 상태를 보여줍니다.</p>
                     </div>
                     <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-6 flex items-start space-x-4">
                         <span class="text-2xl">✅</span>
                         <div class="text-base text-emerald-800">
-                            <p class="font-bold">법적 보호 시스템 작동 중</p>
-                            <p class="mt-1 text-emerald-700 leading-relaxed">작성된 학급 규칙은 교육부 고시 권한 내에 존재하므로 교사의 정당한 생활지도 권리를 보장받을 수 있습니다.</p>
+                            <p class="font-bold">법적 면책 및 보호 권한 작동 중</p>
+                            <p class="mt-1 text-emerald-700 leading-relaxed">매칭된 책임 조항을 어길 시 적용되는 분리 및 훈육 수단은 교육부 생활지도 가이드라인 및 고시 권한과 완벽히 호환됩니다.</p>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-base border-collapse">
                             <thead>
                                 <tr class="bg-slate-100 text-slate-700 border-b">
-                                    <th class="p-4 font-semibold">학급 규칙 내용</th>
-                                    <th class="p-4 font-semibold">연계 고시 조항</th>
-                                    <th class="p-4 font-semibold">지도 가능 권한</th>
-                                    <th class="p-4 font-semibold w-28 text-center">안전성</th>
+                                    <th class="p-4 font-semibold">학급 약속</th>
+                                    <th class="p-4 font-semibold">위반 시 이행할 책임</th>
+                                    <th class="p-4 font-semibold">연계 고시 근거</th>
+                                    <th class="p-4 font-semibold w-24 text-center">보호 여부</th>
                                 </tr>
                             </thead>
                             <tbody id="mapping-table-body" class="divide-y text-slate-600"></tbody>
@@ -132,77 +149,74 @@
                     </div>
                 </div>
 
+                <!-- TAB 4: 생활지도 대응 가이드 -->
                 <div id="tab-guide" class="tab-content hidden">
                     <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">🛡️ 고시 기반 생활지도 대응 가이드</h2>
-                        <p class="text-base text-slate-500 mt-2">학생이 학급 규칙을 반복적으로 위반하거나 거부할 때, 고시에 따른 단계별 대처 매뉴얼을 제시합니다.</p>
+                        <h2 class="text-2xl font-bold text-slate-900">🛡️ 고시 기반 단계별 생활지도 대응 매뉴얼</h2>
+                        <p class="text-base text-slate-500 mt-2">약속 위반 및 책임 거부 상황 발생 시, 법적 분쟁을 방지하는 행정 조치 매뉴얼입니다.</p>
                     </div>
                     <div class="space-y-5">
                         <div class="border rounded-xl p-5 bg-amber-50 border-amber-200">
                             <h3 class="font-bold text-amber-900 text-lg flex items-center space-x-2">
                                 <span class="bg-amber-500 text-white text-sm px-2.5 py-0.5 rounded">1단계</span>
-                                <span>주의 및 조언 (고시 제10조)</span>
+                                <span>구두 조언 및 규칙-책임 확인 (고시 제10조)</span>
                             </h3>
-                            <p class="text-base text-amber-800 mt-2">규칙을 위반한 학생에게 즉시 행동을 멈추도록 구두로 경고하고 올바른 행동을 지시합니다.</p>
+                            <p class="text-base text-amber-800 mt-2">강압적 지시 대신 학기 초에 직접 투표하고 조율했던 약속과 매칭된 책임 문구를 상기시킵니다.</p>
                             <div class="bg-white/70 p-4 rounded-lg text-sm font-mono mt-3 text-slate-700 border border-amber-100">
-                                💬 <strong>추천 발화 예시:</strong> "[학생 이름]아, 우리 학급 규칙 O번 '복도에서는 가볍게 걷기'를 지키지 않으면 부딪혀 다칠 위험이 있단다. 지금부터 안전하게 걸어가 주겠니?"
+                                💬 <strong>권장 발화 예시:</strong> "[학생 이름]아, 우리가 지난 3월 회의 때 평화로운 수업을 위해 '발표 시 손들고 대기하기'로 약속했고, 깜빡했을 때는 '바른 대기 선언문 읽기'라는 책임을 다하기로 다 같이 사인했었지? 약속을 기억하고 책임을 멋지게 실천해 주겠니?"
                             </div>
                         </div>
                         <div class="border rounded-xl p-5 bg-orange-50 border-orange-200">
                             <h3 class="font-bold text-orange-900 text-lg flex items-center space-x-2">
                                 <span class="bg-orange-500 text-white text-sm px-2.5 py-0.5 rounded">2단계</span>
-                                <span>교실 내 분리 및 성찰시간 (고시 제12조)</span>
+                                <span>합의된 후속 조치 강제 및 교실 내 분리 (고시 제12조)</span>
                             </h3>
-                            <p class="text-base text-orange-800 mt-2">주의를 준 후에도 규칙 위반이 지속되거나 수업을 방해하는 경우, 교실 내 지정된 '성찰 구역'으로 분리 조치합니다.</p>
-                        </div>
-                        <div class="border rounded-xl p-5 bg-red-50 border-red-200">
-                            <h3 class="font-bold text-red-900 text-lg flex items-center space-x-2">
-                                <span class="bg-red-500 text-white text-sm px-2.5 py-0.5 rounded">3단계</span>
-                                <span>학부모 안내 및 협조 요청 (고시 제15조)</span>
-                            </h3>
-                            <p class="text-base text-red-800 mt-2">동일한 규칙 위반 행위가 하루 3회 이상 반복되거나 타인의 학습권을 심각하게 침해하는 경우 학부모에게 사실을 고지하고 면담을 요청합니다.</p>
+                            <p class="text-base text-orange-800 mt-2">정당한 지시 및 후속 책임을 고의적으로 거부하며 수업 분위기를 지속적으로 방해할 경우, 지정된 교실 내 성찰 공간으로 즉시 격리 조치하여 자가 성찰 기록지를 작성하게 합니다.</p>
                         </div>
                     </div>
                 </div>
 
+                <!-- TAB 5: 교실 게시용 포스터 출력 (약속 & 책임 세트 바인딩) -->
                 <div id="tab-poster" class="tab-content hidden">
                     <div class="border-b pb-5 mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900">🖨️ 교실 게시용 학급규칙 포스터 출력</h2>
-                        <p class="text-base text-slate-500 mt-2">우리 학급만의 개성 넘치는 테마 색상과 타이틀을 골라 교실 포스터로 인쇄하세요.</p>
+                        <h2 class="text-2xl font-bold text-slate-900">🖨️ 약속 & 책임 연계형 교실 게시용 포스터 출력</h2>
+                        <p class="text-base text-slate-500 mt-2">단순 금지어가 아닌 권리와 책임이 유기적으로 연계된 우리 학급 헌법을 시각화합니다.</p>
                     </div>
 
+                    <!-- 포스터 커스텀 가젯 인터페이스 -->
                     <div class="bg-slate-100 p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">포스터 타이틀 수정</label>
-                            <input type="text" id="poster-title-control" oninput="updatePosterText()" value="행복한 우리 반 학급 규칙" class="w-full text-base border rounded-lg px-3 py-2 focus:outline-indigo-600">
+                            <label class="block text-sm font-bold text-slate-700 mb-1">포스터 대타이틀 문구 변경</label>
+                            <input type="text" id="poster-title-control" oninput="updatePosterText()" value="서로 존중하고 의무를 다하는 우리 반 학급 헌법" class="w-full text-base border rounded-lg px-3 py-2 focus:outline-indigo-600">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">교실 분위기 테마 색상 고르기</label>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">인테리어 조화형 감성 테마 선택</label>
                             <div class="flex space-x-2">
-                                <button onclick="changePosterTheme('indigo')" class="w-8 h-8 rounded-full bg-indigo-600 border-2 border-white ring-2 ring-indigo-600" title="인디고"></button>
-                                <button onclick="changePosterTheme('emerald')" class="w-8 h-8 rounded-full bg-emerald-600 border-2 border-white" title="에메랄드"></button>
-                                <button onclick="changePosterTheme('amber')" class="w-8 h-8 rounded-full bg-amber-500 border-2 border-white" title="앰버"></button>
-                                <button onclick="changePosterTheme('rose')" class="w-8 h-8 rounded-full bg-rose-500 border-2 border-white" title="로즈"></button>
-                                <button onclick="printComponent('poster-view')" class="ml-auto bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-base font-medium hover:bg-indigo-700">🖨️ 바로 인쇄</button>
+                                <button onclick="changePosterTheme('indigo')" class="w-8 h-8 rounded-full bg-indigo-600 border-2 border-white ring-2 ring-indigo-600" title="모던 인디고"></button>
+                                <button onclick="changePosterTheme('emerald')" class="w-8 h-8 rounded-full bg-emerald-600 border-2 border-white" title="내추럴 에메랄드"></button>
+                                <button onclick="changePosterTheme('amber')" class="w-8 h-8 rounded-full bg-amber-500 border-2 border-white" title="클래식 앰버"></button>
+                                <button onclick="changePosterTheme('rose')" class="w-8 h-8 rounded-full bg-rose-500 border-2 border-white" title="차분한 로즈"></button>
+                                <button onclick="printComponent('poster-view')" class="ml-auto bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-base font-medium hover:bg-indigo-700">🖨️ 포스터 인쇄</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-slate-200 p-8 rounded-xl flex justify-center">
-                        <div id="poster-view" class="bg-white shadow-xl border-4 border-indigo-600 p-10 w-[500px] min-h-[650px] flex flex-col justify-between text-center transition-all duration-300">
+                        <div id="poster-view" class="bg-white shadow-xl border-4 border-indigo-600 p-10 w-[550px] min-h-[750px] flex flex-col justify-between text-left transition-all duration-300">
                             <div>
-                                <div id="poster-badge" class="text-base text-indigo-600 font-bold tracking-widest uppercase mb-2">우리들의 약속</div>
-                                <h2 id="poster-title" class="text-3xl font-black text-slate-900 border-b-2 border-indigo-600 pb-4 mb-8">행복한 우리 반 학급 규칙</h2>
-                                <div id="poster-rules-list" class="space-y-5 text-left px-4"></div>
+                                <div id="poster-badge" class="text-sm font-bold tracking-widest uppercase mb-1 text-center text-indigo-600">서로를 지키는 약속과 책임</div>
+                                <h2 id="poster-title" class="text-2xl font-black text-slate-900 border-b-2 border-indigo-600 pb-4 mb-6 text-center">행복한 우리 반 학급 규칙</h2>
+                                <div id="poster-rules-list" class="space-y-4 px-2"></div>
                             </div>
-                            <div class="mt-10 pt-4 border-t border-slate-100 text-xs text-slate-400 leading-relaxed">
-                                본 학급 규칙은 학생생활지도 고시를 준수하여 구성원들의 민주적 합의로 제정되었습니다.
+                            <div class="mt-8 pt-4 border-t border-slate-100 text-center text-[11px] text-slate-400 leading-relaxed">
+                                본 학급 규칙과 조치 사항은 학급 구성원 전체가 민주적으로 합의하여 서약하였으며,<br>교원의 학생생활지도에 관한 고시(교육부 고시)에 의거하여 정당한 법적 보호를 받습니다.
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- 스텝 네비게이션 가이드 바 -->
             <div class="mt-8 pt-5 border-t flex justify-end">
                 <button id="next-step-btn" onclick="goToNextStep()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl text-base font-bold shadow-md hover:bg-indigo-700 flex items-center space-x-2">
                     <span>2단계 활동지 생성으로 이동</span> <span>➔</span>
@@ -214,75 +228,123 @@
 
     <div id="print-area" class="hidden"></div>
 
+    <!-- 푸터 -->
     <footer class="bg-slate-100 border-t py-6 text-center text-sm text-slate-500 no-print flex flex-col items-center justify-center space-y-1">
         <p>© 2026 학급약속 연구소. 대한민국 초등 교사들의 안전하고 체계적인 생활지도를 응원합니다.</p>
         <p class="text-slate-400/70 text-xs font-normal">만든이 2026 최창훈</p>
     </footer>
 
     <script>
+        // 4대 생활 카테고리 정의 테이블
+        const categories = {
+            class: "📚 배움 및 수업 집중",
+            safety: "🚨 교실 안전 및 이동 규칙",
+            relation: "💬 관계 조화 및 바른 언어",
+            environment: "🌱 학급 환경 및 물품 관리"
+        };
+
+        // 민주적 후속 조치(책임 조항) 옵션 풀
+        const consequenceOptions = [
+            "💡 스스로 자가 성찰 기록지 작성 및 다짐",
+            "🤝 피해를 입은 구성원에게 사과/칭찬의 마음 표현하기",
+            "🧹 교실 환경 정돈 및 1일 환경 도우미 참여",
+            "📢 학급 자치 회의(해결 서클) 안건으로 제안하여 토론",
+            "📵 당일 스마트 기기 교탁 보관 후 방과 후 수령",
+            "💬 바른 행동 수칙을 조용히 소리 내어 읽고 입실하기"
+        ];
+
+        // [대폭 확충] 초등 교실 밀착형 실시간 규칙 데이터 라이브러리
         const ruleLibrary = {
             low: [
-                { id: 'l1', text: "교실과 복도에서는 사뿐사뿐 걸어 다녀요.", law: "제8조 (안전 보장)", authority: "주의 및 물리적 제지" },
-                { id: 'l2', text: "친구의 말을 끝까지 귀 기울여 들어요.", law: "제10조 (인성 교육/학업)", authority: "조언 및 주의" },
-                { id: 'l3', text: "바른 언어를 사용하고 비속어는 쓰지 않아요.", law: "제10조 (품위 유지)", authority: "조언 및 훈육" },
-                { id: 'l4', text: "급식을 먹을 때는 제자리에 앉아서 먹어요.", law: "제8조 (교실 안전/위생)", authority: "주의 및 지도" }
+                // 배움
+                { id: 'lo_c1', category: 'class', text: "선생님이 말씀하실 때는 눈을 맞추고 경청해요.", law: "제10조 (인성/학업)", authority: "조언 및 주의" },
+                { id: 'lo_c2', category: 'class', text: "나의 의견을 발표하고 싶을 때는 예쁘게 손을 들고 기다려요.", law: "제7조 (학업 수행권)", authority: "주의 및 조언" },
+                { id: 'lo_c3', category: 'class', text: "공부 시간과 놀이 시간을 구별하여 준비물을 챙겨요.", law: "제10조 (기본생활습관)", authority: "조언" },
+                // 안전
+                { id: 'lo_s1', category: 'safety', text: "교실과 복도에서는 사뿐사뿐 걸어 다녀요.", law: "제8조 (안전 보장)", authority: "주의 및 물리적 제지" },
+                { id: 'lo_s2', category: 'safety', text: "급식을 먹을 때는 자리에 바르게 앉아서 꼭꼭 씹어 먹어요.", law: "제8조 (교실 위생/안전)", authority: "주의 조치" },
+                { id: 'lo_s3', category: 'safety', text: "가위나 학용품을 가지고 장난치거나 칼싸움을 하지 않아요.", law: "제8조 (위험 예방)", authority: "물품 수거 및 주의" },
+                // 관계
+                { id: 'lo_r1', category: 'relation', text: "친구에게 따뜻한 고운 말, 예쁜 말을 사용해요.", law: "제10조 (품위 유지)", authority: "훈육 및 조언" },
+                { id: 'lo_r2', category: 'relation', text: "친구의 실수나 틀린 답변을 비웃지 않고 '괜찮아'라고 말해줘요.", law: "제10조 (상호 존중)", authority: "훈계 및 조언" },
+                // 생활
+                { id: 'lo_e1', category: 'environment', text: "내가 사용한 학용품과 놀잇감은 스스로 바구니에 정리해요.", law: "제11조 (물품 관리)", authority: "정리 명령" },
+                { id: 'lo_e2', category: 'environment', text: "쓰레기는 바닥에 던지지 않고 쓰레기통에 쏙 넣어요.", law: "제11조 (환경 위생)", authority: "원상복구 지시" }
             ],
             mid: [
-                { id: 'l1', text: "선생님이나 친구가 발표할 때 집중해서 바라보아요.", law: "제7조 (학업 수행권 보호)", authority: "주의 및 좌석 배치 변경" },
-                { id: 'l2', text: "모둠 활동을 할 때는 내 역할을 책임감 있게 수행해요.", law: "제9조 (협동 연대)", authority: "조언 및 협동 과제 부과" },
-                { id: 'l3', text: "교실 물건이나 친구 물건을 소중히 다루고 허락을 맡아요.", law: "제11조 (물품 관리)", authority: "주의 및 원상복구 명령" },
-                { id: 'l4', text: "온라인 학습이나 스마트 패드 사용 시 정해진 사이트만 봐요.", law: "제11조 (정보통신망 이용)", authority: "기기 수거 및 제한" }
+                // 배움
+                { id: 'mi_c1', category: 'class', text: "모둠 활동이나 협동 과제를 할 때 내 역할을 책임감 있게 완수해요.", law: "제9조 (협동 연대)", authority: "조언 및 과제 재부과" },
+                { id: 'mi_c2', category: 'class', text: "다른 친구가 발표할 때 딴청 피우지 않고 경청하며 반응해요.", law: "제7조 (학업 분위기)", authority: "주의 조치" },
+                { id: 'mi_c3', category: 'class', text: "수업 중 화장실이나 이동이 필요할 땐 조용히 수신호로 소통해요.", law: "제7조 (교실 질서)", authority: "조언" },
+                // 안전
+                { id: 'mi_s1', category: 'safety', text: "계단과 통로를 이동할 때는 우측통행으로 줄을 서서 안전하게 가요.", law: "제8조 (통행 안전)", authority: "이동 제한 및 주의" },
+                { id: 'mi_s2', category: 'safety', text: "장난치며 친구를 밀치거나 옷을 잡아당기는 위험한 장난을 하지 않아요.", law: "제8조 (신체 안전)", authority: "물리적 분리 조치" },
+                // 관계
+                { id: 'mi_r1', category: 'relation', text: "친구가 싫어하는 나쁜 별명이나 외모 비하성 놀림을 일절 하지 않아요.", law: "제10조 및 학폭법", authority: "즉시 분리 및 훈육" },
+                { id: 'mi_r2', category: 'relation', text: "인터넷 줄임말이나 비속어 대신 올바른 표준 우리말을 쓰도록 노력해요.", law: "제10조 (언어 윤리)", authority: "성찰 과제 부과" },
+                // 생활
+                { id: 'mi_e1', category: 'environment', text: "학급 공용 보드마카나 도서를 소중히 다루고 사용 즉시 제자리에 두어요.", law: "제11조 (공공 물품)", authority: "원상복구 명령" },
+                { id: 'mi_e2', category: 'environment', text: "나에게 맡겨진 1인 1역 교실 자치 활동을 매일 성실히 실천해요.", law: "제6조 (학생 자치 권리)", authority: "이행 촉구 조언" }
             ],
             high: [
-                { id: 'l1', text: "학급 회의를 통해 민주적으로 결정된 사안은 반드시 준수한다.", law: "제6조 (학생 자치 권리)", authority: "조언 및 이행 촉구" },
-                { id: 'l2', text: "모든 종류의 언어폭력, 단톡방 내 사이버 따돌림을 엄격히 금지한다.", law: "제10조 및 학교폭력예방법", authority: "즉시 분리 및 학폭위 보고" },
-                { id: 'l3', text: "수업 시작 소리가 들리면 자리에 앉아 교과서와 필기구를 준비한다.", law: "제7조 (학업 분위기 조성)", authority: "주의 및 교실 내 분리조치" },
-                { id: 'l4', text: "타인의 다양성과 개인 사생활을 존중하며 혐오 표현을 쓰지 않는다.", law: "제10조 (상호 존중)", authority: "훈계 및 성찰 반성문 작성" }
+                // 배움
+                { id: 'hi_c1', category: 'class', text: "수업 시작 소리가 들리면 자리에 앉아 교과서와 필기구를 셋팅하고 대기한다.", law: "제7조 (학업 분위기 조성)", authority: "주의 및 교실 내 분리" },
+                { id: 'hi_c2', category: 'class', text: "모둠 토의 중 내 의견과 다르더라도 상대방의 발언권을 가로막지 않는다.", law: "제7조 (토론 질서 유지)", authority: "발언권 조절 조언" },
+                { id: 'hi_c3', category: 'class', text: "과제물 및 수행 결과물은 정해진 기한 내에 성실히 작성하여 제출한다.", law: "제7조 (학업 책임)", authority: "방과후 이행 지도" },
+                // 안전
+                { id: 'hi_s1', category: 'safety', text: "체육 시간이나 특별실 이동 시 장난치지 않고 전담 교사의 안전 지시를 따른다.", law: "제8조 (실험/실습 안전)", authority: "수업 참여 일시 제한" },
+                { id: 'hi_s2', category: 'safety', text: "위험물(커터칼 오용, 인화물질 등)을 허가 없이 교실 내부로 반입하지 않는다.", law: "제11조 (위험물 관리)", authority: "즉시 소지품 수거 및 보관" },
+                // 관계
+                { id: 'hi_r1', category: 'relation', text: "학급 단톡방이나 SNS 등 온라인 공간 내에서의 언어폭력과 따돌림을 엄격히 금지한다.", law: "제10조 및 학교폭력예방법", authority: "학폭위 보고 및 격리 조치" },
+                { id: 'hi_r2', category: 'relation', text: "서로의 다름과 인종, 외모의 다양성을 인정하며 혐오성 표현을 절대 사용하지 않는다.", law: "제10조 (상호 존중 의무)", authority: "특별 인성 교육 이수 지시" },
+                // 생활
+                { id: 'hi_e1', category: 'environment', text: "스마트 패드 및 개인 휴대폰은 수업 목적 외에 사적인 목적(게임, SNS)으로 조작하지 않는다.", law: "제11조 (정보통신망 이용)", authority: "일과 중 기기 압수 및 수거" },
+                { id: 'hi_e2', category: 'environment', text: "교실 전기 자원(에어컨, 전등)과 학급 예산 물품을 아끼며 제자리에 정돈한다.", law: "제11조 (공공재 관리)", authority: "환경 정화 책임 과제 부과" }
             ]
         };
 
-        // 중요 순서 사전 정의
         const tabsOrder = ['library', 'worksheet', 'mapping', 'guide', 'poster'];
-        const tabNames = { library: "활동지 생성", worksheet: "고시 연계 검증", mapping: "생활지도 가이드", guide: "교실 포스터 출력", poster: "처음 단계로" };
+        const tabNames = { library: "민주적 활동지 인쇄", worksheet: "법적 근거 검증", mapping: "교사용 지도 매뉴얼", guide: "약속 & 책임 포스터", poster: "처음 단계로" };
 
         let currentGrade = 'low';
         let selectedRules = [];
         let currentPosterColor = 'indigo';
 
         // -------------------------------------------------------------
-        // 데이터 보존 및 감지 엔진
+        // 자동 저장 및 실시간 상태 복구 메커니즘
         // -------------------------------------------------------------
         function triggerSaveIndicator() {
             const ind = document.getElementById('save-indicator');
-            ind.innerText = "임시저장 완료";
-            ind.classList.remove('bg-emerald-500');
-            ind.classList.add('bg-blue-500');
+            ind.innerText = "데이터 보존 완료";
+            ind.className = "text-xs bg-blue-500 text-white px-2 py-0.5 rounded animate-pulse";
             setTimeout(() => {
                 ind.innerText = "자동저장 활성";
-                ind.classList.remove('bg-blue-500');
-                ind.classList.add('bg-emerald-500');
-            }, 1000);
+                ind.className = "text-xs bg-emerald-500 text-white px-2 py-0.5 rounded animate-pulse";
+            }, 8000);
         }
 
         function saveToStorage() {
-            localStorage.setItem('lab_selected_rules', JSON.stringify(selectedRules));
-            localStorage.setItem('lab_current_grade', currentGrade);
-            localStorage.setItem('lab_poster_title', document.getElementById('poster-title-control').value);
-            localStorage.setItem('lab_poster_color', currentPosterColor);
+            localStorage.setItem('lab_v2_rules', JSON.stringify(selectedRules));
+            localStorage.setItem('lab_v2_grade', currentGrade);
+            localStorage.setItem('lab_v2_title', document.getElementById('poster-title-control').value);
+            localStorage.setItem('lab_v2_color', currentPosterColor);
             triggerSaveIndicator();
         }
 
         function loadFromStorage() {
-            const savedGrade = localStorage.getItem('lab_current_grade');
-            const savedRules = localStorage.getItem('lab_selected_rules');
-            const savedTitle = localStorage.getItem('lab_poster_title');
-            const savedColor = localStorage.getItem('lab_poster_color');
+            const savedGrade = localStorage.getItem('lab_v2_grade');
+            const savedRules = localStorage.getItem('lab_v2_rules');
+            const savedTitle = localStorage.getItem('lab_v2_title');
+            const savedColor = localStorage.getItem('lab_v2_color');
 
             if(savedGrade) currentGrade = savedGrade;
             if(savedRules) {
                 selectedRules = JSON.parse(savedRules);
             } else {
-                selectedRules = [...ruleLibrary[currentGrade]];
+                selectedRules = [
+                    { ...ruleLibrary[currentGrade][0], consequence: consequenceOptions[0] },
+                    { ...ruleLibrary[currentGrade][3], consequence: consequenceOptions[2] }
+                ];
             }
             if(savedTitle) document.getElementById('poster-title-control').value = savedTitle;
             if(savedColor) currentPosterColor = savedColor;
@@ -298,7 +360,7 @@
             updateMyRulesView();
         });
         window.addEventListener('popstate', () => {
-            if (confirm("학급약속 연구소를 종료하시겠습니까?\n작성 중이던 모든 세션 기록은 내부 보존됩니다.")) {
+            if (confirm("학급약속 연구소를 정말 이탈하시겠습니까? 데이터는 로컬 브라우저에 임시 안전 보존 중입니다.")) {
                 history.go(-1);
             } else {
                 history.pushState(null, null, window.location.href);
@@ -306,26 +368,148 @@
         });
 
         // -------------------------------------------------------------
-        // 스마트 자연어 고시 매핑 엔진
+        // 자연어 기반 고시 조항 매핑 엔진
         // -------------------------------------------------------------
         function analyzeRuleLaw(text) {
-            if (/폰|스마트|패드|태블릿|기기|노트북|인터넷|유튜브/.test(text)) {
-                return { law: "제11조 (정보통신망 이용)", authority: "기기 검수 및 방해시 즉시 수거" };
+            if (/폰|스마트|패드|태블릿|기기|노트북|인터넷|게임|SNS/.test(text)) {
+                return { law: "제11조 (정보통신망 이용)", authority: "기기 검수 및 수업 방해 시 즉시 압수" };
             }
-            if (/때리|욕|싸움|따돌림|괴롭|놀리|비방|단톡|싸우/.test(text)) {
-                return { law: "제10조 및 학교폭력예방법", authority: "즉시 가해자 분리 및 징계 의뢰" };
+            if (/때리|욕|싸움|따돌림|괴롭|놀리|비방|폭력|단톡/.test(text)) {
+                return { law: "제10조 및 학교폭력예방법", authority: "즉시 행위 제한 및 가해 학생 공간 격리" };
             }
-            if (/물건|청소|정리|낙서|파손|부수|사물함/.test(text)) {
-                return { law: "제11조 (물품 관리)", authority: "물품 제한 및 물리적 원상복구 명령" };
+            if (/물건|청소|정리|낙서|파손|부수|쓰레기|사물함/.test(text)) {
+                return { law: "제11조 (물품 관리)", authority: "물품 오용 방지 및 원상복구 명령" };
             }
-            if (/떠들|장난|지각|수업|돌아|소란|기여/.test(text)) {
-                return { law: "제7조 (학업 분위기 조성)", authority: "교실 내 분리조치 및 성찰과제 부과" };
+            if (/떠들|장난|지각|수업|돌아|소란|발표|경청/.test(text)) {
+                return { law: "제7조 (학업 분위기 조성)", authority: "교실 내 분리조치 및 반성문 부여" };
             }
-            return { law: "제10조 (학생생활지도 자율권)", authority: "교사 권한 기반 조언 및 훈육" };
+            return { law: "제10조 (학생생활지도 자율권)", authority: "교사 재량 기반 조언 및 훈육 조치 권한" };
         }
 
         // -------------------------------------------------------------
-        // UI 조작 핵심 함수군
+        // UI 렌더링 스크립트 엔진
+        // -------------------------------------------------------------
+        function renderLibraryPool() {
+            const container = document.getElementById('library-pool-container');
+            container.innerHTML = '';
+
+            // 카테고리별로 규칙을 유목화하여 렌더링 (가독성/내용 획기적 증가)
+            Object.keys(categories).forEach(catKey => {
+                const catRules = ruleLibrary[currentGrade].filter(r => r.category === catKey);
+                
+                let catSection = document.createElement('div');
+                catSection.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-2xs";
+                catSection.innerHTML = `<h4 class="font-bold text-slate-800 text-base mb-3 pb-1 border-b text-indigo-600">${categories[catKey]}</h4>`;
+                
+                let itemsList = document.createElement('div');
+                itemsList.className = "space-y-2.5";
+
+                catRules.forEach(rule => {
+                    const isAdded = selectedRules.some(r => r.id === rule.id);
+                    itemsList.innerHTML += `
+                        <div class="p-3 border rounded-lg bg-slate-50/50 flex justify-between items-center text-sm">
+                            <div class="flex-1 pr-3">
+                                <p class="font-medium text-slate-800">${rule.text}</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">⚖️ 고시 근거: ${rule.law}</p>
+                            </div>
+                            <button onclick="toggleRule('${rule.id}')" class="px-3 py-1.5 text-xs font-semibold rounded-md whitespace-nowrap ${isAdded ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100'}">
+                                ${isAdded ? '제거' : '선택'}
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                catSection.appendChild(itemsList);
+                container.appendChild(catSection);
+            });
+        }
+
+        function toggleRule(id) {
+            const index = selectedRules.findIndex(r => r.id === id);
+            if (index > -1) {
+                selectedRules.splice(index, 1);
+            } else {
+                // 원본 데이터를 복사해서 들고 오고 기본 책임 조항 0번 바인딩
+                const target = ruleLibrary[currentGrade].find(r => r.id === id);
+                if(target) {
+                    selectedRules.push({ ...target, consequence: consequenceOptions[0] });
+                }
+            }
+            saveToStorage();
+            renderLibraryPool();
+            updateMyRulesView();
+        }
+
+        function addCustomRule() {
+            const input = document.getElementById('custom-rule-input');
+            if(!input.value.trim()) return;
+
+            const analyzed = analyzeRuleLaw(input.value.trim());
+            const newRule = {
+                id: 'custom_' + Date.now(),
+                category: 'class',
+                text: input.value.trim(),
+                law: analyzed.law,
+                authority: analyzed.authority,
+                consequence: consequenceOptions[0] // 기본 책임 바인딩
+            };
+            selectedRules.push(newRule);
+            input.value = '';
+            saveToStorage();
+            renderLibraryPool();
+            updateMyRulesView();
+        }
+
+        // 후속 책임 조항 실시간 셀렉트 매칭 업데이터
+        updateConsequence = (ruleId, newConsequence) => {
+            const rule = selectedRules.find(r => r.id === ruleId);
+            if(rule) {
+                rule.consequence = newConsequence;
+                saveToStorage();
+            }
+        };
+
+        function updateMyRulesView() {
+            const myRulesEl = document.getElementById('my-rules');
+            document.getElementById('rule-count').innerText = `${selectedRules.length}개`;
+            
+            if(selectedRules.length === 0) {
+                myRulesEl.innerHTML = '<p class="text-sm text-slate-400 text-center py-12">아직 선택된 규칙이 없습니다.<br>왼쪽에서 우리 반 규칙을 추가해 주세요.</p>';
+                return;
+            }
+
+            myRulesEl.innerHTML = '';
+            selectedRules.forEach((rule, idx) => {
+                let optionsHtml = consequenceOptions.map(opt => 
+                    `<option value="${opt}" ${rule.consequence === opt ? 'selected' : ''}>${opt}</option>`
+                ).join('');
+
+                myRulesEl.innerHTML += `
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-3xs text-sm">
+                        <div class="flex justify-between items-start">
+                            <span class="font-semibold text-slate-700 flex-1 leading-relaxed"><b class="text-indigo-600 mr-1">${idx+1}.</b> ${rule.text}</span>
+                            <button onclick="deleteSelectedRule('${rule.id}')" class="text-slate-400 hover:text-rose-500 font-bold ml-2 text-base">×</button>
+                        </div>
+                        <div class="mt-2">
+                            <label class="block text-[11px] font-bold text-amber-600 mb-0.5">⚠️ 위반 시 아이들이 이행할 책임 조항 선택</label>
+                            <select onchange="updateConsequence('${rule.id}', this.value)" class="text-xs border rounded p-1.5 bg-amber-50/50 text-slate-700 w-full focus:outline-amber-400">
+                                ${optionsHtml}
+                            </select>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteSelectedRule(id) {
+            selectedRules = selectedRules.filter(r => r.id !== id);
+            saveToStorage();
+            renderLibraryPool();
+            updateMyRulesView();
+        }
+
+        // -------------------------------------------------------------
+        // 스텝 제어 및 기타 화면단 연계 로직
         // -------------------------------------------------------------
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -342,16 +526,13 @@
             if(tabId === 'mapping') renderMappingTable();
             if(tabId === 'poster') renderPoster();
             
-            // 네비게이션 가이드 버튼 갱신
             const currentIndex = tabsOrder.indexOf(tabId);
             const nextBtn = document.getElementById('next-step-btn');
             if(currentIndex === tabsOrder.length - 1) {
                 nextBtn.innerHTML = `<span>🔄 처음 단계로 이동</span>`;
             } else {
-                const nextTabId = tabsOrder[currentIndex + 1];
                 nextBtn.innerHTML = `<span>${currentIndex + 2}. ${tabNames[tabId]} 단계로 이동</span> <span>➔</span>`;
             }
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -380,92 +561,15 @@
         function filterGrade(grade) {
             currentGrade = grade;
             applyGradeButtonUI();
-            selectedRules = [...ruleLibrary[grade]];
+            selectedRules = [
+                { ...ruleLibrary[currentGrade][0], consequence: consequenceOptions[0] },
+                { ...ruleLibrary[currentGrade][1], consequence: consequenceOptions[1] }
+            ];
             saveToStorage();
             renderLibraryPool();
             updateMyRulesView();
         }
 
-        function renderLibraryPool() {
-            const poolEl = document.getElementById('library-pool');
-            poolEl.innerHTML = '';
-            ruleLibrary[currentGrade].forEach(rule => {
-                const isAdded = selectedRules.some(r => r.id === rule.id);
-                poolEl.innerHTML += `
-                    <div class="p-4 border rounded-lg bg-white shadow-xs flex justify-between items-center text-base">
-                        <div class="flex-1 pr-3">
-                            <p class="font-medium text-slate-800 leading-relaxed">${rule.text}</p>
-                            <p class="text-sm text-indigo-500 mt-1">🔗 근거조항: ${rule.law}</p>
-                        </div>
-                        <button onclick="toggleRule('${rule.id}')" class="px-3 py-1.5 text-sm font-semibold rounded-md whitespace-nowrap ${isAdded ? 'bg-rose-50 text-rose-600 border border-rose-200' : 'bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100'}">
-                            ${isAdded ? '제거' : '추가'}
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        function toggleRule(id) {
-            const index = selectedRules.findIndex(r => r.id === id);
-            if (index > -1) {
-                selectedRules.splice(index, 1);
-            } else {
-                const target = ruleLibrary[currentGrade].find(r => r.id === id);
-                if(target) selectedRules.push(target);
-            }
-            saveToStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        }
-
-        function addCustomRule() {
-            const input = document.getElementById('custom-rule-input');
-            if(!input.value.trim()) return;
-
-            const analyzed = analyzeRuleLaw(input.value.trim());
-            const newRule = {
-                id: 'custom_' + Date.now(),
-                text: input.value.trim(),
-                law: analyzed.law,
-                authority: analyzed.authority
-            };
-            selectedRules.push(newRule);
-            input.value = '';
-            saveToStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        }
-
-        function updateMyRulesView() {
-            const myRulesEl = document.getElementById('my-rules');
-            document.getElementById('rule-count').innerText = `${selectedRules.length}개`;
-            
-            if(selectedRules.length === 0) {
-                myRulesEl.innerHTML = '<p class="text-base text-slate-400 text-center py-12">아직 선택된 규칙이 없습니다. 왼쪽에서 추가해 주세요.</p>';
-                return;
-            }
-
-            myRulesEl.innerHTML = '';
-            selectedRules.forEach((rule, idx) => {
-                myRulesEl.innerHTML += `
-                    <div class="bg-white p-3.5 rounded-lg border border-slate-200 shadow-2xs text-sm flex justify-between items-center">
-                        <span class="font-medium text-slate-700 flex-1 leading-relaxed"><b class="text-indigo-600 mr-1 text-base">${idx+1}.</b> ${rule.text}</span>
-                        <button onclick="deleteSelectedRule('${rule.id}')" class="text-slate-400 hover:text-rose-500 font-bold ml-3 text-lg p-1">×</button>
-                    </div>
-                `;
-            });
-        }
-
-        function deleteSelectedRule(id) {
-            selectedRules = selectedRules.filter(r => r.id !== id);
-            saveToStorage();
-            renderLibraryPool();
-            updateMyRulesView();
-        }
-
-        // -------------------------------------------------------------
-        // 실감형 저학년 컬러링 픽토그램 포함 활동지 생성 엔진
-        // -------------------------------------------------------------
         function renderWorksheet() {
             const container = document.getElementById('worksheet-view');
             let title = ""; let guideText = ""; let questionHtml = "";
@@ -479,67 +583,40 @@
                             <div class="border-2 border-slate-300 rounded-lg p-4 text-center">
                                 <span class="text-3xl block mb-1">🤫</span>
                                 <span class="text-sm font-bold block text-slate-600">1. 예쁜 경청 상자</span>
-                                <div class="w-full h-16 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
+                                <div class="w-full h-12 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
                             </div>
                             <div class="border-2 border-slate-300 rounded-lg p-4 text-center">
                                 <span class="text-3xl block mb-1">🏃</span>
                                 <span class="text-sm font-bold block text-slate-600">2. 복도 안전 상자</span>
-                                <div class="w-full h-16 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
-                            </div>
-                            <div class="border-2 border-slate-300 rounded-lg p-4 text-center">
-                                <span class="text-3xl block mb-1">🙏</span>
-                                <span class="text-sm font-bold block text-slate-600">3. 바른 언어 상자</span>
-                                <div class="w-full h-16 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
-                            </div>
-                            <div class="border-2 border-slate-300 rounded-lg p-4 text-center">
-                                <span class="text-3xl block mb-1">🧼</span>
-                                <span class="text-sm font-bold block text-slate-600">4. 청결 위생 상자</span>
-                                <div class="w-full h-16 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
+                                <div class="w-full h-12 border border-dashed border-slate-200 mt-2 rounded flex items-center justify-center text-xs text-slate-300">알록달록 색칠하기</div>
                             </div>
                         </div>
                         <p class="font-bold">✏️ 내가 꼭 지키고 싶은 약속 딱 하나만 적어보기:</p>
-                        <div class="border-b-2 border-slate-400 h-12 w-full"></div>
-                    </div>
-                `;
-            } else if (currentGrade === 'mid') {
-                title = "🤝 조화로운 우리 학급 규칙 토론지 (3~4학년용)";
-                guideText = "우리 학급의 행복한 수업 분위기와 안전한 성장을 위해 다음 상황별 해결 방법을 모둠원과 함께 의논하여 합리적인 규칙을 제안해 봅시다.";
-                questionHtml = `
-                    <div class="space-y-5 text-base text-slate-700">
-                        <div class="bg-slate-50 p-4 rounded border leading-relaxed">
-                            <strong>🤔 생각거리 상황:</strong> "수업 시간에 모둠 활동을 할 때 한 친구가 아무것도 하지 않고 장난만 치고 있다면 어떻게 규칙으로 해결할 수 있을까요?"
-                        </div>
-                        <p class="font-bold">📝 우리 모둠이 토의한 해결 아이디어 규칙:</p>
-                        <div class="border border-slate-300 rounded p-4 h-24 text-slate-300 text-sm">여기에 작성하세요.</div>
+                        <div class="border-b-2 border-slate-400 h-10 w-full"></div>
                     </div>
                 `;
             } else {
-                title = "⚖️ 우리 반 학급 헌법 제정 소통지 (5~6학년용)";
-                guideText = "교육부 학생생활지도 고시를 기반으로, 학생의 정당한 권리를 누리기 위한 '책임과 의무'가 담긴 우리 학급 헌법을 설계해 봅시다.";
+                title = "⚖️ 우리 반 약속과 책임 수립을 위한 토론 의제";
+                guideText = "우리가 합의한 약속을 성실히 이행하고, 실수로 약속을 어겼을 때 공동체를 복구하기 위해 수행할 민주적 책임을 토의해 봅시다.";
                 questionHtml = `
-                    <div class="space-y-5 text-base text-slate-700">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="border p-4 rounded bg-blue-50/50 leading-relaxed">
-                                <h4 class="font-bold text-blue-900 text-sm mb-1">우리 학급 학생의 권리</h4>
-                                <p class="text-sm text-slate-600">안전하게 배울 권리, 차별받지 않을 권리, 자유롭게 의견을 표현할 권리</p>
-                            </div>
-                            <div class="border p-4 rounded bg-amber-50/50 leading-relaxed">
-                                <h4 class="font-bold text-amber-900 text-sm mb-1">매칭되는 학생의 의무</h4>
-                                <p class="text-sm text-slate-600">수업 분위기를 해치지 않을 의무, 타인을 비방하지 않을 책임</p>
-                            </div>
+                    <div class="space-y-4 text-sm text-slate-700">
+                        <p class="font-bold">📋 토의할 약속 리스트 개요</p>
+                        <div class="bg-slate-50 p-3 rounded border text-xs text-slate-600 space-y-1">
+                            ${selectedRules.map((r,i) => `<div><b>${i+1}.</b> ${r.text}</div>`).join('')}
                         </div>
-                        <div class="border border-slate-300 rounded p-4 h-28 text-slate-300 text-sm mt-3">고시 연계를 고려해 우리 학급 헌법 규칙 초안을 자유롭게 작성하십시오.</div>
+                        <p class="font-bold">✍️ 우리 모둠이 생각하는 가장 정의로운 책임(후속 조치) 조항 기술:</p>
+                        <div class="border border-slate-300 rounded p-4 h-24 text-slate-300 text-xs">약속을 어겼을 때 어떻게 행동을 회복할 것인가에 대해 논의 후 적어보세요.</div>
                     </div>
                 `;
             }
 
             container.innerHTML = `
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-black text-slate-900">${title}</h3>
-                    <p class="text-sm text-slate-400 mt-2">학년: ____ 학년 ____ 반  /  이름: ______________</p>
+                <div class="text-center mb-4">
+                    <h3 class="text-xl font-black text-slate-900">${title}</h3>
+                    <p class="text-xs text-slate-400 mt-1">____ 학년 ____ 반  /  이름: ______________</p>
                 </div>
-                <div class="bg-indigo-50/50 border border-indigo-100 rounded-lg p-4 mb-6 text-sm leading-relaxed text-slate-600">
-                    💡 <strong>교사용 안내 가이드:</strong> ${guideText}
+                <div class="bg-indigo-50/50 border border-indigo-100 rounded-lg p-3.5 mb-4 text-xs leading-relaxed text-slate-600">
+                    💡 <strong>민주적 합의 안내:</strong> ${guideText}
                 </div>
                 ${questionHtml}
             `;
@@ -548,25 +625,22 @@
         function renderMappingTable() {
             const tbody = document.getElementById('mapping-table-body');
             if(selectedRules.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 text-base">규칙 라이브러리 탭에서 규칙을 먼저 지정해 주세요.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 text-sm">약속 설정 탭에서 규칙을 먼저 지정해 주세요.</td></tr>`;
                 return;
             }
             tbody.innerHTML = '';
             selectedRules.forEach(rule => {
                 tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 text-base">
-                        <td class="p-4 font-medium text-slate-800 leading-relaxed">${rule.text}</td>
-                        <td class="p-4 text-sm font-semibold text-indigo-600">${rule.law}</td>
-                        <td class="p-4 text-sm text-slate-500">${rule.authority}</td>
-                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">안전(합법)</span></td>
+                    <tr class="hover:bg-slate-50 text-sm">
+                        <td class="p-4 font-medium text-slate-800">${rule.text}</td>
+                        <td class="p-4 text-xs text-amber-700 font-medium">${rule.consequence}</td>
+                        <td class="p-4 text-xs font-semibold text-indigo-600">${rule.law}</td>
+                        <td class="p-4 text-center"><span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full">검증안심</span></td>
                     </tr>
                 `;
             });
         }
 
-        // -------------------------------------------------------------
-        // 포스터 테마 및 텍스트 커스터마이징 기능
-        // -------------------------------------------------------------
         const colorThemes = {
             indigo: { border: 'border-indigo-600', text: 'text-indigo-600', badge: 'bg-indigo-100 text-indigo-700', bar: 'border-indigo-600' },
             emerald: { border: 'border-emerald-600', text: 'text-emerald-600', badge: 'bg-emerald-100 text-emerald-700', bar: 'border-emerald-600' },
@@ -582,8 +656,8 @@
 
         function updatePosterText() {
             const ctrlVal = document.getElementById('poster-title-control').value;
-            document.getElementById('poster-title').innerText = ctrlVal || "우리 반 학급 규칙";
-            localStorage.setItem('lab_poster_title', ctrlVal);
+            document.getElementById('poster-title').innerText = ctrlVal || "우리 반 학급 헌법";
+            localStorage.setItem('lab_v2_title', ctrlVal);
         }
 
         function renderPoster() {
@@ -594,25 +668,29 @@
             
             const theme = colorThemes[currentPosterColor] || colorThemes['indigo'];
             
-            // 클래스 바인딩 동적 초기화 및 주입
-            viewFrame.className = `bg-white shadow-xl border-4 ${theme.border} p-10 w-[500px] min-h-[650px] flex flex-col justify-between text-center transition-all duration-300`;
-            badge.className = `text-base ${theme.text} font-bold tracking-widest uppercase mb-2`;
-            title.className = `text-3xl font-black text-slate-900 border-b-2 ${theme.bar} pb-4 mb-8`;
+            viewFrame.className = `bg-white shadow-xl border-4 ${theme.border} p-8 w-[550px] min-h-[720px] flex flex-col justify-between text-left transition-all duration-300`;
+            badge.className = `text-sm ${theme.text} font-bold tracking-widest uppercase mb-2 text-center`;
+            title.className = `text-2xl font-black text-slate-900 border-b-2 ${theme.bar} pb-4 mb-6 text-center`;
             
-            badge.innerText = currentGrade === 'low' ? "🎈 우리들의 예쁜 약속 🎈" : "⚖️ CLASS CONSTITUTION ⚖️";
-            title.innerText = document.getElementById('poster-title-control').value || "행복한 우리 반 학급 규칙";
+            badge.innerText = currentGrade === 'low' ? "🎈 우리들의 약속과 이쁜 책임 🎈" : "⚖️ CLASS CONSTITUTION (약속과 책임) ⚖️";
+            title.innerText = document.getElementById('poster-title-control').value || "우리 반 학급 규칙";
 
             if(selectedRules.length === 0) {
-                listEl.innerHTML = '<p class="text-base text-slate-400 text-center py-12">선택된 규칙이 없습니다.</p>';
+                listEl.innerHTML = '<p class="text-sm text-slate-400 text-center py-12">선택된 약속 조항이 없습니다.</p>';
                 return;
             }
 
             listEl.innerHTML = '';
             selectedRules.forEach((rule, idx) => {
                 listEl.innerHTML += `
-                    <div class="flex items-start space-x-4 py-2">
-                        <span class="flex-shrink-0 w-7 h-7 rounded-full ${theme.badge} flex items-center justify-center font-bold text-base shadow-2xs">${idx+1}</span>
-                        <p class="text-base font-semibold text-slate-800 pt-0.5 leading-relaxed">${rule.text}</p>
+                    <div class="py-2 border-b border-slate-50 last:border-0">
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full ${theme.badge} flex items-center justify-center font-bold text-xs shadow-3xs">${idx+1}</span>
+                            <div class="flex-1">
+                                <p class="text-sm font-bold text-slate-800 leading-snug">${rule.text}</p>
+                                <p class="text-xs text-amber-600 font-medium mt-1 pl-0.5">↳ 위반 시 책임: ${rule.consequence}</p>
+                            </div>
+                        </div>
                     </div>
                 `;
             });
