@@ -97,7 +97,7 @@
         }
         @media print {
             #floating-next-btn { display:none !important; }
-            #classroom-exit-btn { display:none !important; }
+            
         }
 
         /* 스크롤 페이드 */
@@ -228,13 +228,9 @@
             </div>
         </div>
 
-        <div class="mt-2 space-y-2">
+        <div class="mt-2">
             <button onclick="showQuickStart()" class="w-full flex items-center justify-center gap-2 font-bold px-4 py-2.5 rounded-lg transition-all text-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:1px solid var(--border)">
                 <span>🚀</span><span>빠른 시작</span>
-            </button>
-            <button onclick="toggleClassroomMode()" id="classroom-mode-btn"
-                class="w-full flex items-center justify-center gap-2 font-bold px-4 py-3 rounded-lg transition-all text-sm" style="background:var(--gold);color:#1a1200">
-                <span>📺</span><span id="classroom-mode-label">수업 모드로 전환</span>
             </button>
         </div>
     </aside>
@@ -252,14 +248,14 @@
                         <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
                             <h3 class="font-bold text-lg mb-4">① 기본 정보</h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <label class="block"><span class="text-sm font-bold text-slate-600">학년</span><select id="grade-select" onchange="setGrade(parseInt(this.value))" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option value="1">1학년</option><option value="2">2학년</option><option value="3">3학년</option><option value="4">4학년</option><option value="5">5학년</option><option value="6">6학년</option></select></label>
-                                <label class="block"><span class="text-sm font-bold text-slate-600">반</span><input id="class-num" oninput="updateAll()" type="text" placeholder="예: 3반" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
-                                <label class="block"><span class="text-sm font-bold text-slate-600">담임교사</span><input id="teacher-name" oninput="updateAll()" type="text" placeholder="예: 홍길동" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
+                                <label class="block"><span class="text-sm font-bold" style="color:var(--text-md)">학년</span><select id="grade-select" onchange="setGrade(parseInt(this.value))" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option value="1">1학년</option><option value="2">2학년</option><option value="3">3학년</option><option value="4">4학년</option><option value="5">5학년</option><option value="6">6학년</option></select></label>
+                                <label class="block"><span class="text-sm font-bold" style="color:var(--text-md)">반</span><input id="class-num" oninput="updateAll()" type="text" placeholder="예: 3반" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
+                                <label class="block"><span class="text-sm font-bold" style="color:var(--text-md)">담임교사</span><input id="teacher-name" oninput="updateAll()" type="text" placeholder="예: 홍길동" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <label class="block"><span class="text-sm font-bold text-slate-600">작성일</span><input id="doc-date" oninput="updateAll()" type="date" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
-                                <label class="block"><span class="text-sm font-bold text-slate-600">학생 수</span><input id="student-count" oninput="updateAll()" type="number" value="24" min="1" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
-                                <label class="block"><span class="text-sm font-bold text-slate-600">학급 특성</span><select id="class-type" onchange="updateAll()" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option>일반학급</option><option>과밀학급</option><option>소규모학급</option><option>다문화 학생 포함</option><option>통합학급</option></select></label>
+                                <label class="block"><span class="text-sm font-bold" style="color:var(--text-md)">작성일</span><input id="doc-date" oninput="updateAll()" type="date" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
+                                <label class="block"><span class="text-sm font-bold" style="color:var(--text-md)">학생 수</span><input id="student-count" oninput="updateAll()" type="number" value="24" min="1" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
+                                <label class="block"><span class="text-sm font-bold" style="color:var(--text-md)">학급 특성</span><select id="class-type" onchange="updateAll()" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option>일반학급</option><option>과밀학급</option><option>소규모학급</option><option>다문화 학생 포함</option><option>통합학급</option></select></label>
                             </div>
                         </div>
                         <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
@@ -282,7 +278,7 @@
                         </div>
                         <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
                             <h3 class="font-bold mb-2" style="color:#6b4e00">⚠️ 법적 표현 주의</h3>
-                            <p class="text-sm text-amber-800 leading-relaxed">이 도구는 학생생활규정과 고시를 참고해 학급 약속과 생활지도 절차를 정리하지만, 법적 판단이나 면책을 보장하지 않습니다. 실제 조치는 비례성, 학생 상황, 절차, 기록을 함께 고려해야 합니다.</p>
+                            <p class="text-sm leading-relaxed" style="color:var(--gold-lt)">이 도구는 학생생활규정과 고시를 참고해 학급 약속과 생활지도 절차를 정리하지만, 법적 판단이나 면책을 보장하지 않습니다. 실제 조치는 비례성, 학생 상황, 절차, 기록을 함께 고려해야 합니다.</p>
                         </div>
                     </div>
                     <div class="xl:col-span-7 rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
@@ -301,8 +297,8 @@
                 </div>
                 <div id="grade-mode-cards" class="grid grid-cols-1 lg:grid-cols-3 gap-5"></div>
                 <div class="mt-6 rounded-xl" style="background:var(--green-lt);border:1px solid #b8d8c8 rounded-xl p-5">
-                    <h3 class="font-black text-indigo-900 mb-3">현재 선택된 모드 안내</h3>
-                    <div id="current-mode-guide" class="text-sm text-indigo-900 leading-7"></div>
+                    <h3 class="font-black mb-3" style="color:var(--gold)">현재 선택된 모드 안내</h3>
+                    <div id="current-mode-guide" class="text-sm leading-7" style="color:var(--text-md)"></div>
                 </div>
             </section>
 
@@ -326,7 +322,7 @@
                         </div>
                         <div class="rounded-xl p-5" style="background:var(--card-lt);border:1px solid var(--border)">
                             <h3 class="font-bold text-lg mb-3">칠판/스티커 투표 운영 안내</h3>
-                            <ol class="list-decimal ml-5 text-sm text-slate-600 leading-8">
+                            <ol class="list-decimal ml-5 text-sm leading-8" style="color:var(--text-md)">
                                 <li>학생은 개인 활동지에 원하는 교실 모습을 적습니다.</li>
                                 <li>모둠별로 의견을 묶어 핵심 가치 2개와 대표 약속 1개를 정합니다.</li>
                                 <li>교사는 이 화면에 모둠 결과만 입력합니다.</li>
@@ -399,8 +395,8 @@
                         <div class="flex flex-wrap gap-2 mb-1" id="grade-buttons"></div>
                         <div id="library-pool-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 scroll-fade max-h-[650px] overflow-y-auto pr-2"></div>
                     </div>
-                    <div class="xl:col-span-5 bg-slate-50 rounded-xl p-5 pb-24 border flex flex-col">
-                        <h3 class="text-base font-bold text-slate-700 mb-3 flex justify-between items-center"><span>📋 우리 반 핵심 약속</span><span id="rule-count" class="text-sm px-3 py-1 rounded-full font-bold" style="background:var(--gold-dim);color:var(--gold)">0개</span></h3>
+                    <div class="xl:col-span-5 rounded-xl p-5 pb-24 flex flex-col" style="background:var(--card);border:1px solid var(--border)">
+                        <h3 class="text-base font-bold mb-3 flex justify-between items-center" style="color:var(--text)"><span>📋 우리 반 핵심 약속</span><span id="rule-count" class="text-sm px-3 py-1 rounded-full font-bold" style="background:var(--gold-dim);color:var(--gold)">0개</span></h3>
                         <div id="my-rules" class="space-y-3 scroll-fade overflow-y-auto max-h-[450px] pr-1"></div>
                         <div class="mt-5 pt-4 border-t border-slate-200">
                             <div class="flex gap-2"><input type="text" id="custom-rule-input" placeholder="직접 약속 입력" class="flex-1 text-sm border rounded-lg px-3 py-2.5"><button onclick="addCustomRule()" class="text-white px-4 py-2.5 rounded-md text-sm font-bold" style="background:var(--card-lt);border:1px solid var(--border);color:var(--text)">추가</button></div>
@@ -420,7 +416,7 @@
                     <div class="xl:col-span-7"><div id="vote-board" class="space-y-3"></div></div>
                     <div class="xl:col-span-5 space-y-5">
                         <div id="worksheet-view" class="rounded-xl p-6 shadow-sm" style="background:var(--card-lt);border:1px solid var(--border)"></div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm text-slate-700 leading-relaxed"><b>합의 기준 예시</b><br>전체 학생의 2/3 이상이 동의한 약속만 최종 결과물에 포함합니다. 낮은 동의율의 약속은 표현을 바꾸거나 학생 의견을 다시 반영하세요.</div>
+                        <div class="rounded-xl p-5 text-sm leading-relaxed" style="background:var(--card);border:1px solid var(--border);color:var(--text-md)"><b style="color:var(--text)">합의 기준 예시</b><br>전체 학생의 2/3 이상이 동의한 약속만 최종 결과물에 포함합니다. 낮은 동의율의 약속은 표현을 바꾸거나 학생 의견을 다시 반영하세요.</div>
                     </div>
                 </div>
             </section>
@@ -439,11 +435,11 @@
 <div class="xl:col-span-4 space-y-4">
 <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
 <h3 class="font-bold text-lg mb-3">필터</h3>
-<label class="block text-sm font-bold text-slate-700 mb-1">학년군</label>
+<label class="block text-sm font-bold mb-1" style="color:var(--text-md)">학년군</label>
 <select id="situation-band-filter" onchange="renderSituationCards()" class="w-full border rounded-lg px-3 py-2 mb-3"><option value="auto">현재 학년에 맞춤</option><option value="low">1~2학년</option><option value="mid">3~4학년</option><option value="high">5~6학년</option><option value="all">전체</option></select>
-<label class="block text-sm font-bold text-slate-700 mb-1">가치</label>
+<label class="block text-sm font-bold mb-1" style="color:var(--text-md)">가치</label>
 <select id="situation-value-filter" onchange="renderSituationCards()" class="w-full border rounded-lg px-3 py-2 mb-3"><option value="all">전체 가치</option><option>존중</option><option>안전</option><option>배움</option><option>책임</option><option>배려</option><option>자치</option></select>
-<label class="block text-sm font-bold text-slate-700 mb-1">검색</label>
+<label class="block text-sm font-bold mb-1" style="color:var(--text-md)">검색</label>
 <input id="situation-search" oninput="renderSituationCards()" class="w-full border rounded-lg px-3 py-2" placeholder="예: 복도, 발표, SNS">
 </div>
 <div class="rounded-xl p-5 text-sm leading-7" style="background:var(--card);border:1px solid var(--border);color:var(--text-md)">
@@ -509,7 +505,7 @@
 </div>
 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
 <div class="xl:col-span-4 space-y-4">
-<div class="bg-slate-50 border rounded-xl p-5 text-sm leading-7"><b>안내문 구성</b><br>학생 참여 과정, 핵심 가치, 최종 약속, 회복 책임, 가정 연계 부탁 문구가 자동으로 들어갑니다.</div>
+<div class="rounded-xl p-5 text-sm leading-7" style="background:var(--card);border:1px solid var(--border);color:var(--text-md)"><b style="color:var(--text)">안내문 구성</b><br>학생 참여 과정, 핵심 가치, 최종 약속, 회복 책임, 가정 연계 부탁 문구가 자동으로 들어갑니다.</div>
 <p class="text-xs text-slate-400 mt-2">탭을 열 때마다 자동으로 최신 내용이 반영됩니다.</p>
 </div>
 <div class="xl:col-span-8"><div id="parent-letter-view" class="rounded-xl p-8 min-h-[620px]" style="background:var(--card-lt);border:1px solid var(--border)"></div></div>
@@ -600,7 +596,7 @@
   </div>
 </div>
 
-<footer class="bg-slate-100 border-t py-6 text-center text-sm text-slate-500 no-print flex flex-col items-center justify-center space-y-1">
+<footer class="border-t py-6 text-center text-sm text-slate-500 no-print flex flex-col items-center justify-center space-y-1">
     <p>© 2026 학급약속 연구소. 대한민국 초등 교사들의 안전하고 체계적인 생활교육을 응원합니다.</p>
     <p class="text-slate-400/70 text-xs font-normal">만든이 2026 최창훈</p>
 </footer>
@@ -829,9 +825,9 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeQuickStart()
 // 모달 배경 클릭으로 닫기
 document.addEventListener('click', e=>{ if(e.target.id==='quickstart-modal') closeQuickStart(); });
 function updateAll(doSave=true){ updateDiagnosis(false); renderGroupInput(); renderStudentVoices(); renderValueAnalysis(); renderLibraryPool(); updateMyRulesView(); renderWorksheet(); renderVoteBoard(); renderLessonPlan(); renderConstitution(); if(doSave) saveToStorage(); }
-function renderConcernChecks(){ const el=document.getElementById('concern-checks'); el.innerHTML=concerns.map(c=>`<label class="flex items-center gap-3 bg-white border rounded-lg p-3 card-hover"><input type="checkbox" value="${c.id}" onchange="toggleConcern('${c.id}', this.checked)"><span class="text-sm font-medium">${c.label}</span><span class="ml-auto text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded">${c.value}</span></label>`).join(''); }
+function renderConcernChecks(){ const el=document.getElementById('concern-checks'); el.innerHTML=concerns.map(c=>`<label class="flex items-center gap-3 rounded-lg p-3 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><input type="checkbox" value="${c.id}" onchange="toggleConcern('${c.id}', this.checked)"><span class="text-sm font-medium">${c.label}</span><span class="ml-auto text-xs px-2 py-1 rounded" style="background:var(--gold-dim);color:var(--gold)">${c.value}</span></label>`).join(''); }
 function toggleConcern(id, checked){ selectedConcerns = checked ? [...new Set([...selectedConcerns,id])] : selectedConcerns.filter(x=>x!==id); updateAll(); }
-function updateDiagnosis(doSave=true){ currentGrade=parseInt(document.getElementById('grade-select').value||currentGrade); document.querySelectorAll('#concern-checks input').forEach(i=>i.checked=selectedConcerns.includes(i.value)); const picked=concerns.filter(c=>selectedConcerns.includes(c.id)); const priority=[...new Set([...picked.map(c=>c.value), ...topValues(3)])].slice(0,3); const count=document.getElementById('student-count').value||24; const type=document.getElementById('class-type').value||'일반학급'; document.getElementById('diagnosis-summary').innerHTML=`<div class="bg-white p-4 rounded-lg border"><b>${currentGrade}학년 ${count}명 · ${type}</b><br><span class="text-slate-500">발달 단계: ${gradeDevelopmentText(currentGrade)}</span></div><div class="bg-white p-4 rounded-lg border"><b>우선 가치 TOP3</b><div class="mt-2 flex flex-wrap gap-2">${priority.map(v=>`<span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs font-bold">${v}</span>`).join('')||'<span class="text-slate-400">선택된 걱정 장면 없음</span>'}</div></div><div class="bg-white p-4 rounded-lg border"><b>학년별 추천 명칭</b><p class="mt-2 text-slate-600">${currentGrade<=2?'우리 반 약속 · 그림/카드 중심':currentGrade<=4?'우리 반 약속 · 토론/합의 중심':'학급헌법 · 자치/책임 중심'}</p></div><div class="bg-white p-4 rounded-lg border"><b>추천 흐름</b><ol class="list-decimal ml-5 mt-2 text-slate-600 leading-7"><li>모둠 토의 결과를 교사가 입력</li><li>핵심 가치를 3개 이하로 압축</li><li>약속은 5개 이하로 합의</li><li>위반 시 처벌보다 회복 책임 연결</li></ol></div>`; if(doSave) saveToStorage(); }
+function updateDiagnosis(doSave=true){ currentGrade=parseInt(document.getElementById('grade-select').value||currentGrade); document.querySelectorAll('#concern-checks input').forEach(i=>i.checked=selectedConcerns.includes(i.value)); const picked=concerns.filter(c=>selectedConcerns.includes(c.id)); const priority=[...new Set([...picked.map(c=>c.value), ...topValues(3)])].slice(0,3); const count=document.getElementById('student-count').value||24; const type=document.getElementById('class-type').value||'일반학급'; document.getElementById('diagnosis-summary').innerHTML=`<div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>${currentGrade}학년 ${count}명 · ${type}</b><br><span class="text-slate-500">발달 단계: ${gradeDevelopmentText(currentGrade)}</span></div><div class="bg-white p-4 rounded-lg border"><b>우선 가치 TOP3</b><div class="mt-2 flex flex-wrap gap-2">${priority.map(v=>`<span class="px-2 py-1 rounded-full text-xs font-bold" style="background:var(--gold-dim);color:var(--gold)">${v}</span>`).join('')||'<span class="text-slate-400">선택된 걱정 장면 없음</span>'}</div></div><div class="bg-white p-4 rounded-lg border"><b>학년별 추천 명칭</b><p class="mt-2 text-slate-600">${currentGrade<=2?'우리 반 약속 · 그림/카드 중심':currentGrade<=4?'우리 반 약속 · 토론/합의 중심':'학급헌법 · 자치/책임 중심'}</p></div><div class="bg-white p-4 rounded-lg border"><b>추천 흐름</b><ol class="list-decimal ml-5 mt-2 text-slate-600 leading-7"><li>모둠 토의 결과를 교사가 입력</li><li>핵심 가치를 3개 이하로 압축</li><li>약속은 5개 이하로 합의</li><li>위반 시 처벌보다 회복 책임 연결</li></ol></div>`; if(doSave) saveToStorage(); }
 function gradeDevelopmentText(g){ return g<=1?'그림·행동 중심, 짧고 긍정적인 문장 필요':g==2?'그림과 간단한 이유 설명 병행':g==3?'모둠 토론과 공동체 개념 시작':g==4?'합의와 책임 개념을 구체화 가능':g==5?'자치와 디지털 시민성 규칙 필요':'학급헌법형 규칙과 학생 자치 운영 가능'; }
 function defaultTitle(){ return currentGrade<=2?'행복한 우리 반 약속':currentGrade<=4?'서로 존중하는 우리 반 약속':'서로 존중하고 책임지는 우리 반 학급헌법'; }
 function applyGradeTexts(){ const title=document.getElementById('constitution-title-control'); if(title && (!title.value || /학급헌법|우리 반 약속/.test(title.value))) title.value=defaultTitle(); }
@@ -880,7 +876,7 @@ function renderGroupSummary(){
         sug.innerHTML=rows.map((r,i)=>`<div class="bg-slate-50 border rounded-lg p-3 text-sm"><b class="text-indigo-700">${r.team||i+1+'모둠'}</b><p class="mt-1">${r.suggestion}</p><p class="text-xs text-slate-400 mt-1">가치: ${r.value1}, ${r.value2}</p></div>`).join('') || '<p class="text-sm text-slate-400">아직 모둠 대표 약속이 없습니다.</p>';
     }
 }
-function renderStudentVoices(){ const list=document.getElementById('student-voice-list'); if(!list) return; const groupItems=groupRows.filter(r=>r.suggestion&&r.suggestion.trim()).map((r,i)=>({type:'group', text:r.suggestion, label:r.team||`${i+1}모둠`})); const manualItems=studentVoices.map((v,i)=>({type:'manual', text:v, idx:i, label:'교사 입력'})); const items=[...groupItems,...manualItems]; list.innerHTML=items.map((item,i)=>`<div class="bg-white border rounded-lg p-3 flex gap-3 card-hover"><span class="w-7 h-7 rounded-full ${item.type==='group'?'bg-emerald-100 text-emerald-700':'bg-indigo-100 text-indigo-700'} flex items-center justify-center text-xs font-black">${i+1}</span><div class="flex-1"><p class="text-sm text-slate-700">${item.text}</p><p class="text-[11px] text-slate-400 mt-1">${item.label}</p></div>${item.type==='manual'?`<button onclick="deleteVoice(${item.idx})" class="text-slate-400 hover:text-rose-500 font-bold">×</button>`:''}</div>`).join('') || '<p class="text-sm text-slate-400 py-8 text-center">모둠 의견이나 대표 의견을 입력해 주세요.</p>'; }
+function renderStudentVoices(){ const list=document.getElementById('student-voice-list'); if(!list) return; const groupItems=groupRows.filter(r=>r.suggestion&&r.suggestion.trim()).map((r,i)=>({type:'group', text:r.suggestion, label:r.team||`${i+1}모둠`})); const manualItems=studentVoices.map((v,i)=>({type:'manual', text:v, idx:i, label:'교사 입력'})); const items=[...groupItems,...manualItems]; list.innerHTML=items.map((item,i)=>`<div class="bg-white border rounded-lg p-3 flex gap-3 card-hover"><span class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black" style="${item.type==='group'?'background:rgba(52,211,153,.15);color:var(--success)':'background:var(--gold-dim);color:var(--gold)'}">${i+1}</span><div class="flex-1"><p class="text-sm text-slate-700">${item.text}</p><p class="text-[11px] text-slate-400 mt-1">${item.label}</p></div>${item.type==='manual'?`<button onclick="deleteVoice(${item.idx})" class="text-slate-400 hover:text-rose-500 font-bold">×</button>`:''}</div>`).join('') || '<p class="text-sm text-slate-400 py-8 text-center">모둠 의견이나 대표 의견을 입력해 주세요.</p>'; }
 function addStudentVoice(){ const input=document.getElementById('student-voice-input'); if(!input.value.trim()) return; studentVoices.push(input.value.trim()); input.value=''; updateAll(); }
 function deleteVoice(i){ studentVoices.splice(i,1); updateAll(); }
 function detectValue(text){ if(/비웃|놀림|욕|존중|말|친구|따돌|혐오/.test(text)) return '존중'; if(/안전|뛰|다치|밀|복도|계단/.test(text)) return '안전'; if(/수업|공부|집중|발표|경청|듣/.test(text)) return '배움'; if(/정리|물건|청소|역할|준비/.test(text)) return '책임'; if(/도와|배려|괜찮/.test(text)) return '배려'; return '자치'; }
@@ -888,11 +884,11 @@ function combinedValueCounts(){ const counts={...valueVotes}; studentVoices.forE
 function topValues(n=3){ return Object.entries(combinedValueCounts()).sort((a,b)=>b[1]-a[1]).slice(0,n).map(x=>x[0]); }
 function renderValueAnalysis(){ const counts=combinedValueCounts(); const total=Object.values(counts).reduce((a,b)=>a+b,0)||1; document.getElementById('value-analysis').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,c],idx)=>`<div class="" style="${idx<3?'background:var(--card-lt);border:1px solid var(--border);padding:12px;border-radius:8px;margin-bottom:4px':''}"><div class="flex justify-between text-sm font-bold mb-1"><span>${idx<3?'🏅 ':''}${k}</span><span>${c}점 · ${Math.round(c/total*100)}%</span></div><div class="h-2 rounded-full overflow-hidden" style="background:var(--bg)"><div class="h-full" style="background:linear-gradient(90deg,var(--gold),#b8973c);width:${c/total*100}%"></div></div></div>`).join('')||'<p class="text-sm text-slate-400">학생 의견을 추가해 주세요.</p>'; }
 function generateValueStatement(){ const top=topValues(3); document.getElementById('value-statement').value=`우리 반은 ${top.join(', ')}을(를) 소중히 여기는 공동체입니다. 우리는 서로의 배움과 안전을 지키기 위해 함께 정한 약속을 실천하고, 실수했을 때는 벌을 받는 데서 끝내지 않고 공동체를 회복하는 책임을 다합니다.`; saveToStorage(); renderConstitution(); }
-function renderLibraryPool(){ document.querySelectorAll('.grade-chip').forEach(b=>{b.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200';}); const gb=document.getElementById(`grade-btn-${currentGrade}`); if(gb) gb.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-indigo-600 text-white shadow-sm'; const container=document.getElementById('library-pool-container'); const pool=ruleLibrary[currentGrade]||[]; container.innerHTML=pool.map(rule=>{ const added=selectedRules.some(r=>r.id===rule.id); const m=valueMeta[rule.value]||valueMeta['존중']; return `<div class="rounded-xl p-4 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><div class="flex justify-between gap-3"><div><div class="text-2xl mb-1">${m.emoji}</div><h4 class="font-black text-base leading-snug">${rule.text}</h4><p class="text-xs mt-2 opacity-80"><b>왜 필요할까요?</b><br>${rule.why}</p><p class="text-[11px] mt-2 opacity-70">가치: ${rule.value} · 참고 근거: ${rule.law}</p></div><button onclick="toggleRule('${rule.id}')" class="self-start px-3 py-1.5 text-xs font-bold rounded-md whitespace-nowrap transition-all ${added?'text-red-700 border border-red-200':'border text-green-800'}" style="background:${added?'#fff':'#fff'}">>${added?'제거':'선택'}</button></div></div>`; }).join('') + `<div class="md:col-span-2 rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)"><h4 class="font-black mb-3">📊 교사 추천 베스트 규칙 DB 예시</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${bestPracticeRules.map((r,i)=>`<div class="bg-white border rounded-lg p-3"><b>${i+1}. ${r.text}</b><p class="text-xs text-slate-500 mt-1">${r.grade} · ${r.reason}</p></div>`).join('')}</div></div>`; }
+function renderLibraryPool(){ document.querySelectorAll('.grade-chip').forEach(b=>{b.className='grade-chip px-4 py-2 rounded-full text-sm font-bold'; b.style.background='var(--card-lt)'; b.style.color='var(--text-md)';}); const gb=document.getElementById(`grade-btn-${currentGrade}`); if(gb) gb.className='grade-chip px-4 py-2 rounded-full text-sm font-bold bg-indigo-600 text-white shadow-sm'; const container=document.getElementById('library-pool-container'); const pool=ruleLibrary[currentGrade]||[]; container.innerHTML=pool.map(rule=>{ const added=selectedRules.some(r=>r.id===rule.id); const m=valueMeta[rule.value]||valueMeta['존중']; return `<div class="rounded-xl p-4 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><div class="flex justify-between gap-3"><div><div class="text-2xl mb-1">${m.emoji}</div><h4 class="font-black text-base leading-snug">${rule.text}</h4><p class="text-xs mt-2 opacity-80"><b>왜 필요할까요?</b><br>${rule.why}</p><p class="text-[11px] mt-2 opacity-70">가치: ${rule.value} · 참고 근거: ${rule.law}</p></div><button onclick="toggleRule('${rule.id}')" class="self-start px-3 py-1.5 text-xs font-bold rounded-md whitespace-nowrap transition-all ${added?'text-red-700 border border-red-200':'border text-green-800'}" style="background:${added?'#fff':'#fff'}">>${added?'제거':'선택'}</button></div></div>`; }).join('') + `<div class="md:col-span-2 rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)"><h4 class="font-black mb-3">📊 교사 추천 베스트 규칙 DB 예시</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${bestPracticeRules.map((r,i)=>`<div class="bg-white border rounded-lg p-3"><b>${i+1}. ${r.text}</b><p class="text-xs text-slate-500 mt-1">${r.grade} · ${r.reason}</p></div>`).join('')}</div></div>`; }
 function toggleRule(id){ const idx=selectedRules.findIndex(r=>r.id===id); if(idx>-1) selectedRules.splice(idx,1); else { const target=(ruleLibrary[currentGrade]||[]).find(r=>r.id===id); if(target) selectedRules.push(ruleWithRestorative(target)); } updateAll(); }
 function addCustomRule(){ const input=document.getElementById('custom-rule-input'); if(!input.value.trim()) return; const text=input.value.trim(); const category=/폰|스마트|SNS|온라인|기기/.test(text)?'digital':/욕|친구|놀림|비웃|따돌/.test(text)?'relation':/뛰|안전|밀|장난/.test(text)?'safety':/청소|정리|물건/.test(text)?'environment':'class'; selectedRules.push(ruleWithRestorative({id:'custom_'+Date.now(), value:detectValue(text), category, text, law: category==='digital'?'제11조 정보통신망 이용':category==='relation'?'제10조 상호 존중':'학생생활규정 및 고시 참고', why:'우리 반 상황에 맞게 학생들과 필요성을 함께 이야기해 보세요.'})); input.value=''; updateAll(); }
 function updateRuleWarning(){ const box=document.getElementById('rule-warning'); if(!box) return; if(selectedRules.length>5){ box.classList.remove('hidden'); box.innerHTML=`⚠️ 현재 약속이 <b>${selectedRules.length}개</b>입니다. 초등학생이 기억하고 실천하기에는 많을 수 있습니다. 3~5개 이하를 권장합니다. 중복되는 약속은 하나의 가치로 묶어 주세요.`; } else { box.classList.add('hidden'); box.innerHTML=''; } }
-function updateMyRulesView(){ document.getElementById('rule-count').innerText=`${selectedRules.length}개`; updateRuleWarning(); const el=document.getElementById('my-rules'); if(!selectedRules.length){ el.innerHTML='<p class="text-sm text-slate-400 text-center py-12">선택된 약속이 없습니다.</p>'; return; } el.innerHTML=selectedRules.map((r,i)=>{ const opts=(restorativeOptions[r.category]||restorativeOptions.class).map(o=>`<option ${r.recovery===o?'selected':''}>${o}</option>`).join(''); return `<div class="p-3 rounded-lg text-sm" style="background:var(--card-lt);border:1px solid var(--border)"><div class="flex justify-between gap-2"><span class="font-bold" style="color:var(--text)"><b style="color:var(--gold)">${i+1}.</b> ${r.text}</span><button onclick="deleteSelectedRule('${r.id}')" class="text-slate-400 hover:text-rose-500 font-bold">×</button></div><p class="text-xs text-slate-500 mt-2"><b>왜 필요할까요?</b> ${r.why||''}</p><div class="mt-2 flex flex-wrap gap-1"><span class="text-[11px] px-2 py-1 rounded" style="background:var(--gold-dim);color:var(--gold)">${r.value}</span><span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded">${r.law}</span></div><label class="block mt-2 text-[11px] font-bold text-amber-700">회복 책임</label><select onchange="updateRecovery('${r.id}', this.value)" class="w-full text-xs border rounded p-1.5 bg-amber-50">${opts}</select></div>`; }).join(''); }
+function updateMyRulesView(){ document.getElementById('rule-count').innerText=`${selectedRules.length}개`; updateRuleWarning(); const el=document.getElementById('my-rules'); if(!selectedRules.length){ el.innerHTML='<p class="text-sm text-slate-400 text-center py-12">선택된 약속이 없습니다.</p>'; return; } el.innerHTML=selectedRules.map((r,i)=>{ const opts=(restorativeOptions[r.category]||restorativeOptions.class).map(o=>`<option ${r.recovery===o?'selected':''}>${o}</option>`).join(''); return `<div class="p-3 rounded-lg text-sm" style="background:var(--card-lt);border:1px solid var(--border)"><div class="flex justify-between gap-2"><span class="font-bold" style="color:var(--text)"><b style="color:var(--gold)">${i+1}.</b> ${r.text}</span><button onclick="deleteSelectedRule('${r.id}')" class="text-slate-400 hover:text-rose-500 font-bold">×</button></div><p class="text-xs text-slate-500 mt-2"><b>왜 필요할까요?</b> ${r.why||''}</p><div class="mt-2 flex flex-wrap gap-1"><span class="text-[11px] px-2 py-1 rounded" style="background:var(--gold-dim);color:var(--gold)">${r.value}</span><span class="text-[11px] px-2 py-1 rounded" style="background:var(--card);color:var(--text-lt)">${r.law}</span></div><label class="block mt-2 text-[11px] font-bold text-amber-700">회복 책임</label><select onchange="updateRecovery('${r.id}', this.value)" class="w-full text-xs border rounded p-1.5" style="background:var(--card-lt)">${opts}</select></div>`; }).join(''); }
 function updateRecovery(id,val){ const r=selectedRules.find(x=>x.id===id); if(r) r.recovery=val; updateAll(); }
 function deleteSelectedRule(id){ selectedRules=selectedRules.filter(r=>r.id!==id); updateAll(); }
 function compressRules(){ const byValue=[]; selectedRules.forEach(r=>{ if(!byValue.some(x=>x.value===r.value)) byValue.push(r); }); selectedRules=byValue.slice(0,5); updateAll(); }
@@ -950,7 +946,7 @@ function syncVote(id,val,source){
 }
 function renderLessonPlan(){ const view=document.getElementById('lesson-plan-view'); if(!view) return; const info=getClassInfo(); const low=currentGrade<=2; const mid=currentGrade<=4 && currentGrade>=3; const title=low?'우리 반 약속 만들기 2차시 수업안':mid?'민주적으로 우리 반 약속 만들기 2차시 수업안':'학급헌법 제정 프로젝트 2차시 수업안'; const materials=low?'약속 카드, 그림 활동지, 스티커, 색연필':'가치 카드, 모둠 토의지, 칠판 집계표, 투표 스티커'; view.innerHTML=classInfoHeader()+`<div class="text-center border-b pb-5 mb-6"><h3 class="text-2xl font-black">${title}</h3><p class="text-sm mt-2" style="color:var(--text-md)">대상: ${info.gradeLabel||currentGrade+'학년'}${info.teacher?' · '+info.teacher+' 선생님 담임':''} · 총 80분 · DB 기반 학급규칙 수립 수업</p></div><div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6"><div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)"><b>수업 목표</b><ul class="list-disc ml-5 mt-2 text-sm leading-7"><li>우리 반에 필요한 핵심 가치를 설명할 수 있다.</li><li>가치를 실천 가능한 약속 문장으로 바꿀 수 있다.</li><li>약속을 어겼을 때의 회복 책임을 함께 정할 수 있다.</li></ul></div><div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)"><b>준비물</b><p class="text-sm mt-2 leading-7">${materials}</p><b class="block mt-3">핵심 가치</b><p class="text-sm mt-1">${topValues(3).join(', ')}</p></div></div><div class="space-y-4"><div class="border rounded-xl p-4"><h4 class="font-black text-indigo-700">1차시 40분 · 가치 찾기와 의견 수집</h4><ol class="list-decimal ml-5 mt-2 text-sm leading-8"><li>도입 5분: “어떤 교실에서 생활하고 싶은가?” 질문하기</li><li>모둠 카드 10분: 핵심 가치 선택과 대표 약속 정리</li><li>모둠 토의 15분: 비슷한 의견을 가치별로 묶기</li><li>전체 공유 10분: 우리 반 TOP3 가치 확정</li></ol></div><div class="border rounded-xl p-4"><h4 class="font-black text-indigo-700">2차시 40분 · 약속 만들기와 합의</h4><ol class="list-decimal ml-5 mt-2 text-sm leading-8"><li>도입 5분: 지난 시간 TOP3 가치 확인</li><li>약속 카드 선택 10분: 가치별 구체 행동 고르기</li><li>회복 책임 토의 10분: 처벌이 아닌 회복 방법 정하기</li><li>투표 10분: 2/3 이상 동의한 약속 확정</li><li>정리 5분: ${low?'우리 반 약속':'학급헌법'} 서명과 실천 다짐</li></ol></div><div class="rounded-xl p-4 text-sm" style="background:var(--card);border:1px solid var(--border)"><b style="color:#6b4e00">교사 발문 예시</b><p class="mt-2 leading-7">“이 약속은 누구의 배움과 안전을 지키기 위한 것일까요?”<br>“실수했을 때 벌을 받는 것보다 공동체를 회복하려면 무엇을 해야 할까요?”<br>“우리가 진짜 1년 동안 지킬 수 있는 약속은 몇 개가 적당할까요?”</p></div></div>`; }
 function renderConstitution(){ const view=document.getElementById('constitution-view'); if(!view) return; const total=parseInt(document.getElementById('student-count')?.value||24); const pass=Math.ceil(total*2/3); const approved=selectedRules.filter(r=>(votes[r.id]??pass)>=pass); const theme=document.getElementById('theme-select')?.value||'indigo'; const themeMap={indigo:['border-indigo-600','text-indigo-700','bg-indigo-100'],emerald:['border-emerald-600','text-emerald-700','bg-emerald-100'],amber:['border-amber-500','text-amber-700','bg-amber-100'],rose:['border-rose-500','text-rose-700','bg-rose-100']}; const t=themeMap[theme]; const label=currentGrade<=2?'우리 반 약속':currentGrade<=4?'우리 반 약속':'학급헌법'; document.getElementById('constitution-heading').innerText=`📜 ${label} 자동 생성`; view.className=`bg-white shadow-xl border-4 ${t[0]} p-8 w-[620px] min-h-[820px]`; const title=document.getElementById('constitution-title-control')?.value||defaultTitle(); const info2=getClassInfo(); const headerMeta2=[info2.gradeLabel,info2.teacher?(info2.teacher+' 선생님 담임'):'',info2.dateLabel].filter(Boolean).join(' · '); view.innerHTML=`<div class="text-center"><div class="text-sm font-black ${t[1]} tracking-widest">${currentGrade<=2?'CLASS PROMISE':currentGrade<=4?'CLASS AGREEMENT':'CLASS CONSTITUTION'}</div><h2 class="text-2xl font-black text-slate-900 mt-2 pb-4 border-b-2 ${t[0]}">${title}</h2>${headerMeta2?`<p class="text-xs ${t[1]} font-bold mt-2">${headerMeta2}</p>`:''}<p class="text-xs text-slate-400 mt-1">학생 의견 수집과 토론·투표를 거쳐 합의한 ${label}입니다.</p></div><div class="mt-6 bg-slate-50 rounded-lg p-4 text-sm leading-relaxed"><b>전문</b><br>${document.getElementById('value-statement')?.value||'우리 반은 서로의 배움과 안전을 지키기 위해 함께 정한 약속을 실천합니다.'}</div><div class="mt-6 space-y-4">${approved.map((r,i)=>`<div class="pb-3 border-b"><div class="flex gap-3"><span class="w-7 h-7 rounded-full ${t[2]} ${t[1]} font-black text-xs flex items-center justify-center">${i+1}</span><div><p class="font-black text-slate-800">${currentGrade<=4?`${i+1}번째 약속`:`제${i+1}조 ${r.value}`}</p><p class="text-sm mt-1">${r.text}</p><p class="text-xs text-slate-500 mt-1">왜 필요할까요? ${r.why||''}</p><p class="text-xs text-amber-700 mt-1">실수했을 때의 회복 책임: ${r.recovery}</p><p class="text-[11px] text-slate-400 mt-1">참고 근거: ${r.law}</p></div></div></div>`).join('')||'<p class="text-center text-slate-400 py-10">합의된 약속이 없습니다.</p>'}</div><div class="mt-8 pt-4 border-t text-center"><p class="text-sm font-bold">우리 반 모두는 위 약속을 함께 만들었으며, 서로의 성장을 위해 실천합니다.</p><div class="mt-6 grid grid-cols-3 gap-3 text-xs text-slate-400">${Array.from({length:9}).map(()=>'<div class="border-b pb-6">서명</div>').join('')}</div></div>`; }
-function generateGuidanceRecord(){ const text=document.getElementById('incident-input').value.trim(); if(!text){alert('상황을 입력해 주세요.');return;} const category=/폰|스마트|SNS|온라인|기기/.test(text)?'digital':/욕|놀림|비웃|따돌|친구|폭력/.test(text)?'relation':/뛰|밀|위험|안전/.test(text)?'safety':/청소|정리|물건|파손/.test(text)?'environment':'class'; const related=selectedRules.find(r=>r.category===category)||selectedRules[0]; const recovery=related?.recovery || (restorativeOptions[category]||restorativeOptions.class)[0]; document.getElementById('guidance-result').innerHTML=`<h3 class="font-black text-lg text-slate-900 mb-4">생활지도 지원 문안</h3><div class="space-y-4 text-sm"><div class="bg-white border rounded-lg p-4"><b>관련 약속</b><p class="mt-1 text-slate-700">${related?related.text:'관련 약속을 먼저 설정하세요.'}</p></div><div class="bg-white border rounded-lg p-4"><b>권장 발화</b><p class="mt-1 text-slate-700">“우리가 함께 만든 약속을 기억해 보자. 지금 행동은 어떤 친구의 배움이나 안전에 영향을 주었을까? 어떻게 회복하면 좋을까?”</p></div><div class="bg-white border rounded-lg p-4"><b>복원 질문</b><ol class="list-decimal ml-5 mt-1 leading-7"><li>누가 영향을 받았나요?</li><li>어떤 불편이나 피해가 생겼나요?</li><li>다시 공동체로 돌아오기 위해 어떤 책임을 실천할 수 있나요?</li></ol></div><div class="bg-white border rounded-lg p-4"><b>권장 회복 책임</b><p class="mt-1 text-amber-700 font-bold">${recovery}</p></div><div class="bg-slate-800 text-white rounded-lg p-4"><b>기록 예시</b><p class="mt-2 leading-relaxed">${new Date().toLocaleDateString('ko-KR')} 생활지도 상황: ${text}. 학생에게 학급에서 합의한 약속을 상기시키고, 행위가 공동체에 미친 영향을 확인하도록 조언함. 학생은 회복 책임으로 ‘${recovery}’을(를) 안내받았으며, 이후 동일 상황 예방을 위한 약속을 확인함.</p></div></div>`; }
+function generateGuidanceRecord(){ const text=document.getElementById('incident-input').value.trim(); if(!text){alert('상황을 입력해 주세요.');return;} const category=/폰|스마트|SNS|온라인|기기/.test(text)?'digital':/욕|놀림|비웃|따돌|친구|폭력/.test(text)?'relation':/뛰|밀|위험|안전/.test(text)?'safety':/청소|정리|물건|파손/.test(text)?'environment':'class'; const related=selectedRules.find(r=>r.category===category)||selectedRules[0]; const recovery=related?.recovery || (restorativeOptions[category]||restorativeOptions.class)[0]; document.getElementById('guidance-result').innerHTML=`<h3 class="font-black text-lg mb-4" style="color:var(--text)">생활지도 지원 문안</h3><div class="space-y-4 text-sm"><div class="bg-white border rounded-lg p-4"><b>관련 약속</b><p class="mt-1 text-slate-700">${related?related.text:'관련 약속을 먼저 설정하세요.'}</p></div><div class="bg-white border rounded-lg p-4"><b>권장 발화</b><p class="mt-1 text-slate-700">“우리가 함께 만든 약속을 기억해 보자. 지금 행동은 어떤 친구의 배움이나 안전에 영향을 주었을까? 어떻게 회복하면 좋을까?”</p></div><div class="bg-white border rounded-lg p-4"><b>복원 질문</b><ol class="list-decimal ml-5 mt-1 leading-7"><li>누가 영향을 받았나요?</li><li>어떤 불편이나 피해가 생겼나요?</li><li>다시 공동체로 돌아오기 위해 어떤 책임을 실천할 수 있나요?</li></ol></div><div class="bg-white border rounded-lg p-4"><b>권장 회복 책임</b><p class="mt-1 text-amber-700 font-bold">${recovery}</p></div><div class="bg-slate-800 text-white rounded-lg p-4"><b>기록 예시</b><p class="mt-2 leading-relaxed">${new Date().toLocaleDateString('ko-KR')} 생활지도 상황: ${text}. 학생에게 학급에서 합의한 약속을 상기시키고, 행위가 공동체에 미친 영향을 확인하도록 조언함. 학생은 회복 책임으로 ‘${recovery}’을(를) 안내받았으며, 이후 동일 상황 예방을 위한 약속을 확인함.</p></div></div>`; }
 function switchTab(tabId){ document.querySelectorAll('.tab-content').forEach(el=>el.classList.add('hidden')); const t=document.getElementById(`tab-${tabId}`); if(t) t.classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(el=>{el.classList.remove('active-tab'); el.style.color='rgba(255,255,255,.65)';}); const btn=document.getElementById(`btn-${tabId}`); if(btn){ btn.classList.add('active-tab'); btn.style.color=''; } if(tabId==='agreement') renderVoteBoard(); if(tabId==='lesson') renderLessonPlan(); if(tabId==='constitution') renderConstitution(); window.scrollTo({top:0,behavior:'smooth'}); }
 function goToNextStep(){ const current=tabsOrder.find(id=>!document.getElementById(`tab-${id}`).classList.contains('hidden')); const idx=tabsOrder.indexOf(current); switchTab(idx===tabsOrder.length-1?'diagnosis':tabsOrder[idx+1]); }
 function printComponent(divId){
@@ -1091,7 +1087,7 @@ function generateGuidanceRecord(){
         const situation = text || type+' 관련 생활지도 상황 발생';
         const recordText = db.record.replace('{date}',today).replace('{situation}',situation).replace('{recovery}',recovery);
         html += '<div class="bg-white border-2 '+db.color+' rounded-xl p-5">'
-            + '<h4 class="font-black text-slate-800 mb-3">'+db.label+'</h4>'
+            + '<h4 class="font-black mb-3" style="color:var(--text)">'+db.label+'</h4>'
             + '<div class="space-y-3">'
             + '<div class="bg-slate-50 rounded-lg p-3"><p class="text-xs font-black text-slate-500 mb-2">💬 초기 발화</p>'
             + db.speech.map(s=>'<p class="text-slate-700 leading-relaxed text-sm">'+s+'</p>').join('<p class="text-slate-300 text-xs my-1">또는</p>')
@@ -1125,36 +1121,6 @@ function selectRecoveryCard(btn, type, recovery){
     if(el) el.querySelector('.record-text').textContent = recordText;
 }
 
-/* ── 5순위(v36→v37): 수업 모드 — 사이드바 하단 버튼 ── */
-let classroomMode = false;
-function toggleClassroomMode(){
-    classroomMode = !classroomMode;
-    const aside = document.querySelector('aside');
-    const label = document.getElementById('classroom-mode-label');
-    const btn = document.getElementById('classroom-mode-btn');
-    const main = document.getElementById('main-content');
-    if(classroomMode){
-        aside.classList.add('hidden');
-        if(main){ main.classList.remove('p-6','lg:p-8'); main.classList.add('p-4'); }
-        /* 버튼 자체는 aside 안에 있으므로 aside가 숨겨지면 보이지 않음
-           → 화면 우하단에 복귀 버튼을 동적으로 삽입 */
-        let exitBtn = document.getElementById('classroom-exit-btn');
-        if(!exitBtn){
-            exitBtn = document.createElement('button');
-            exitBtn.id = 'classroom-exit-btn';
-            exitBtn.className = 'fixed top-4 left-4 z-50 bg-slate-700 text-white text-xs font-bold px-3 py-2 rounded-lg shadow-lg hover:bg-slate-600 no-print';
-            exitBtn.innerHTML = '🔙 일반 모드로';
-            exitBtn.onclick = toggleClassroomMode;
-            document.body.appendChild(exitBtn);
-        }
-        exitBtn.style.display = 'block';
-    } else {
-        aside.classList.remove('hidden');
-        if(main){ main.classList.remove('p-4'); main.classList.add('p-6','lg:p-8'); }
-        const exitBtn = document.getElementById('classroom-exit-btn');
-        if(exitBtn) exitBtn.style.display = 'none';
-    }
-}
 
 /* ── 6순위: 교사 직접 등록 규칙 DB ── */
 let myCustomDB = [];
@@ -1296,7 +1262,7 @@ function addHabitAsRule(id){
 }
 function habitRecommendationPanel(){
     const rows=relevantHabits(null, 8);
-    return `<div class="md:col-span-2 bg-emerald-50 border border-emerald-100 rounded-2xl p-4"><h4 class="font-black mb-2 text-emerald-900">🌱 함께 실천하면 좋은 생활습관 추천</h4><p class="text-xs text-emerald-800 mb-3">학생들이 합의한 가치가 일상 행동으로 이어지도록 돕는 보조 추천입니다. 규칙으로 강제하기보다 선택적으로 약속 카드에 추가하세요.</p><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${rows.map(h=>`<div class="bg-white border rounded-lg p-3"><b>${valueMeta[h.value]?.emoji||'•'} ${h.habit}</b><p class="text-xs text-slate-500 mt-1">${h.value} · ${h.why}</p><button onclick="addHabitAsRule('${h.id}')" class="mt-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-bold">약속으로 추가</button></div>`).join('')}</div></div>`;
+    return `<div class="md:col-span-2 bg-emerald-50 border border-emerald-100 rounded-2xl p-4"><h4 class="font-black mb-2" style="color:var(--success)">🌱 함께 실천하면 좋은 생활습관 추천</h4><p class="text-xs mb-3" style="color:rgba(52,211,153,.7)">학생들이 합의한 가치가 일상 행동으로 이어지도록 돕는 보조 추천입니다. 규칙으로 강제하기보다 선택적으로 약속 카드에 추가하세요.</p><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${rows.map(h=>`<div class="bg-white border rounded-lg p-3"><b>${valueMeta[h.value]?.emoji||'•'} ${h.habit}</b><p class="text-xs text-slate-500 mt-1">${h.value} · ${h.why}</p><button onclick="addHabitAsRule('${h.id}')" class="mt-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-bold">약속으로 추가</button></div>`).join('')}</div></div>`;
 }
 
 
@@ -1324,7 +1290,7 @@ renderSituationCards = function(){
             const val=valueList.find(v=>text.includes(v));
             const h=val ? relevantHabits(val,1)[0] : null;
             if(h && !card.querySelector('[data-habit-tip="v33"]')){
-                card.insertAdjacentHTML('beforeend', `<div data-habit-tip="v33" class="mt-3 bg-emerald-50 border border-emerald-100 rounded-lg p-3 text-xs leading-6"><b>생활습관 연결</b><br>${h.habit}<br><span class="text-slate-500">${h.prompt}</span></div>`);
+                card.insertAdjacentHTML('beforeend', `<div data-habit-tip="v33" class="mt-3 rounded-lg p-3 text-xs leading-6" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2)"><b style="color:var(--success)">생활습관 연결</b><br>${h.habit}<br><span class="text-slate-500">${h.prompt}</span></div>`);
             }
         });
     }
@@ -1340,7 +1306,7 @@ renderLessonPlan = function(){
     const view=document.getElementById('lesson-plan-view');
     if(view && !view.querySelector('[data-habit-lesson="v33"]')){
         const rows=relevantHabits(null,5);
-        view.insertAdjacentHTML('beforeend', `<div data-habit-lesson="v33" class="mt-5 bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-sm"><b>생활습관 미니 루틴</b><p class="mt-2 text-slate-600">합의한 약속이 일회성 포스터로 끝나지 않도록, 수업 마무리에서 하루 한 가지 실천 습관을 정합니다.</p><ul class="list-disc ml-5 mt-2 leading-7">${rows.map(h=>`<li>${h.habit}</li>`).join('')}</ul></div>`);
+        view.insertAdjacentHTML('beforeend', `<div data-habit-lesson="v33" class="mt-5 rounded-xl p-4 text-sm" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2)"><b style="color:var(--success)">생활습관 미니 루틴</b><p class="mt-2" style="color:var(--text-md)">합의한 약속이 일회성 포스터로 끝나지 않도록, 수업 마무리에서 하루 한 가지 실천 습관을 정합니다.</p><ul class="list-disc ml-5 mt-2 leading-7">${rows.map(h=>`<li>${h.habit}</li>`).join('')}</ul></div>`);
     }
 };
 
@@ -1360,7 +1326,7 @@ renderParentLetter = function(){
     const view=document.getElementById('parent-letter-view');
     if(view && !view.querySelector('[data-habit-parent="v33"]')){
         const rows=relevantHabits(null,5);
-        const box=`<div data-habit-parent="v33" class="border rounded-lg p-4"><b>가정에서 함께 격려해 주시면 좋은 생활습관</b><ul class="list-disc ml-5 mt-2 leading-7">${rows.map(h=>`<li>${h.habit}</li>`).join('')}</ul><p class="text-xs text-slate-500 mt-2">위 내용은 학생들이 정한 약속을 생활 속 작은 행동으로 이어가기 위한 참고 자료입니다.</p></div>`;
+        const box=`<div data-habit-parent="v33" class="rounded-lg p-4" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2)"><b style="color:var(--success)">가정에서 함께 격려해 주시면 좋은 생활습관</b><ul class="list-disc ml-5 mt-2 leading-7">${rows.map(h=>`<li>${h.habit}</li>`).join('')}</ul><p class="text-xs text-slate-500 mt-2">위 내용은 학생들이 정한 약속을 생활 속 작은 행동으로 이어가기 위한 참고 자료입니다.</p></div>`;
         const target=view.querySelector('.space-y-4');
         if(target) target.insertAdjacentHTML('beforeend', box);
     }
