@@ -944,7 +944,7 @@ function syncVote(id,val,source){
     if(statusEl){
         const ok=num>=pass;
         statusEl.textContent=ok?'통과':'미달 '+(pass-num)+'명';
-        statusEl.className='font-bold '+(ok?'':'') " style=""+(ok?'color:var(--green-md)':'color:var(--gold)')+'"';
+        statusEl.className='font-bold'; statusEl.style.color=ok?'var(--success)':'var(--gold)';
     }
     saveToStorage(); renderConstitution();
 }
@@ -1100,7 +1100,7 @@ function generateGuidanceRecord(){
             + '<ol class="list-decimal ml-4 leading-7 text-sm">'+db.questions.map(q=>'<li>'+q+'</li>').join('')+'</ol>'
             + '</div>'
             + '<div class="bg-slate-50 rounded-lg p-3"><p class="text-xs font-black text-slate-500 mb-2">✅ 회복 책임 선택</p>'
-            + '<div class="flex flex-wrap gap-2">'+db.recovery.map((r,i)=>'<button onclick="selectRecoveryCard(this,''+type+'',''+r.replace(/'/g,'\x27')+'')" class="recovery-opt border rounded-lg px-3 py-1.5 text-xs font-bold '+(i===0?'bg-amber-100 border-amber-400 text-amber-800':'bg-white border-slate-200 text-slate-600 hover:bg-slate-50')+'">'+r+'</button>').join('')+'</div>'
+            + '<div class="flex flex-wrap gap-2">'+db.recovery.map((r,i)=>'<button onclick="selectRecoveryCard(this,\''+type+'\',\''+r.replace(/'/g,'&#39;')+'\')" class="recovery-opt border rounded-lg px-3 py-1.5 text-xs font-bold '+(i===0?'bg-amber-100 border-amber-400 text-amber-800':'bg-white border-slate-200 text-slate-600')+'">'+r+'</button>').join('')+'</div>'
             + '</div>'
             + '<div class="bg-slate-800 text-white rounded-lg p-3" id="grec-'+type+'">'
             + '<div class="flex justify-between items-center mb-1"><p class="text-xs font-black opacity-60">📋 기록 문장</p><button onclick="copyRecord(\'grec-'+type+'\')" class="copy-record-btn text-xs bg-white/20 hover:bg-white/30 text-white font-bold px-2 py-0.5 rounded transition-all">복사</button></div>'
