@@ -1307,6 +1307,7 @@ function welcomeGo(tab){
     if(_welcomeGrade > 0){
         setGrade(_welcomeGrade);
     }
+    switchStudentInputMode();
     closeQuickStart();
     switchTab(tab);
 }
@@ -1343,6 +1344,9 @@ function init(){
     updateGradeValueNotice();
     updateGroupOpsGuide();
     updateVoteBanner();
+    // grade-select 값 반영 후 모드 전환 (순서 보장)
+    const sel = document.getElementById('grade-select');
+    if(sel) currentGrade = parseInt(sel.value) || currentGrade;
     switchStudentInputMode();
     // 탭 이름 동기화 (v43)
     if(typeof tabNext!=='undefined'){
@@ -2634,6 +2638,9 @@ function renderLowResultSummary(total){
 
 /* 학년 전환 시 UI 분기 */
 function switchStudentInputMode(){
+    // grade-select 실제 값을 우선 반영 (init 타이밍 문제 방지)
+    const sel = document.getElementById('grade-select');
+    if(sel && sel.value) currentGrade = parseInt(sel.value);
     const isLow = gradeBand() === 'low';
     const lowEl = document.getElementById('student-input-low');
     const normEl = document.getElementById('student-input-normal');
