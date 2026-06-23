@@ -519,7 +519,7 @@
                                     <span class="text-xl">🖨️</span>
                                     <span class="text-[10px] font-bold leading-tight text-center" style="color:var(--text-lt)">인쇄</span>
                                     <input type="checkbox" id="chk1" class="hidden" onchange="savePrepChecks()">
-                                    <span class="tip-box" style="width:180px">활동지 인쇄 완료<br><span style="opacity:.7">약속 카드 설계 탭 → 활동지 인쇄</span></span>
+                                    <span class="tip-box" style="width:180px">학생 작성 양식 인쇄<br><span style="opacity:.7">2단계 → STEP 1 → 🖨️ 활동지 인쇄</span></span>
                                 </button>
                                 <button onclick="togglePrepCheck(2)" id="chk-btn-2" class="prep-chk-btn rounded-xl p-3 flex flex-col items-center gap-1.5 transition-all tip-wrap" style="background:var(--card-lt);border:2px solid var(--border)">
                                     <span class="text-xl">👥</span>
@@ -654,13 +654,13 @@
                 <div id="student-input-low" class="hidden">
                     <div class="rounded-xl p-5 mb-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
                         <p class="text-sm font-bold mb-1" style="color:var(--text)">🖐️ 1~2학년 전용 모드</p>
-                        <p class="text-sm" style="color:var(--text-md)">모둠 구분 없이 전체 학급 단위로 진행합니다. 교사가 약속을 읽어 주면 학생이 손을 들고, 교사가 숫자만 입력합니다.</p>
+                        <p class="text-sm" style="color:var(--text-md)">모둠 구분 없이 전체 학급 단위로 진행합니다. 생활 장면 카드를 보여주고 "이럴 때 어떤 기분이에요?" 를 물어보세요. 손든 학생 수를 입력하면 집계됩니다.</p>
                     </div>
                     <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                         <div class="xl:col-span-5 space-y-4">
                             <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
                                 <h3 class="font-bold text-lg mb-1">① 장면 카드 선택</h3>
-                                <p class="text-sm mb-3" style="color:var(--text-md)">아이들에게 보여줄 생활 장면을 고르세요. 좋아요 반응이 많은 장면이 약속 후보가 됩니다.</p>
+                                <p class="text-sm mb-3" style="color:var(--text-md)">아이들에게 보여줄 생활 장면을 고르세요. "이럴 때 어떤 기분이에요?" 를 물어보며 학생 반응을 이끌어내세요.</p>
 
                                 <!-- 필터 바 -->
                                 <div class="flex flex-wrap gap-2 mb-3" id="low-scene-filter-bar">
@@ -707,7 +707,7 @@
                                     <li>화면의 카드를 TV·칠판에 띄워 학생에게 보여 줍니다.</li>
                                     <li>"이런 교실이 좋으면 손 들어요!" 하고 물어봅니다.</li>
                                     <li>손든 학생 수를 ② 입력란에 바로 기록합니다.</li>
-                                    <li class="font-bold" style="color:var(--success)">과반(반 학생의 절반 이상)이 좋아한 장면이 약속 후보가 됩니다.</li>
+                                    <li class="font-bold" style="color:var(--success)">과반(반 학생의 절반 이상)이 반응한 장면을 바탕으로 약속 아이디어를 이끌어냅니다.</li>
                                 </ol>
                             </div>
                         </div>
@@ -876,7 +876,7 @@
                 <div class="pb-5 mb-4 flex flex-col xl:flex-row xl:justify-between xl:items-start gap-2" style="border-bottom:2px solid var(--border)">
                     <div>
                         <h2 class="text-2xl font-black" style="color:var(--text)">✏️ 약속 문장 검토</h2>
-                        <p class="text-sm mt-1" style="color:var(--text-md)">수업 후 — 학생 발언 기록 → 교사 검토 → 5단계 투표 준비.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">수업 중 학생이 한 말을 그대로 입력하고, 각 약속에 대해 법적·발달 측면을 검토하세요. 검토 완료 후 5단계 투표를 진행합니다.</span></span></p>
+                        <p class="text-sm mt-1" style="color:var(--text-md)">학생 발언 기록 → 교사 검토 → 5단계 투표 준비.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학생이 발표한 약속 표현을 기록하고, 각 약속에 대해 법적·발달 측면을 검토하세요. 검토 완료 후 5단계 투표를 진행합니다.</span></span></p>
                     </div>
                     <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#a5b4fc">🔵 수업 후 정리</span>
                 </div>
@@ -888,7 +888,7 @@
                         <span class="font-black text-base" style="color:var(--text)">약속 문장 검토</span>
                     </div>
                     <div class="flex-1 space-y-1.5">
-<div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:rgba(99,102,241,.5);color:#e0e7ff">1</span><span class="text-sm" style="color:var(--text)">수업 중 학생이 한 말을 보라색 입력란에 그대로 입력하고 "약속으로 추가"를 누르세요</span></div>
+<div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:rgba(99,102,241,.5);color:#e0e7ff">1</span><span class="text-sm" style="color:var(--text)">학생이 발표한 약속 표현을 보라색 입력란에 그대로 입력하고 "약속으로 추가"를 누르세요</span></div>
 <div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:rgba(99,102,241,.5);color:#e0e7ff">2</span><span class="text-sm" style="color:var(--text)">각 약속 카드에서 학생 발언(💬)·회복 책임(🔄)을 기록하세요</span></div>
 <div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:rgba(99,102,241,.5);color:#e0e7ff">3</span><span class="text-sm" style="color:var(--text)">처벌 표현·학년 부적합 여부를 확인 후 "교사 검토 완료" 체크박스를 체크하세요</span></div>
 <div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:rgba(99,102,241,.5);color:#e0e7ff">4</span><span class="text-sm" style="color:var(--text)">모든 약속 검토 완료 후 → 5단계 투표로 이동하세요</span></div>
@@ -901,7 +901,7 @@
                         <!-- 학생 직접 문장 작성 -->
                         <div class="rounded-xl p-5" style="background:rgba(99,102,241,.1);border:2px solid rgba(99,102,241,.35)">
                             <h3 class="font-black text-base mb-1" style="color:#a5b4fc">✏️ 학생이 직접 쓰는 약속 문장</h3>
-                            <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">수업 중 학생이 말한 약속 표현을 그대로 입력하세요. 아래 참고 예시는 힌트로만 활용하세요.</p>
+                            <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">학생이 발표한 약속 표현을 그대로 입력하세요. 아래 참고 예시는 힌트로만 활용하세요.</p>
                             <div class="flex gap-2">
                                 <input id="student-rule-input" type="text" placeholder="예: 친구가 말할 때 끼어들지 않아요 (학생이 직접 말한 문장)" maxlength="60"
                                     class="flex-1 border rounded-lg px-3 py-2.5 text-sm"
@@ -975,7 +975,7 @@
                         <span class="text-xs font-black px-2 py-1 rounded-full" style="background:var(--gold);color:#1a1200">STEP 5</span>
                         <span class="font-black text-base" style="color:var(--text)">함께 투표하기</span>
                     </div>
-                    <div class="flex-1 space-y-1.5"><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">1</span><span class="text-sm" style="color:var(--text)">5단계에서 검토 완료된 약속 카드를 TV에 띄우고 학생들과 함께 읽어보세요</span></div><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">2</span><span class="text-sm" style="color:var(--text)">각 약속에 대해 간단히 토론한 뒤 찬성하는 학생 수를 입력하세요</span></div><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">3</span><span class="text-sm" style="color:var(--text)">전체 학생의 2/3 이상 찬성 → ✅ 합의 확정</span></div><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">4</span><span class="text-sm" style="color:var(--text)">미달 약속은 5단계로 돌아가 표현을 수정하거나 재토론하세요</span></div></div>
+                    <div class="flex-1 space-y-1.5"><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">1</span><span class="text-sm" style="color:var(--text)">5단계에서 검토 완료된 약속 카드를 TV에 띄우고 학생들과 함께 읽어보세요</span></div><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">2</span><span class="text-sm" style="color:var(--text)">각 약속에 대해 간단히 토론한 뒤 찬성하는 학생 수를 입력하세요</span></div><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">3</span><span class="text-sm" style="color:var(--text)">전체 학생의 2/3 이상 찬성 → ✅ 합의 확정</span></div><div class="flex items-start gap-2"><span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style="background:var(--gold);color:#1a1200">4</span><span class="text-sm" style="color:var(--text)">미달 약속은 4단계로 돌아가 표현을 수정한 후 다시 투표하세요</span></div></div>
                     <p class="text-xs mt-2" style="color:rgba(201,168,76,.6)">💡 교사 검토가 완료된 약속만 투표할 수 있습니다. 모두 합의되면 위에 출력 버튼이 나타납니다.</p>
                 </div>
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
@@ -990,14 +990,14 @@
                         <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
                             <p class="text-xs font-black mb-3" style="color:var(--text-md)">✅ 합의 완료 후 바로가기</p>
                             <div class="space-y-2">
-                                <button onclick="switchTab('constitution')" class="w-full px-4 py-2.5 rounded-lg text-sm font-bold text-left flex items-center gap-2 transition-all" style="background:var(--card-lt);border:1px solid var(--border);color:var(--text)">
+                                <button onclick="switchTab('constitution')" class="w-full px-4 py-2.5 rounded-lg text-sm font-bold text-left flex items-center gap-2 transition-all" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);color:var(--gold)">
                                     <span>📜</span><span class="flex-1">학급헌법 출력</span><span class="text-xs opacity-50">→</span>
                                 </button>
                                 <button onclick="switchTab('parent')" class="w-full px-4 py-2.5 rounded-lg text-sm font-bold text-left flex items-center gap-2 transition-all" style="background:var(--card-lt);border:1px solid var(--border);color:var(--text)">
                                     <span>👨‍👩‍👧</span><span class="flex-1">학부모 안내문</span><span class="text-xs opacity-50">→</span>
                                 </button>
-                                <button onclick="switchTab('rules')" class="w-full px-4 py-2.5 rounded-lg text-sm font-bold text-left flex items-center gap-2 transition-all" style="background:var(--card-lt);border:1px solid var(--border);color:var(--text)">
-                                    <span>✏️</span><span class="flex-1">약속 문장 검토</span><span class="text-xs opacity-50">→</span>
+                                <button onclick="switchTab('checkup')" class="w-full px-4 py-2.5 rounded-lg text-sm font-bold text-left flex items-center gap-2 transition-all" style="background:var(--card-lt);border:1px solid var(--border);color:var(--text)">
+                                    <span>🔎</span><span class="flex-1">중간점검 (나중에)</span><span class="text-xs opacity-50">→</span>
                                 </button>
                             </div>
                         </div>
@@ -1174,7 +1174,7 @@
       <!-- 상황 선택 -->
       <p class="text-sm font-black mb-3" style="color:var(--text-md)">지금 어떤 상황인가요?</p>
       <div class="space-y-2 mb-6">
-        <button onclick="welcomeGo('student')" class="w-full text-left rounded-xl px-4 py-3.5 transition-all group" style="background:var(--gold-dim);border:2px solid rgba(201,168,76,.5)">
+        <button onclick="welcomeGo('diagnosis')" class="w-full text-left rounded-xl px-4 py-3.5 transition-all group" style="background:var(--gold-dim);border:2px solid rgba(201,168,76,.5)">
           <div class="font-black flex items-center gap-2" style="color:var(--gold)">🟡 약속을 처음 만들어요 <span class="text-xs font-normal ml-auto opacity-70">→ 학생 의견 수집부터</span></div>
           <div class="text-xs mt-0.5" style="color:var(--text-md)">의견 모으기 → 가치 정하기 → 문장 쓰기 → 투표</div>
         </button>
@@ -2611,7 +2611,7 @@ function updateVoteBanner(){
     const band=gradeBand();
     const pass=band==='low'?Math.ceil(total/2):Math.ceil(total*2/3);
     const msgs={
-        low:`🖐️ 1~2학년: 교사가 약속을 읽어 주면 좋으면 손들기 → 숫자 입력 · 합의 기준: 과반 ${pass}명 이상`,
+        low:`🖐️ 1~2학년: 장면 카드 보여주고 반응 확인 → 손들기 → 숫자 입력 · 합의 기준: 과반 ${pass}명 이상`,
         mid:`📋 3~4학년: 모둠 토의 후 전체 투표(손들기·스티커) · 합의 기준: 2/3 이상 ${pass}명`,
         high:`⚖️ 5~6학년: 자유 토론 후 표결 · 합의 기준: 2/3 이상 ${pass}명 · 미달 시 재토론 권장`
     };
