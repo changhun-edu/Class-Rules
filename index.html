@@ -570,41 +570,79 @@
                     </button>
                 </div>
 
-                <!-- ── STEP A: 개인 생각 작성 대기 화면 ── -->
+                <!-- ── STEP A: 개인 생각 작성 ── -->
                 <div id="step-panel-A">
-                    <div class="rounded-2xl p-8 text-center mb-6" style="background:var(--card);border:2px dashed rgba(255,255,255,.15)">
-                        <div class="text-5xl mb-4">✏️</div>
-                        <h3 class="text-xl font-black mb-2" style="color:var(--text)">지금은 학생들이 혼자 생각하는 시간입니다</h3>
-                        <p class="text-sm mb-6 max-w-lg mx-auto leading-7" style="color:var(--text-md)">
-                            바로 카드를 보여주거나 손들기로 넘어가지 마세요.<br>
-                            학생들이 <b style="color:var(--gold)">스스로 먼저 생각한 것</b>이 진짜 의견이 됩니다.
-                        </p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left mb-8 max-w-2xl mx-auto">
-                            <div class="rounded-xl p-4" style="background:var(--card-lt);border:1px solid var(--border)">
-                                <div class="text-2xl mb-2">📝</div>
-                                <b class="text-sm" style="color:var(--text)">포스트잇에 쓰기</b>
-                                <p class="text-xs mt-1" style="color:var(--text-md)">"우리 반이 어떤 반이 되었으면 좋겠어?" 한 장에 한 가지씩 씁니다.</p>
+                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
+
+                        <!-- 좌: 교사 안내 -->
+                        <div class="xl:col-span-5 space-y-4">
+                            <!-- 교사 멘트 카드 -->
+                            <div class="rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.3)">
+                                <p class="text-xs font-black mb-2" style="color:var(--gold)">📢 교사가 먼저 이렇게 말해 주세요</p>
+                                <p class="text-base leading-7 font-bold" id="step-a-teacher-ment" style="color:var(--text)"></p>
                             </div>
-                            <div class="rounded-xl p-4" style="background:var(--card-lt);border:1px solid var(--border)">
-                                <div class="text-2xl mb-2">🖊️</div>
-                                <b class="text-sm" style="color:var(--text)">활동지에 쓰기</b>
-                                <p class="text-xs mt-1" style="color:var(--text-md)">인쇄된 활동지에 자유롭게 씁니다. 이전 활동 '미래' 참고 가능.</p>
+                            <!-- 진행 방법 -->
+                            <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
+                                <p class="text-sm font-black mb-3" style="color:var(--text)">⏱️ 진행 방법</p>
+                                <ol class="list-decimal ml-5 space-y-2 text-sm" style="color:var(--text-md)" id="step-a-procedure"></ol>
                             </div>
-                            <div class="rounded-xl p-4" style="background:var(--card-lt);border:1px solid var(--border)">
-                                <div class="text-2xl mb-2">⏱️</div>
-                                <b class="text-sm" style="color:var(--text)">3~5분 조용히</b>
-                                <p class="text-xs mt-1" style="color:var(--text-md)">친구와 이야기하지 않고 자신의 생각을 씁니다. 생각이 안 나면 옆 힌트 참고.</p>
+                            <!-- 하단 버튼 -->
+                            <div class="flex gap-3">
+                                <button onclick="openFullscreenForm()" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all" style="background:var(--card-lt);color:var(--text-md);border:1px solid var(--border)">
+                                    📺 TV 전체화면
+                                </button>
+                                <button onclick="printStudentForm()" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all" style="background:var(--card-lt);color:var(--text-md);border:1px solid var(--border)">
+                                    🖨️ 활동지 인쇄
+                                </button>
+                            </div>
+                            <button onclick="switchStudentStep('B')" class="w-full py-3 rounded-xl font-black text-sm transition-all" style="background:var(--gold);color:#1a1200">
+                                ✅ 학생들이 다 썼어요 → STEP 2 의견 수집으로
+                            </button>
+                        </div>
+
+                        <!-- 우: 학생 양식 미리보기 (TV 표시용) -->
+                        <div class="xl:col-span-7">
+                            <div class="rounded-xl overflow-hidden" style="border:2px solid rgba(255,255,255,.12)">
+                                <div class="flex items-center justify-between px-4 py-2.5" style="background:var(--card-lt);border-bottom:1px solid var(--border)">
+                                    <span class="text-xs font-black" style="color:var(--text-lt)">📋 학생 작성 양식 미리보기</span>
+                                    <span class="text-xs px-2 py-0.5 rounded-full" id="step-a-grade-badge" style="background:var(--gold-dim);color:var(--gold)"></span>
+                                </div>
+                                <!-- 1~2학년 전용 양식 선택 탭 -->
+                                <div id="low-form-selector" class="hidden flex border-b" style="background:var(--card-lt);border-color:var(--border)">
+                                    <button onclick="selectLowForm('A')" id="low-form-btn-A"
+                                        class="flex-1 py-2 text-xs font-black transition-all"
+                                        style="background:var(--gold);color:#1a1200;border-right:1px solid var(--border)">
+                                        방법 A<span class="block font-normal opacity-70">행복한 순간 그리기</span>
+                                    </button>
+                                    <button onclick="selectLowForm('B')" id="low-form-btn-B"
+                                        class="flex-1 py-2 text-xs font-black transition-all"
+                                        style="background:var(--card-lt);color:var(--text-md);border-right:1px solid var(--border)">
+                                        방법 B<span class="block font-normal opacity-70">두 교실 비교</span>
+                                    </button>
+                                    <button onclick="selectLowForm('C')" id="low-form-btn-C"
+                                        class="flex-1 py-2 text-xs font-black transition-all"
+                                        style="background:var(--card-lt);color:var(--text-md)">
+                                        방법 C<span class="block font-normal opacity-70">빈칸+이모지</span>
+                                    </button>
+                                </div>
+                                <div id="step-a-form-preview" class="p-6" style="background:var(--card)"></div>
                             </div>
                         </div>
-                        <div class="rounded-xl p-4 mb-6 text-left max-w-lg mx-auto" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3)">
-                            <p class="text-sm font-bold mb-1" style="color:var(--gold)">💡 교사 힌트 질문</p>
-                            <p class="text-sm" id="step-a-hint-question" style="color:var(--text-md)">어떤 반이 되었으면 좋겠나요?</p>
-                        </div>
-                        <button onclick="switchStudentStep('B')" class="px-8 py-3 rounded-xl font-black text-sm transition-all" style="background:var(--gold);color:#1a1200">
-                            ✅ 학생들이 다 썼어요 → STEP 2 의견 수집으로
+                    </div>
+                </div>
+
+                <!-- TV 전체화면 오버레이 -->
+                <div id="fullscreen-form-overlay" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-8" style="background:#0f1729">
+                    <div class="w-full max-w-3xl">
+                        <div id="fullscreen-form-content" class="rounded-2xl p-10" style="background:white;color:#1a1a2e"></div>
+                        <button onclick="closeFullscreenForm()" class="mt-6 w-full py-3 rounded-xl font-black text-sm" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">
+                            ✕ 닫기 (ESC)
                         </button>
                     </div>
                 </div>
+
+                <!-- 인쇄용 학생 양식 (숨김) -->
+                <div id="student-form-print" class="hidden"></div>
 
                 <!-- ── 1~2학년 전용 입력 UI ── -->
                 <div id="student-input-low" class="hidden">
@@ -2526,56 +2564,56 @@ setGrade=function(g){
 // place 필드: 교실·복도·화장실·급식실·운동장 (장소별 필터 지원)
 const lowGradeScenesDB = [
     // ── 안전 ──
-    { id:'ls01', emoji:'🏃', text:'복도에서 뛰지 않아요', value:'안전', place:'복도',
+    { id:'ls01', emoji:'🏃', text:'복도에서 뛰고 있어요', value:'안전', place:'복도',
       rule:'교실과 복도에서는 걸어서 이동해요.', ruleId:'g1_s1' },
-    { id:'ls07', emoji:'⬆️', text:'계단 오른쪽으로 올라가요', value:'안전', place:'복도',
+    { id:'ls07', emoji:'⬆️', text:'계단에서 장난치며 내려가요', value:'안전', place:'복도',
       rule:'계단과 복도에서는 한 줄로 오른쪽 통행을 해요.', ruleId:'g1_s1' },
-    { id:'ls08', emoji:'🚪', text:'문을 조심히 열고 닫아요', value:'안전', place:'교실',
+    { id:'ls08', emoji:'🚪', text:'문을 세게 열어 친구가 놀랐어요', value:'안전', place:'교실',
       rule:'문을 열 때 뒤에 친구가 있는지 확인해요.', ruleId:'g1_s1' },
-    { id:'ls09', emoji:'✂️', text:'가위는 뾰족한 쪽을 아래로', value:'안전', place:'교실',
+    { id:'ls09', emoji:'✂️', text:'가위를 들고 장난치고 있어요', value:'안전', place:'교실',
       rule:'뾰족한 도구는 안전하게 건네줘요.', ruleId:'g1_s1' },
-    { id:'ls10', emoji:'💧', text:'젖은 손으로 콘센트 안 건드려요', value:'안전', place:'교실',
+    { id:'ls10', emoji:'💧', text:'젖은 손으로 콘센트를 만져요', value:'안전', place:'교실',
       rule:'전기 콘센트는 만지지 않아요.', ruleId:'g1_s1' },
-    { id:'ls11', emoji:'🍽️', text:'급식 줄에서 밀지 않아요', value:'안전', place:'급식실',
+    { id:'ls11', emoji:'🍽️', text:'급식 줄에서 새치기를 해요', value:'안전', place:'급식실',
       rule:'급식 줄에서 차례를 지키고 밀지 않아요.', ruleId:'g1_s1' },
-    { id:'ls12', emoji:'🛝', text:'운동장 기구를 차례로 써요', value:'안전', place:'운동장',
+    { id:'ls12', emoji:'🛝', text:'운동장 기구를 혼자 차지해요', value:'안전', place:'운동장',
       rule:'운동장 놀이기구는 차례를 지켜요.', ruleId:'g1_s1' },
     // ── 배려 ──
-    { id:'ls02', emoji:'👂', text:'친구 말을 끝까지 들어요', value:'배려', place:'교실',
+    { id:'ls02', emoji:'👂', text:'친구가 말하는데 끼어들어요', value:'배려', place:'교실',
       rule:'선생님과 친구가 말할 때 눈과 귀로 들어요.', ruleId:'g1_c1' },
-    { id:'ls03', emoji:'🗣️', text:'고운 말을 써요', value:'배려', place:'교실',
+    { id:'ls03', emoji:'🗣️', text:'친구에게 나쁜 말을 해요', value:'배려', place:'교실',
       rule:'친구에게 고운 말로 이야기해요.', ruleId:'g1_r1' },
-    { id:'ls06', emoji:'🤝', text:'실수한 친구에게 괜찮아', value:'배려', place:'교실',
+    { id:'ls06', emoji:'🤝', text:'실수한 친구를 놀려요', value:'배려', place:'교실',
       rule:'친구의 실수에 "괜찮아"라고 말해요.', ruleId:'g2_r1' },
-    { id:'ls13', emoji:'😊', text:'혼자 있는 친구에게 먼저 말 걸어요', value:'배려', place:'교실',
+    { id:'ls13', emoji:'😊', text:'혼자 있는 친구를 모른 척해요', value:'배려', place:'교실',
       rule:'혼자 있는 친구에게 먼저 말을 걸어요.', ruleId:'g1_r1' },
-    { id:'ls14', emoji:'🍱', text:'급식은 남기지 않으려 노력해요', value:'배려', place:'급식실',
+    { id:'ls14', emoji:'🍱', text:'급식을 많이 남겨요', value:'배려', place:'급식실',
       rule:'급식을 주신 분들을 생각하며 감사히 먹어요.', ruleId:'g1_e1' },
-    { id:'ls15', emoji:'🎨', text:'친구 그림을 함부로 건드리지 않아요', value:'배려', place:'교실',
+    { id:'ls15', emoji:'🎨', text:'친구 작품을 허락 없이 만져요', value:'배려', place:'교실',
       rule:'친구의 작품과 물건을 소중히 해요.', ruleId:'g1_r1' },
-    { id:'ls16', emoji:'🚽', text:'화장실 차례를 지켜요', value:'배려', place:'화장실',
+    { id:'ls16', emoji:'🚽', text:'화장실에서 차례를 안 지켜요', value:'배려', place:'화장실',
       rule:'화장실에서 차례를 지키고 깨끗이 써요.', ruleId:'g1_e1' },
     // ── 배움 ──
-    { id:'ls04', emoji:'🧹', text:'내 자리를 정리해요', value:'배움', place:'교실',
+    { id:'ls04', emoji:'🧹', text:'자리가 엉망이에요', value:'배움', place:'교실',
       rule:'쓴 물건은 제자리에 정리해요.', ruleId:'g1_e1' },
-    { id:'ls05', emoji:'✋', text:'하고 싶을 때 손들어요', value:'배움', place:'교실',
+    { id:'ls05', emoji:'✋', text:'선생님 말씀 중 큰 소리로 말해요', value:'배움', place:'교실',
       rule:'발표하고 싶을 때 손을 들고 차례를 기다려요.', ruleId:'g2_c1' },
-    { id:'ls17', emoji:'📚', text:'수업 준비물을 미리 꺼내요', value:'배움', place:'교실',
+    { id:'ls17', emoji:'📚', text:'수업 시작해도 준비물이 없어요', value:'배움', place:'교실',
       rule:'수업 시작 전에 준비물을 책상 위에 꺼내 놓아요.', ruleId:'g2_c1' },
-    { id:'ls18', emoji:'🖊️', text:'친구가 발표할 때 조용히 들어요', value:'배움', place:'교실',
+    { id:'ls18', emoji:'🖊️', text:'친구가 발표할 때 떠들어요', value:'배움', place:'교실',
       rule:'친구가 발표할 때 조용히 경청해요.', ruleId:'g1_c1' },
-    { id:'ls19', emoji:'🔇', text:'쉬는 시간과 수업 시간을 구분해요', value:'배움', place:'교실',
+    { id:'ls19', emoji:'🔇', text:'수업 중에도 쉬는 시간처럼 놀아요', value:'배움', place:'교실',
       rule:'수업 시간에는 선생님 말씀에 집중해요.', ruleId:'g1_c1' },
     // ── 책임 ──
-    { id:'ls20', emoji:'🗑️', text:'쓰레기는 쓰레기통에 버려요', value:'책임', place:'교실',
+    { id:'ls20', emoji:'🗑️', text:'쓰레기를 아무 데나 버려요', value:'책임', place:'교실',
       rule:'쓰레기는 항상 쓰레기통에 버려요.', ruleId:'g1_e1' },
-    { id:'ls21', emoji:'🪑', text:'의자를 밀어 넣고 자리를 떠나요', value:'책임', place:'교실',
+    { id:'ls21', emoji:'🪑', text:'자리에서 일어나도 의자가 그대로예요', value:'책임', place:'교실',
       rule:'자리에서 일어날 때 의자를 밀어 넣어요.', ruleId:'g1_e1' },
-    { id:'ls22', emoji:'🧼', text:'손을 씻고 급식실에 가요', value:'책임', place:'화장실',
+    { id:'ls22', emoji:'🧼', text:'손을 안 씻고 밥을 먹어요', value:'책임', place:'화장실',
       rule:'식사 전에는 손을 깨끗이 씻어요.', ruleId:'g1_e1' },
-    { id:'ls23', emoji:'📦', text:'공용 물건을 쓰고 제자리에 놓아요', value:'책임', place:'교실',
+    { id:'ls23', emoji:'📦', text:'공용 물건을 쓰고 안 돌려놔요', value:'책임', place:'교실',
       rule:'공용 물건은 사용 후 바로 제자리에 돌려놓아요.', ruleId:'g1_e1' },
-    { id:'ls24', emoji:'🌿', text:'화단 꽃과 나무를 꺾지 않아요', value:'책임', place:'운동장',
+    { id:'ls24', emoji:'🌿', text:'화단 꽃을 꺾고 있어요', value:'책임', place:'운동장',
       rule:'화단의 식물을 소중히 여겨요.', ruleId:'g1_e1' },
 ];
 
@@ -2664,6 +2702,7 @@ function renderLowGradeUI(){
                         ${deleteBtn}
                         <div class="text-2xl mb-1">${s.emoji}</div>
                         <p class="text-xs font-bold leading-snug" style="color:${sel?'var(--gold)':'var(--text)'}">${s.text}</p>
+                        <p class="text-[10px] mt-1 leading-tight opacity-70" style="color:${sel?'var(--gold)':'var(--text-lt)'}">이럴 때 어떤 기분일까요?</p>
                         <div class="flex items-center gap-1 mt-1.5">
                             <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style="background:rgba(255,255,255,.08);color:${valueColors[s.value]||'var(--text-lt)'}">${s.value}</span>
                             ${s.place&&showPlace?`<span class="text-[10px]" style="color:var(--text-lt)">${s.place}</span>`:''}
@@ -2920,16 +2959,234 @@ window.addDirectVoice=addDirectVoice; window.confirmVoiceTag=confirmVoiceTag;
 window.dismissVoiceTag=dismissVoiceTag; window.deleteDirectVoice=deleteDirectVoice;
 
 /* ── 학년별 STEP A 힌트 질문 ── */
-function updateStepAHint(){
-    const el = document.getElementById('step-a-hint-question');
-    if(!el) return;
-    const hints = {
-        low:  '"우리 반이 어떤 반이 되었으면 좋겠어?" (그림으로 그려도 좋아요)',
-        mid:  '"우리 반에서 바꾸고 싶은 것이 있나요?" (불편했던 상황을 써도 돼요)',
-        high: '"이상적인 우리 반의 모습은 어떤가요? 구체적으로 써보세요."',
-    };
-    el.textContent = hints[gradeBand()] || hints.mid;
+/* ── STEP A: 학년별 교사 멘트 + 양식 + 절차 ── */
+const stepAContent = {
+    low: {
+        badge: '1~2학년',
+        ment: '"눈을 감아보세요. 학교 오는 게 너무너무 신나는 날이에요. 우리 반에서 어떤 일이 있었을까요? 어떤 반이었으면 좋겠는지, 아래 방법 중 하나로 표현해 보아요."',
+        procedure: [
+            '눈을 감고 1분 동안 상상합니다. "학교 오는 게 신나는 날, 우리 반에서 어떤 일이 있었을까?"',
+            '아래 세 가지 방법 중 하나를 골라 활동지를 인쇄해 줍니다.',
+            '학생들이 그림·빈칸·이모지로 자유롭게 표현합니다. (3~4분)',
+            '다 쓴 학생은 칠판에 붙이거나 이웃에게 한 마디 소개합니다.',
+        ],
+        formA: `
+            <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+                <div style="text-align:center;margin-bottom:20px">
+                    <div style="font-size:2rem;margin-bottom:6px">😊</div>
+                    <h2 style="font-size:1.1rem;font-weight:900;color:#1a1a2e;margin:0">방법 A — 행복한 순간 그리기</h2>
+                    <p style="font-size:0.75rem;color:#888;margin-top:4px">이름: ___________</p>
+                </div>
+                <p style="font-size:0.85rem;color:#444;margin-bottom:14px">학교에서 기분이 가장 좋았던 순간을 떠올려 그림으로 그려요.<br><span style="color:#6366f1;font-weight:700">(누가 있었나요? 어디서? 무슨 일이 있었나요?)</span></p>
+                <div style="border:2px dashed #aaa;border-radius:12px;height:160px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.85rem;margin-bottom:16px">여기에 그림을 그려요 ✏️</div>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">그때 기분이 어땠나요? (동그라미 하나만!)</p>
+                <div style="display:flex;gap:12px;justify-content:center;margin-bottom:16px;font-size:1.3rem">
+                    <span>😊 행복해요</span><span>❤️ 따뜻해요</span><span>😄 신나요</span>
+                </div>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:4px">한 줄로 쓰기 <span style="font-weight:400;color:#888">(어려우면 안 써도 돼요)</span></p>
+                <div style="border-bottom:2px solid #333;min-height:28px;margin-bottom:4px"></div>
+            </div>`,
+        formB: `
+            <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+                <div style="text-align:center;margin-bottom:20px">
+                    <div style="font-size:2rem;margin-bottom:6px">🔄</div>
+                    <h2 style="font-size:1.1rem;font-weight:900;color:#1a1a2e;margin:0">방법 B — 두 교실 비교하기</h2>
+                    <p style="font-size:0.75rem;color:#888;margin-top:4px">이름: ___________</p>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+                    <div>
+                        <p style="font-size:0.85rem;font-weight:700;color:#16a34a;text-align:center;margin-bottom:6px">😊 좋은 교실</p>
+                        <div style="border:2px solid #86efac;border-radius:10px;height:120px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.8rem">그림을 그려요</div>
+                    </div>
+                    <div>
+                        <p style="font-size:0.85rem;font-weight:700;color:#dc2626;text-align:center;margin-bottom:6px">😢 싫은 교실</p>
+                        <div style="border:2px solid #fca5a5;border-radius:10px;height:120px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.8rem">그림을 그려요</div>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">좋은 교실에는 <span style="border-bottom:2px solid #333;display:inline-block;min-width:100px">&nbsp;</span> 이/가 있어요.</p>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:16px">싫은 교실에는 <span style="border-bottom:2px solid #333;display:inline-block;min-width:100px">&nbsp;</span> 이/가 있어요.</p>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">그래서 우리 반은 이런 반이면 좋겠어요:</p>
+                <div style="border-bottom:2px solid #333;min-height:28px"></div>
+            </div>`,
+        formC: `
+            <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+                <div style="text-align:center;margin-bottom:20px">
+                    <div style="font-size:2rem;margin-bottom:6px">✏️</div>
+                    <h2 style="font-size:1.1rem;font-weight:900;color:#1a1a2e;margin:0">방법 C — 빈칸 채우기</h2>
+                    <p style="font-size:0.75rem;color:#888;margin-top:4px">이름: ___________</p>
+                </div>
+                <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px;margin-bottom:12px">
+                    <p style="font-size:0.9rem;color:#1a1a2e;margin:0">우리 반에서 <span style="border-bottom:2px solid #16a34a;display:inline-block;min-width:90px">&nbsp;</span> 하면 기분이 <span style="font-size:1.2rem">😊</span> 좋아요!</p>
+                </div>
+                <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:14px;margin-bottom:16px">
+                    <p style="font-size:0.9rem;color:#1a1a2e;margin:0">우리 반에서 <span style="border-bottom:2px solid #dc2626;display:inline-block;min-width:90px">&nbsp;</span> 하면 기분이 <span style="font-size:1.2rem">😢</span> 싫어요.</p>
+                </div>
+                <p style="font-size:0.9rem;font-weight:700;color:#1a1a2e;margin-bottom:8px">그래서 우리 반은 _____________________ 반이면 좋겠어요!</p>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:8px">이모지로 표현해요 (동그라미 치세요)</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:1.4rem">
+                    <span>😊</span><span>🤝</span><span>🛡️</span><span>📚</span><span>🎉</span><span>🧹</span>
+                </div>
+            </div>`,
+        get form(){ return this.formC; },
+    },
+    mid: {
+        badge: '3~4학년',
+        ment: '"1년 뒤 졸업할 때 \'이 반이어서 정말 좋았다\'고 말하려면 어떤 반이어야 할까요? 3월 지금은 잘 모르지만, 어떤 반이 되고 싶은지 상상해서 써보세요."',
+        procedure: [
+            '잠깐 눈을 감고 1년 뒤 우리 반을 상상합니다. (1분)',
+            '활동지의 빈칸을 채웁니다. (4분)',
+            '다 쓴 학생은 이웃에게 한 문장씩 소개합니다.',
+            '교사가 발표된 내용을 STEP 2에 입력합니다.',
+        ],
+        form: `
+            <div style="font-family:sans-serif;max-width:520px;margin:0 auto">
+                <div style="text-align:center;margin-bottom:20px">
+                    <div style="font-size:1.8rem;margin-bottom:6px">📰</div>
+                    <h2 style="font-size:1.1rem;font-weight:900;color:#1a1a2e;margin:0">1년 후 우리 반 신문 기사</h2>
+                    <p style="font-size:0.8rem;color:#666;margin-top:4px">이름: ___________&nbsp;&nbsp;&nbsp;&nbsp; 날짜: ___________</p>
+                </div>
+                <div style="background:#f8f9fa;border-radius:8px;padding:16px;margin-bottom:14px;border-left:4px solid #6366f1">
+                    <p style="font-size:0.85rem;color:#555;margin-bottom:4px">기자: "이 반은 어떤 반으로 소문났나요?"</p>
+                    <p style="font-size:0.9rem;font-weight:700;color:#1a1a2e">우리 반은 <span style="border-bottom:2px solid #333;display:inline-block;min-width:120px">&nbsp;</span> 반으로 소문났습니다.</p>
+                </div>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">이 반의 비결은 무엇인가요?</p>
+                <div style="border:1px solid #ddd;border-radius:6px;height:52px;margin-bottom:14px"></div>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">이 반 친구들은 어떻게 행동하나요?</p>
+                <div style="border:1px solid #ddd;border-radius:6px;height:52px;margin-bottom:14px"></div>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">이 반에서 나는 어떤 역할을 하고 싶나요?</p>
+                <div style="border:1px solid #ddd;border-radius:6px;height:40px"></div>
+            </div>`,
+    },
+    high: {
+        badge: '5~6학년',
+        ment: '"우리 반이 100년 후에도 기억될 공동체라면, 어떤 가치로 기억되고 싶나요? 지금 3월이라 우리 반을 잘 모르지만, 어떤 공동체이고 싶은지 자신의 생각을 씁니다."',
+        procedure: [
+            '1분간 조용히 생각합니다. 친구와 이야기하지 않습니다.',
+            '활동지의 빈칸을 채웁니다. (4분)',
+            '모둠에서 돌아가며 한 문장씩 발표합니다.',
+            '교사가 주요 키워드를 STEP 2에 입력합니다.',
+        ],
+        form: `
+            <div style="font-family:sans-serif;max-width:520px;margin:0 auto">
+                <div style="text-align:center;margin-bottom:20px">
+                    <div style="font-size:1.8rem;margin-bottom:6px">📜</div>
+                    <h2 style="font-size:1.1rem;font-weight:900;color:#1a1a2e;margin:0">우리 반 헌법 전문 초안</h2>
+                    <p style="font-size:0.8rem;color:#666;margin-top:4px">이름: ___________&nbsp;&nbsp;&nbsp;&nbsp; 날짜: ___________</p>
+                </div>
+                <div style="background:#fffbeb;border:1px solid #f59e0b;border-radius:8px;padding:16px;margin-bottom:16px">
+                    <p style="font-size:0.95rem;line-height:1.8;color:#1a1a2e;margin:0">
+                        우리 ○학년 ○반은
+                        <span style="border-bottom:2px solid #333;display:inline-block;min-width:130px">&nbsp;</span>
+                        을/를 가장 소중히 여기는 공동체입니다.
+                    </p>
+                </div>
+                <p style="font-size:0.85rem;font-weight:700;color:#1a1a2e;margin-bottom:6px">우리가 이것을 소중히 여기는 이유:</p>
+                <div style="border:1px solid #ddd;border-radius:6px;height:60px;margin-bottom:14px"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div>
+                        <p style="font-size:0.8rem;font-weight:700;color:#6366f1;margin-bottom:6px">이렇게 말해요</p>
+                        <div style="border:1px solid #ddd;border-radius:6px;height:72px"></div>
+                    </div>
+                    <div>
+                        <p style="font-size:0.8rem;font-weight:700;color:#6366f1;margin-bottom:6px">이렇게 행동해요</p>
+                        <div style="border:1px solid #ddd;border-radius:6px;height:72px"></div>
+                    </div>
+                </div>
+                <div style="margin-top:14px;padding-top:12px;border-top:1px solid #eee">
+                    <p style="font-size:0.8rem;color:#888">우리 반은 <span style="border-bottom:1px solid #888;display:inline-block;min-width:80px">&nbsp;</span> 합니다. 왜냐하면 <span style="border-bottom:1px solid #888;display:inline-block;min-width:100px">&nbsp;</span> 때문입니다.</p>
+                </div>
+            </div>`,
+    },
+};
+
+let _currentLowForm = 'C'; // 1~2학년 기본 양식
+
+function selectLowForm(type){
+    _currentLowForm = type;
+    const content = stepAContent.low;
+    const formHtml = content['form'+type] || content.formC;
+    const prevEl = document.getElementById('step-a-form-preview');
+    if(prevEl) prevEl.innerHTML = formHtml;
+    // 버튼 스타일 갱신
+    ['A','B','C'].forEach(t=>{
+        const btn = document.getElementById('low-form-btn-'+t);
+        if(!btn) return;
+        const active = t === type;
+        btn.style.background = active ? 'var(--gold)' : 'var(--card-lt)';
+        btn.style.color = active ? '#1a1200' : 'var(--text-md)';
+    });
+    // TV·인쇄 동기화
+    const fullEl = document.getElementById('fullscreen-form-content');
+    if(fullEl) fullEl.innerHTML = formHtml;
 }
+window.selectLowForm = selectLowForm;
+
+function updateStepAHint(){
+    const band = gradeBand();
+    const content = stepAContent[band] || stepAContent.mid;
+    const isLow = band === 'low';
+
+    // 교사 멘트
+    const mentEl = document.getElementById('step-a-teacher-ment');
+    if(mentEl) mentEl.textContent = content.ment;
+
+    // 진행 절차
+    const procEl = document.getElementById('step-a-procedure');
+    if(procEl) procEl.innerHTML = content.procedure.map(p=>`<li class="leading-6">${p}</li>`).join('');
+
+    // 1~2학년: 양식 선택 탭 표시, 기본 C 선택
+    const selectorEl = document.getElementById('low-form-selector');
+    if(selectorEl) selectorEl.classList.toggle('hidden', !isLow);
+
+    // 양식 미리보기
+    const prevEl = document.getElementById('step-a-form-preview');
+    const formHtml = isLow ? (content['form'+_currentLowForm]||content.formC) : content.form;
+    if(prevEl) prevEl.innerHTML = formHtml;
+
+    // 학년 뱃지
+    const badgeEl = document.getElementById('step-a-grade-badge');
+    if(badgeEl) badgeEl.textContent = content.badge + (isLow ? ' (3가지 양식)' : ' 양식');
+
+    // TV 전체화면 콘텐츠 동기화
+    const fullEl = document.getElementById('fullscreen-form-content');
+    if(fullEl) fullEl.innerHTML = formHtml;
+
+    // 인쇄용 동기화
+    const printEl = document.getElementById('student-form-print');
+    if(printEl) printEl.innerHTML = formHtml;
+}
+
+function openFullscreenForm(){
+    const band = gradeBand();
+    const content = stepAContent[band] || stepAContent.mid;
+    const overlay = document.getElementById('fullscreen-form-overlay');
+    const fc = document.getElementById('fullscreen-form-content');
+    if(fc) fc.innerHTML = content.form;
+    if(overlay) overlay.classList.remove('hidden');
+    document.addEventListener('keydown', _escFullscreen);
+}
+function closeFullscreenForm(){
+    document.getElementById('fullscreen-form-overlay')?.classList.add('hidden');
+    document.removeEventListener('keydown', _escFullscreen);
+}
+function _escFullscreen(e){ if(e.key==='Escape') closeFullscreenForm(); }
+
+function printStudentForm(){
+    const band = gradeBand();
+    const content = stepAContent[band] || stepAContent.mid;
+    const isLow = band === 'low';
+    const formHtml = isLow ? (content['form'+_currentLowForm]||content.formC) : content.form;
+    const w = window.open('','_blank','width=800,height=900');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>학생 작성 양식</title>
+    <style>body{font-family:sans-serif;padding:40px;max-width:600px;margin:0 auto}
+    @media print{body{padding:20px}}</style></head>
+    <body>${formHtml}<br><br>
+    <script>window.onload=()=>{window.print();}<\/script></body></html>`);
+    w.document.close();
+}
+window.openFullscreenForm=openFullscreenForm;
+window.closeFullscreenForm=closeFullscreenForm;
+window.printStudentForm=printStudentForm;
 
 function switchStudentSubTab(tab){
     const isA = tab === 'A';
