@@ -2735,8 +2735,8 @@ function switchStudentSubTab(tab){
         btnB.style.background = !isA ? 'var(--gold)' : 'transparent';
         btnB.style.color = !isA ? '#1a1200' : 'var(--text-md)';
     }
-    // B탭은 학년에 따라 내부 모드도 전환
-    if(!isA) switchStudentInputMode();
+    // A/B 탭 모두 학년에 따라 내부 모드 전환
+    switchStudentInputMode();
 }
 window.switchStudentSubTab = switchStudentSubTab;
 
@@ -2745,10 +2745,14 @@ function switchStudentInputMode(){
     const sel = document.getElementById('grade-select');
     if(sel && sel.value) currentGrade = parseInt(sel.value);
     const isLow = gradeBand() === 'low';
-    const lowEl = document.getElementById('student-input-low');
+    const lowEl  = document.getElementById('student-input-low');
     const normEl = document.getElementById('student-input-normal');
-    if(lowEl) lowEl.classList.toggle('hidden', !isLow);
-    if(normEl) normEl.classList.toggle('hidden', isLow);
+    const wishEl = document.getElementById('student-wish-panel');
+    // 1~2학년: 장면카드 UI 표시, wish 패널 숨김
+    // 3~6학년: 장면카드 UI 숨김, wish 패널 표시
+    if(lowEl)  lowEl.classList.toggle('hidden', !isLow);
+    if(normEl) normEl.classList.toggle('hidden',  isLow);
+    if(wishEl) wishEl.classList.toggle('hidden',  isLow);
     if(isLow) renderLowGradeUI();
 }
 
