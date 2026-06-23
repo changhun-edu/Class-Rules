@@ -228,6 +228,12 @@
             color: var(--success);
             font-size: 10px;
         }
+        /* ── 레이아웃 ── */
+        #main-layout-wrapper { display:flex; flex-direction:row; gap:24px; align-items:flex-start; }
+        @media (max-width: 767px) {
+            #main-layout-wrapper { flex-direction:column; }
+            #main-layout-wrapper > aside { width:100% !important; min-width:0 !important; position:static !important; max-height:none !important; }
+        }
         /* ── 툴팁 ── */
         .tip-wrap { position:relative; display:inline-block; }
         .tip-icon {
@@ -358,8 +364,8 @@
     </div>
 </header>
 
-<div class="container mx-auto px-4 py-8 flex-1 flex flex-col md:flex-row gap-6 no-print" style="background:var(--bg)">
-    <aside class="w-full md:w-80 rounded-xl p-5 flex flex-col space-y-2 h-fit sticky top-4" style="background:var(--sidebar);box-shadow:0 4px 24px rgba(0,0,0,.4);border:1px solid var(--border);max-height:calc(100vh - 2rem);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent">
+<div id="main-layout-wrapper" class="container mx-auto px-4 py-8 flex-1 gap-6 no-print" style="background:var(--bg);display:flex;flex-direction:row;align-items:flex-start">
+    <aside style="width:300px;min-width:300px;flex-shrink:0;background:var(--sidebar);box-shadow:0 4px 24px rgba(0,0,0,.4);border:1px solid var(--border);border-radius:12px;padding:20px;position:sticky;top:16px;max-height:calc(100vh - 2rem);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent">
 
         <!-- ── 5단계 진행 표시바 ── -->
         <div class="px-1 mb-3">
@@ -462,7 +468,7 @@
         </div>
     </aside>
 
-    <main class="flex-1 rounded-xl p-6 lg:p-8 min-h-[760px]" id="main-content" style="background:var(--card);border:1px solid var(--border);box-shadow:0 4px 24px rgba(0,0,0,.3)">
+    <main style="flex:1;min-width:0;border-radius:12px;padding:32px;min-height:760px;background:var(--card);border:1px solid var(--border);box-shadow:0 4px 24px rgba(0,0,0,.3)" id="main-content">
 
         <div class="content-body">
             <section id="tab-diagnosis" class="tab-content">
