@@ -532,28 +532,78 @@
 
 
             <section id="tab-student" class="tab-content hidden">
-                <div class="pb-5 mb-6 flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4" style="border-bottom:2px solid var(--border)">
-                    <div>
-                        <h2 class="text-2xl font-black" style="color:var(--gold)">👥 학생 의견 모으기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🟢 수업 중 사용</span>
-                        <p class="text-base mt-2" style="color:var(--text-md)">학생 의견 수집 → 모둠 토의 결과 기록.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">TV에 wish 카드를 띄워 "이런 반이 되었으면?" 손들기를 진행하세요. 모둠 토의 결과도 아래에 입력합니다. 이 단계에서는 약속 문장을 확정하지 않습니다.</span></span></p><p class="text-sm mt-1 font-bold" id="grade-value-notice" style="color:var(--gold)"></p>
+                <div class="pb-5 mb-5" style="border-bottom:2px solid var(--border)">
+                    <div class="flex flex-col xl:flex-row xl:justify-between xl:items-start gap-3">
+                        <div>
+                            <h2 class="text-2xl font-black" style="color:var(--gold)">👥 학생 의견 모으기</h2>
+                            <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🟢 수업 중 사용</span>
+                            <p class="text-sm mt-2" style="color:var(--text-md)">개인 생각 → 전체 수집 → 모둠 토의 순서로 진행합니다.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학생이 먼저 스스로 생각한 뒤 의견을 냅니다. 바로 손들기로 들어가지 말고 개인 작성 시간을 먼저 주세요.</span></span></p>
+                            <p class="text-sm mt-1 font-bold" id="grade-value-notice" style="color:var(--gold)"></p>
+                        </div>
+                        <!-- 학년별 진행 안내 뱃지 -->
+                        <div id="student-flow-guide" class="rounded-lg px-4 py-3 text-xs flex-shrink-0" style="background:var(--neutral);border:1px solid var(--neutral-border);color:var(--text-md);min-width:220px"></div>
                     </div>
-                    <div class="rounded-lg px-4 py-3 text-sm" style="background:var(--neutral);border:1px solid var(--neutral-border);color:var(--text-md)"><b>핵심 원칙</b> 이 단계에서 약속 문장을 미리 정하지 않습니다. 학생 의견·희망·불편함을 있는 그대로 수집하세요.</div>
                 </div>
 
-                <!-- ── 소탭 네비게이션 ── -->
-                <div class="flex gap-2 mb-6 p-1 rounded-xl" style="background:var(--card-lt);border:1px solid var(--border)">
-                    <button onclick="switchStudentSubTab('A')" id="sub-tab-A"
-                        class="flex-1 py-2.5 rounded-lg text-sm font-black transition-all"
-                        style="background:var(--gold);color:#1a1200">
-                        A. 학생 의견 카드 수집
-                        <span class="text-[10px] font-normal block opacity-70">TV 띄우고 손들기</span>
+                <!-- ── 3단계 흐름 스텝 네비게이션 ── -->
+                <div class="flex items-center gap-0 mb-6 rounded-xl overflow-hidden" style="border:1px solid var(--border)">
+                    <button onclick="switchStudentStep('A')" id="step-btn-A"
+                        class="flex-1 py-3 text-sm font-black transition-all border-r"
+                        style="background:var(--gold);color:#1a1200;border-color:var(--border)">
+                        <span class="block text-[10px] font-black opacity-70 mb-0.5">STEP 1</span>
+                        ✏️ 개인 생각 작성
+                        <span class="text-[10px] font-normal block opacity-70">3~5분 · 포스트잇/활동지</span>
                     </button>
-                    <button onclick="switchStudentSubTab('B')" id="sub-tab-B"
-                        class="flex-1 py-2.5 rounded-lg text-sm font-black transition-all"
-                        style="background:transparent;color:var(--text-md)">
-                        B. 모둠 토의 결과 입력
-                        <span class="text-[10px] font-normal block opacity-70">모둠별 가치·약속 기록</span>
+                    <button onclick="switchStudentStep('B')" id="step-btn-B"
+                        class="flex-1 py-3 text-sm font-black transition-all border-r"
+                        style="background:var(--card-lt);color:var(--text-md);border-color:var(--border)">
+                        <span class="block text-[10px] font-black opacity-70 mb-0.5">STEP 2</span>
+                        🗣️ 전체 의견 수집
+                        <span class="text-[10px] font-normal block opacity-70">발언 기록 · wish 카드</span>
                     </button>
+                    <button onclick="switchStudentStep('C')" id="step-btn-C"
+                        class="flex-1 py-3 text-sm font-black transition-all"
+                        style="background:var(--card-lt);color:var(--text-md)">
+                        <span class="block text-[10px] font-black opacity-70 mb-0.5">STEP 3</span>
+                        👥 모둠 토의 기록
+                        <span class="text-[10px] font-normal block opacity-70" id="step-c-optional">선택 · 3학년 이상 권장</span>
+                    </button>
+                </div>
+
+                <!-- ── STEP A: 개인 생각 작성 대기 화면 ── -->
+                <div id="step-panel-A">
+                    <div class="rounded-2xl p-8 text-center mb-6" style="background:var(--card);border:2px dashed rgba(255,255,255,.15)">
+                        <div class="text-5xl mb-4">✏️</div>
+                        <h3 class="text-xl font-black mb-2" style="color:var(--text)">지금은 학생들이 혼자 생각하는 시간입니다</h3>
+                        <p class="text-sm mb-6 max-w-lg mx-auto leading-7" style="color:var(--text-md)">
+                            바로 카드를 보여주거나 손들기로 넘어가지 마세요.<br>
+                            학생들이 <b style="color:var(--gold)">스스로 먼저 생각한 것</b>이 진짜 의견이 됩니다.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left mb-8 max-w-2xl mx-auto">
+                            <div class="rounded-xl p-4" style="background:var(--card-lt);border:1px solid var(--border)">
+                                <div class="text-2xl mb-2">📝</div>
+                                <b class="text-sm" style="color:var(--text)">포스트잇에 쓰기</b>
+                                <p class="text-xs mt-1" style="color:var(--text-md)">"우리 반이 어떤 반이 되었으면 좋겠어?" 한 장에 한 가지씩 씁니다.</p>
+                            </div>
+                            <div class="rounded-xl p-4" style="background:var(--card-lt);border:1px solid var(--border)">
+                                <div class="text-2xl mb-2">🖊️</div>
+                                <b class="text-sm" style="color:var(--text)">활동지에 쓰기</b>
+                                <p class="text-xs mt-1" style="color:var(--text-md)">인쇄된 활동지에 자유롭게 씁니다. 이전 활동 '미래' 참고 가능.</p>
+                            </div>
+                            <div class="rounded-xl p-4" style="background:var(--card-lt);border:1px solid var(--border)">
+                                <div class="text-2xl mb-2">⏱️</div>
+                                <b class="text-sm" style="color:var(--text)">3~5분 조용히</b>
+                                <p class="text-xs mt-1" style="color:var(--text-md)">친구와 이야기하지 않고 자신의 생각을 씁니다. 생각이 안 나면 옆 힌트 참고.</p>
+                            </div>
+                        </div>
+                        <div class="rounded-xl p-4 mb-6 text-left max-w-lg mx-auto" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3)">
+                            <p class="text-sm font-bold mb-1" style="color:var(--gold)">💡 교사 힌트 질문</p>
+                            <p class="text-sm" id="step-a-hint-question" style="color:var(--text-md)">어떤 반이 되었으면 좋겠나요?</p>
+                        </div>
+                        <button onclick="switchStudentStep('B')" class="px-8 py-3 rounded-xl font-black text-sm transition-all" style="background:var(--gold);color:#1a1200">
+                            ✅ 학생들이 다 썼어요 → STEP 2 의견 수집으로
+                        </button>
+                    </div>
                 </div>
 
                 <!-- ── 1~2학년 전용 입력 UI ── -->
@@ -631,8 +681,38 @@
                     <p class="text-xs mt-2" style="color:rgba(201,168,76,.6)">💡 아직 약속 문장을 확정하지 마세요. 학생 의견을 그대로 기록하는 단계입니다.</p>
                 </div>
                 <!-- ── 소탭 A: 학생 의견 카드 수집 ── -->
+                <div id="step-panel-B" class="hidden">
                 <div id="sub-panel-A">
                 <!-- ── 학생 의견 수집 패널 ── -->
+                <!-- 학생 발언 직접 입력 — 메인 -->
+                <div class="rounded-xl p-5 mb-4" style="background:rgba(99,102,241,.1);border:2px solid rgba(99,102,241,.35)">
+                    <h3 class="font-black text-base mb-1" style="color:#a5b4fc">📝 학생이 한 말 그대로 입력 <span class="text-xs font-normal opacity-60">(핵심)</span></h3>
+                    <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">학생들이 쓴 포스트잇·활동지 내용을 그대로 입력하세요. 가치 태그가 자동으로 제안됩니다.</p>
+                    <div class="flex gap-2 mb-2">
+                        <input id="student-voice-direct" type="text" placeholder="예: 친구가 욕하지 않았으면 좋겠어요" maxlength="60"
+                            class="flex-1 border rounded-lg px-3 py-2.5 text-sm"
+                            style="background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.4);color:var(--text)"
+                            onkeydown="if(event.key==='Enter') addDirectVoice()">
+                        <button onclick="addDirectVoice()" class="px-4 py-2 rounded-lg text-sm font-bold flex-shrink-0"
+                            style="background:rgba(99,102,241,.4);color:#e0e7ff;border:1px solid rgba(99,102,241,.5)">발언 추가</button>
+                    </div>
+                    <!-- 자동 태그 제안 -->
+                    <div id="voice-tag-suggestion" class="hidden text-xs mb-3 px-3 py-2 rounded-lg" style="background:rgba(99,102,241,.15);color:#c7d2fe">
+                        🏷️ 가치 태그 제안: <span id="suggested-tag-text"></span>
+                        <button onclick="confirmVoiceTag()" class="ml-2 px-2 py-0.5 rounded font-bold" style="background:rgba(99,102,241,.3);color:#e0e7ff">확인</button>
+                        <button onclick="dismissVoiceTag()" class="ml-1 px-2 py-0.5 rounded" style="color:rgba(165,180,252,.5)">무시</button>
+                    </div>
+                    <!-- 입력된 발언 목록 -->
+                    <div id="direct-voice-list" class="space-y-1 max-h-40 overflow-y-auto"></div>
+                    <div class="mt-3 pt-3 flex items-center justify-between" style="border-top:1px solid rgba(99,102,241,.2)">
+                        <span class="text-xs" style="color:rgba(165,180,252,.6)">입력된 의견이 비슷한 것끼리 묶여 가치 집계에 반영됩니다.</span>
+                        <button onclick="switchStudentStep('C')" id="step-b-to-c" class="hidden text-xs px-3 py-1.5 rounded-lg font-bold" style="background:var(--gold);color:#1a1200">
+                            모둠 토의로 → (3학년+)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- wish 카드 (힌트 역할) -->
                 <div id="student-wish-panel" class="mb-6 rounded-xl overflow-hidden" style="border:2px solid rgba(99,102,241,.4)">
                     <div class="flex items-center justify-between px-5 py-3 cursor-pointer" style="background:rgba(99,102,241,.15)" onclick="toggleWishPanel()">
                         <div class="flex items-center gap-3">
@@ -648,7 +728,7 @@
                         </div>
                     </div>
                     <div id="wish-panel-body" class="p-5" style="background:rgba(99,102,241,.07)">
-                        <p class="text-sm mb-4 font-bold" style="color:#c7d2fe">💬 아래 항목을 TV에 띄우고 "이런 반이 되었으면 좋겠으면 손 들어요!" 라고 물어보세요.</p>
+                        <p class="text-sm mb-4 font-bold" style="color:#c7d2fe">💡 힌트 카드 <span class="font-normal opacity-70 text-xs">— 생각이 안 나는 학생에게 아이디어를 주는 보조 도구입니다. 카드를 보여주고 바로 손들기로 넘어가지 마세요.</span></p>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4" id="wish-card-grid"></div>
                         <!-- 직접 추가 -->
                         <div class="flex gap-2 mt-3">
@@ -671,9 +751,10 @@
                 </div>
 
                 </div><!-- /sub-panel-A -->
+                </div><!-- /step-panel-B -->
 
-                <!-- ── 소탭 B: 모둠 토의 결과 입력 ── -->
-                <div id="sub-panel-B" class="hidden">
+                <!-- ── STEP C: 모둠 토의 기록 ── -->
+                <div id="step-panel-C" class="hidden">
                 <!-- ── 3~6학년 기존 UI ── -->
                 <div id="student-input-normal">
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
@@ -704,7 +785,7 @@
                 </div>
                 </div>
                 </div><!-- /student-input-normal -->
-                </div><!-- /sub-panel-B -->
+                </div><!-- /step-panel-C -->
             </section>
 
             <section id="tab-values" class="tab-content hidden">
@@ -1433,7 +1514,7 @@ function onStudentCountChange(){
     }
     updateAll();
 }
-function updateAll(doSave=true){ updateDiagnosis(false); renderGroupInput(); renderStudentVoices(); renderValueAnalysis(); renderLibraryPool(); updateMyRulesView(); renderWorksheet(); renderVoteBoard(); renderLessonPlan(); renderConstitution(); renderWishPanel(); updateLessonHints(); if(doSave) saveToStorage(); }
+function updateAll(doSave=true){ updateDiagnosis(false); renderGroupInput(); renderStudentVoices(); renderValueAnalysis(); renderLibraryPool(); updateMyRulesView(); renderWorksheet(); renderVoteBoard(); renderLessonPlan(); renderConstitution(); renderWishPanel(); updateLessonHints(); renderDirectVoiceList(); updateStudentFlowGuide(); updateStepAHint(); if(doSave) saveToStorage(); }
 function renderConcernChecks(){ const el=document.getElementById('concern-checks'); el.innerHTML=concerns.map(c=>`<label class="flex items-center gap-3 rounded-lg p-3 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><input type="checkbox" value="${c.id}" onchange="toggleConcern('${c.id}', this.checked)"><span class="text-sm font-medium">${c.label}</span><span class="ml-auto text-xs px-2 py-1 rounded" style="background:var(--gold-dim);color:var(--gold)">${c.value}</span></label>`).join(''); }
 function toggleConcern(id, checked){ selectedConcerns = checked ? [...new Set([...selectedConcerns,id])] : selectedConcerns.filter(x=>x!==id); _userActed.diagnosis=true; updateAll(); }
 function updateDiagnosis(doSave=true){ currentGrade=parseInt(document.getElementById('grade-select').value||currentGrade); document.querySelectorAll('#concern-checks input').forEach(i=>i.checked=selectedConcerns.includes(i.value)); const picked=concerns.filter(c=>selectedConcerns.includes(c.id)); const priority=[...new Set([...picked.map(c=>c.value), ...topValues(3)])].slice(0,3); const count=document.getElementById('student-count').value||24; const type=document.getElementById('class-type').value||'일반학급'; document.getElementById('diagnosis-summary').innerHTML=`<div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>${currentGrade}학년 ${count}명 · ${type}</b><br><span class="text-mid-a">발달 단계: ${gradeDevelopmentText(currentGrade)}</span></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>우선 가치 TOP3</b><div class="mt-2 flex flex-wrap gap-2">${priority.map(v=>`<span class="px-2 py-1 rounded-full text-xs font-bold" style="background:var(--gold-dim);color:var(--gold)">${v}</span>`).join('')||'<span class="text-lt-a">선택된 걱정 장면 없음</span>'}</div></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>학년별 추천 명칭</b><p class="mt-2 text-mid-a">${currentGrade<=2?'우리 반 약속 · 그림/카드 중심':currentGrade<=4?'우리 반 약속 · 토론/합의 중심':'학급헌법 · 자치/책임 중심'}</p></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>추천 흐름</b><ol class="list-decimal ml-5 mt-2 text-mid-a leading-7"><li>모둠 토의 결과를 교사가 입력</li><li>핵심 가치를 3개 이하로 압축</li><li>약속은 5개 이하로 합의</li><li>위반 시 처벌보다 회복 책임 연결</li></ol></div>`; if(doSave) saveToStorage(); }
@@ -1985,7 +2066,7 @@ function switchTab(tabId){ updateMobBar(tabId); document.querySelectorAll('.tab-
     const refTabs = ['situation'];
     if(toolTabs.includes(tabId)) toggleToolsPanel(true);
     if(refTabs.includes(tabId)) toggleRefPanel(true);
-    if(tabId==='agreement') renderVoteBoard(); if(tabId==='lesson') renderLessonPlan(); if(tabId==='constitution') renderConstitution(); updateStepUI(tabId); updateTabMarkers(); const coreTabsScroll=['diagnosis','student','values','rules','agreement']; if(!coreTabsScroll.includes(tabId)) window.scrollTo({top:0,behavior:'smooth'}); }
+    if(tabId==='student'){ switchStudentStep('A'); } if(tabId==='agreement') renderVoteBoard(); if(tabId==='lesson') renderLessonPlan(); if(tabId==='constitution') renderConstitution(); updateStepUI(tabId); updateTabMarkers(); const coreTabsScroll=['diagnosis','student','values','rules','agreement']; if(!coreTabsScroll.includes(tabId)) window.scrollTo({top:0,behavior:'smooth'}); }
 function goToNextStep(){ const current=tabsOrder.find(id=>!document.getElementById(`tab-${id}`).classList.contains('hidden')); const idx=tabsOrder.indexOf(current); switchTab(idx===tabsOrder.length-1?'diagnosis':tabsOrder[idx+1]); }
 function printComponent(divId){
     if(divId==='worksheet-view') renderWorksheet();
@@ -2719,6 +2800,137 @@ function renderLowResultSummary(total){
 }
 
 /* 학년 전환 시 UI 분기 */
+/* ── 2단계 3단계 스텝 전환 ── */
+function switchStudentStep(step){
+    const steps = ['A','B','C'];
+    steps.forEach(s=>{
+        const panel = document.getElementById('step-panel-'+s);
+        const btn   = document.getElementById('step-btn-'+s);
+        const isActive = s === step;
+        if(panel) panel.classList.toggle('hidden', !isActive);
+        if(btn){
+            btn.style.background = isActive ? 'var(--gold)' : 'var(--card-lt)';
+            btn.style.color      = isActive ? '#1a1200'     : 'var(--text-md)';
+        }
+    });
+    if(step==='B'||step==='C') switchStudentInputMode();
+    updateStudentFlowGuide();
+}
+window.switchStudentStep = switchStudentStep;
+
+/* ── 학년별 진행 안내 뱃지 ── */
+function updateStudentFlowGuide(){
+    const el = document.getElementById('student-flow-guide');
+    if(!el) return;
+    const optEl = document.getElementById('step-c-optional');
+    const toCBtn = document.getElementById('step-b-to-c');
+    const band = gradeBand();
+    const guides = {
+        low:  { icon:'🟡', text:'1~2학년: STEP1→STEP2만 진행하세요.<br>STEP3 모둠 토의는 생략해도 됩니다.', showC:false },
+        mid:  { icon:'🟢', text:'3~4학년: STEP1→STEP2→STEP3 순서로<br>모두 진행하는 것을 권장합니다.',    showC:true  },
+        high: { icon:'🔵', text:'5~6학년: STEP3 모둠 토의 위주로<br>STEP2는 보조로만 활용하세요.',        showC:true  },
+    };
+    const g = guides[band];
+    el.innerHTML = `<span class="font-black">${g.icon} 이 학년 권장 순서</span><br>${g.text}`;
+    if(optEl) optEl.textContent = g.showC ? '선택 · 3학년 이상 권장' : '1~2학년은 생략 가능';
+    if(toCBtn) toCBtn.classList.toggle('hidden', !g.showC);
+}
+
+/* ── 학생 발언 직접 입력 + 가치 태그 자동 제안 ── */
+let _pendingVoice = null;
+let _pendingTag   = null;
+
+const voiceTagMap = {
+    '비웃':'배려','욕':'배려','놀리':'배려','친절':'배려','도와':'배려','혼자':'배려',
+    '뛰':'안전','다치':'안전','위험':'안전','조심':'안전','안전':'안전',
+    '집중':'배움','수업':'배움','공부':'배움','발표':'배움','들어':'배움',
+    '정리':'책임','청소':'책임','쓰레기':'책임','물건':'책임','제자리':'책임',
+    '규칙':'자치','결정':'자치','의견':'자치','투표':'자치','함께':'자치',
+};
+function guessVoiceTag(text){
+    for(const [kw, val] of Object.entries(voiceTagMap)){
+        if(text.includes(kw)) return val;
+    }
+    return null;
+}
+
+function addDirectVoice(){
+    const inp = document.getElementById('student-voice-direct');
+    const text = inp?.value?.trim();
+    if(!text) return;
+    const tag = guessVoiceTag(text);
+    _pendingVoice = text;
+    _pendingTag   = tag;
+    if(tag){
+        const sug = document.getElementById('voice-tag-suggestion');
+        const sugText = document.getElementById('suggested-tag-text');
+        if(sug && sugText){
+            sugText.textContent = `"${tag}" 가치로 분류할까요?`;
+            sug.classList.remove('hidden');
+        }
+    } else {
+        commitVoice(text, '기타');
+        inp.value = '';
+    }
+}
+function confirmVoiceTag(){
+    if(_pendingVoice){
+        commitVoice(_pendingVoice, _pendingTag||'기타');
+        document.getElementById('student-voice-direct').value = '';
+    }
+    document.getElementById('voice-tag-suggestion')?.classList.add('hidden');
+    _pendingVoice = null; _pendingTag = null;
+}
+function dismissVoiceTag(){
+    if(_pendingVoice) commitVoice(_pendingVoice, '기타');
+    document.getElementById('student-voice-direct').value = '';
+    document.getElementById('voice-tag-suggestion')?.classList.add('hidden');
+    _pendingVoice = null; _pendingTag = null;
+}
+function commitVoice(text, tag){
+    studentVoices.push(text);
+    // 가치 투표에 반영
+    if(tag && tag !== '기타') valueVotes[tag] = (valueVotes[tag]||0) + 1;
+    _userActed.values = true;
+    renderDirectVoiceList();
+    renderStudentVoices();
+    renderValueAnalysis();
+    saveToStorage();
+}
+function renderDirectVoiceList(){
+    const el = document.getElementById('direct-voice-list');
+    if(!el) return;
+    if(!studentVoices.length){
+        el.innerHTML = '<p class="text-xs py-2 text-center" style="color:rgba(165,180,252,.4)">아직 입력된 발언이 없습니다.</p>';
+        return;
+    }
+    el.innerHTML = studentVoices.map((v,i)=>`
+        <div class="flex items-center gap-2 rounded px-2 py-1.5" style="background:rgba(99,102,241,.08)">
+            <span class="text-xs flex-1" style="color:#c7d2fe">${v}</span>
+            <button onclick="deleteDirectVoice(${i})" class="text-[10px] opacity-40 hover:opacity-80" style="color:#fca5a5">×</button>
+        </div>`).join('');
+}
+function deleteDirectVoice(i){
+    studentVoices.splice(i,1);
+    renderDirectVoiceList();
+    renderStudentVoices();
+    saveToStorage();
+}
+window.addDirectVoice=addDirectVoice; window.confirmVoiceTag=confirmVoiceTag;
+window.dismissVoiceTag=dismissVoiceTag; window.deleteDirectVoice=deleteDirectVoice;
+
+/* ── 학년별 STEP A 힌트 질문 ── */
+function updateStepAHint(){
+    const el = document.getElementById('step-a-hint-question');
+    if(!el) return;
+    const hints = {
+        low:  '"우리 반이 어떤 반이 되었으면 좋겠어?" (그림으로 그려도 좋아요)',
+        mid:  '"우리 반에서 바꾸고 싶은 것이 있나요?" (불편했던 상황을 써도 돼요)',
+        high: '"이상적인 우리 반의 모습은 어떤가요? 구체적으로 써보세요."',
+    };
+    el.textContent = hints[gradeBand()] || hints.mid;
+}
+
 function switchStudentSubTab(tab){
     const isA = tab === 'A';
     const panelA = document.getElementById('sub-panel-A');
