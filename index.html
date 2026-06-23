@@ -221,6 +221,8 @@
             box-shadow:0 8px 24px rgba(0,0,0,.5); pointer-events:none;
         }
         .tip-wrap:hover .tip-box { display:block; }
+        .prep-chk-btn:hover { opacity: .85; transform: translateY(-1px); }
+        .prep-chk-btn { cursor: pointer; }
         .scroll-fade { position: relative; }
         .scroll-fade::after {
             content: ''; position: absolute;
@@ -471,61 +473,56 @@
                             <h3 class="font-bold text-lg mb-4">② 걱정되는 생활 장면</h3>
                             <div id="concern-checks" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
                         </div>
-                        <!-- 학년별 모드 안내 접이식 패널 -->
-                        <div class="rounded-xl overflow-hidden" style="border:1px solid var(--border)">
-                            <button onclick="toggleModeGuidePanel()" class="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold transition-all" style="background:var(--card-lt);color:rgba(255,255,255,.65)">
-                                <span class="flex items-center gap-2"><span>📋</span> 학년별 프로젝트 모드 안내</span>
-                                <span id="mode-guide-chevron" class="text-xs transition-all" style="color:var(--text-lt)">▼</span>
-                            </button>
-                            <div id="mode-guide-panel" class="hidden px-5 pb-5 pt-4" style="background:var(--card)">
-                                <div id="mode-guide-inline" class="text-sm leading-7" style="color:var(--text-md)">
-                                    <p class="text-xs mb-3" style="color:var(--text-lt)">현재 선택된 학년에 맞는 수업 방식과 활동을 안내합니다.</p>
-                                    <div id="current-mode-guide-inline"></div>
-                                </div>
-                                <div id="all-mode-compare" class="mt-4 grid grid-cols-1 gap-3"></div>
-                            </div>
-                        </div>
-                        <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
-                            <h3 class="font-bold mb-2" style="color:var(--text-md)">⚠️ 법적 표현 주의</h3>
-                            <p class="text-sm leading-relaxed" style="color:var(--text-lt)">이 도구는 학생생활규정과 고시를 참고해 학급 약속과 생활지도 절차를 정리하지만, 법적 판단이나 면책을 보장하지 않습니다. 실제 조치는 비례성, 학생 상황, 절차, 기록을 함께 고려해야 합니다.</p>
-                        </div>
+
+
                     </div>
                     <div class="xl:col-span-7 space-y-4">
                         <div class="rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
                             <h3 class="font-black text-lg mb-3" style="color:var(--gold)">📌 우리 반 진단 요약</h3>
                             <div id="diagnosis-summary" class="space-y-3 text-sm"></div>
                         </div>
-                        <!-- 수업 준비 체크리스트 -->
-                        <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
-                            <h3 class="font-black text-base mb-3" style="color:var(--text)">✅ 수업 준비 체크리스트</h3>
-                            <div class="space-y-2 text-sm" id="prep-checklist">
-                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-all hover:opacity-80" style="background:var(--card-lt)">
-                                    <input type="checkbox" id="chk1" onchange="savePrepChecks()" class="w-4 h-4" style="accent-color:var(--gold)">
-                                    <span style="color:var(--text-md)">활동지 인쇄 완료 <span class="text-xs opacity-60">(약속 카드 설계 탭 → 활동지 인쇄)</span></span>
-                                </label>
-                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-all hover:opacity-80" style="background:var(--card-lt)">
-                                    <input type="checkbox" id="chk2" onchange="savePrepChecks()" class="w-4 h-4" style="accent-color:var(--gold)">
-                                    <span style="color:var(--text-md)">모둠 구성 완료 <span class="text-xs opacity-60">(4~6명 기준)</span></span>
-                                </label>
-                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-all hover:opacity-80" style="background:var(--card-lt)">
-                                    <input type="checkbox" id="chk3" onchange="savePrepChecks()" class="w-4 h-4" style="accent-color:var(--gold)">
-                                    <span style="color:var(--text-md)">TV/프로젝터 연결 확인 <span class="text-xs opacity-60">(학생 의견 수집 화면 사용)</span></span>
-                                </label>
-                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-all hover:opacity-80" style="background:var(--card-lt)">
-                                    <input type="checkbox" id="chk4" onchange="savePrepChecks()" class="w-4 h-4" style="accent-color:var(--gold)">
-                                    <span style="color:var(--text-md)">시간 배분 확인 <span class="text-xs opacity-60">(의견 수집 15분 · 모둠 토의 20분 · 합의 15분)</span></span>
-                                </label>
-                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-all hover:opacity-80" style="background:var(--card-lt)">
-                                    <input type="checkbox" id="chk5" onchange="savePrepChecks()" class="w-4 h-4" style="accent-color:var(--gold)">
-                                    <span style="color:var(--text-md)">학생에게 오늘 수업 목적 안내 준비 <span class="text-xs opacity-60">"오늘은 우리 반 약속을 여러분이 직접 만들어요"</span></span>
-                                </label>
+                        <!-- 수업 준비 체크리스트 — 아이콘 행 -->
+                        <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-black text-base" style="color:var(--text)">✅ 수업 준비</h3>
+                                <span id="prep-hint" class="text-xs font-bold px-2 py-0.5 rounded-full" style="color:#f0c040"></span>
                             </div>
-                            <div id="prep-hint" class="mt-4 rounded-lg p-3 text-xs leading-6" style="background:rgba(255,200,50,.1);border:1px solid rgba(255,200,50,.2);color:#f0c040"></div>
+                            <div id="prep-checklist" class="grid grid-cols-5 gap-2">
+                                <button onclick="togglePrepCheck(1)" id="chk-btn-1" class="prep-chk-btn rounded-xl p-3 flex flex-col items-center gap-1.5 transition-all tip-wrap" style="background:var(--card-lt);border:2px solid var(--border)">
+                                    <span class="text-xl">🖨️</span>
+                                    <span class="text-[10px] font-bold leading-tight text-center" style="color:var(--text-lt)">인쇄</span>
+                                    <input type="checkbox" id="chk1" class="hidden" onchange="savePrepChecks()">
+                                    <span class="tip-box" style="width:180px">활동지 인쇄 완료<br><span style="opacity:.7">약속 카드 설계 탭 → 활동지 인쇄</span></span>
+                                </button>
+                                <button onclick="togglePrepCheck(2)" id="chk-btn-2" class="prep-chk-btn rounded-xl p-3 flex flex-col items-center gap-1.5 transition-all tip-wrap" style="background:var(--card-lt);border:2px solid var(--border)">
+                                    <span class="text-xl">👥</span>
+                                    <span class="text-[10px] font-bold leading-tight text-center" style="color:var(--text-lt)">모둠</span>
+                                    <input type="checkbox" id="chk2" class="hidden" onchange="savePrepChecks()">
+                                    <span class="tip-box" style="width:180px">모둠 구성 완료<br><span style="opacity:.7">4~6명 기준</span></span>
+                                </button>
+                                <button onclick="togglePrepCheck(3)" id="chk-btn-3" class="prep-chk-btn rounded-xl p-3 flex flex-col items-center gap-1.5 transition-all tip-wrap" style="background:var(--card-lt);border:2px solid var(--border)">
+                                    <span class="text-xl">📺</span>
+                                    <span class="text-[10px] font-bold leading-tight text-center" style="color:var(--text-lt)">TV</span>
+                                    <input type="checkbox" id="chk3" class="hidden" onchange="savePrepChecks()">
+                                    <span class="tip-box" style="width:180px">TV/프로젝터 연결<br><span style="opacity:.7">학생 의견 수집 화면 표시용</span></span>
+                                </button>
+                                <button onclick="togglePrepCheck(4)" id="chk-btn-4" class="prep-chk-btn rounded-xl p-3 flex flex-col items-center gap-1.5 transition-all tip-wrap" style="background:var(--card-lt);border:2px solid var(--border)">
+                                    <span class="text-xl">⏱️</span>
+                                    <span class="text-[10px] font-bold leading-tight text-center" style="color:var(--text-lt)">시간</span>
+                                    <input type="checkbox" id="chk4" class="hidden" onchange="savePrepChecks()">
+                                    <span class="tip-box" style="width:180px">시간 배분 확인<br><span style="opacity:.7">의견수집 15분·토의 20분·합의 15분</span></span>
+                                </button>
+                                <button onclick="togglePrepCheck(5)" id="chk-btn-5" class="prep-chk-btn rounded-xl p-3 flex flex-col items-center gap-1.5 transition-all tip-wrap" style="background:var(--card-lt);border:2px solid var(--border)">
+                                    <span class="text-xl">💬</span>
+                                    <span class="text-[10px] font-bold leading-tight text-center" style="color:var(--text-lt)">안내</span>
+                                    <input type="checkbox" id="chk5" class="hidden" onchange="savePrepChecks()">
+                                    <span class="tip-box" style="width:180px">학생 안내 준비<br><span style="opacity:.7">"오늘은 여러분이 직접 만들어요"</span></span>
+                                </button>
+                            </div>
                         </div>
-                        <!-- 오늘 수업 추천 장면 힌트 (DB 선택 X, 힌트만) -->
-                        <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
-                            <h3 class="font-black text-base mb-1" style="color:var(--text)">💡 오늘 수업에서 다루면 좋은 생활 장면</h3>
-                            <p class="text-xs mb-3" style="color:var(--text-lt)">걱정 항목 선택 결과를 바탕으로 제안하는 힌트입니다. 약속을 미리 정하지 않습니다.</p>
+                        <!-- 오늘 수업 추천 장면 힌트 — 걱정 항목 선택 시에만 표시 -->
+                        <div id="lesson-hint-section" class="hidden rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
+                            <h3 class="font-black text-base mb-1" style="color:var(--text)">💡 오늘 수업 힌트</h3>
                             <div id="lesson-hint-list" class="space-y-2 text-sm"></div>
                         </div>
                     </div>
@@ -1092,7 +1089,8 @@
     <button onclick="toggleMobileMore()" class="mt-3 w-full text-xs font-bold py-2 rounded-xl" style="background:var(--border);color:var(--text-lt)">닫기</button>
 </div>
 
-<footer class="border-t py-6 text-center text-sm no-print" style="background:var(--sidebar);border-color:var(--border);color:var(--text-lt)">
+<footer class="border-t py-4 text-center text-sm no-print" style="background:var(--sidebar);border-color:var(--border);color:var(--text-lt)">
+        <p class="text-xs mb-3 opacity-40">⚠️ 이 도구는 학생생활규정과 고시를 참고하지만, 법적 판단이나 면책을 보장하지 않습니다.</p>
     <p>© 2026 학급규칙 도우미. 대한민국 초등 교사들의 안전하고 체계적인 생활교육을 응원합니다.</p>
     <p class="text-color-lt/70 text-xs font-normal">만든이 2026 최창훈</p>
 </footer>
@@ -1357,6 +1355,28 @@ function welcomeGo(tab){
     switchTab(tab);
 }
 function closeQuickStart(){ document.getElementById('quickstart-modal').classList.add('hidden'); }
+
+function togglePrepCheck(n){
+    const chk = document.getElementById('chk'+n);
+    const btn = document.getElementById('chk-btn-'+n);
+    if(!chk || !btn) return;
+    chk.checked = !chk.checked;
+    applyPrepCheckStyle(n, chk.checked);
+    savePrepChecks();
+}
+function applyPrepCheckStyle(n, checked){
+    const btn = document.getElementById('chk-btn-'+n);
+    if(!btn) return;
+    if(checked){
+        btn.style.background = 'rgba(52,211,153,.15)';
+        btn.style.borderColor = 'rgba(52,211,153,.5)';
+        btn.querySelector('span.text-\[10px\]').style.color = 'var(--success)';
+    } else {
+        btn.style.background = 'var(--card-lt)';
+        btn.style.borderColor = 'var(--border)';
+        btn.querySelector('span.text-\[10px\]').style.color = 'var(--text-lt)';
+    }
+}
 function updateMobBar(tabId){
     const coreIds = ['diagnosis','student','values','rules','agreement'];
     document.querySelectorAll('.mob-tab-item').forEach(b=>b.classList.remove('active'));
@@ -1694,7 +1714,7 @@ function loadPrepChecks(){
         const saved = JSON.parse(localStorage.getItem('prepChecks')||'{}');
         [1,2,3,4,5].forEach(i => {
             const el = document.getElementById('chk'+i);
-            if(el && saved['chk'+i]) el.checked = true;
+            if(el && saved['chk'+i]){ el.checked = true; applyPrepCheckStyle(i, true); }
         });
     } catch(e){}
     updatePrepHint();
@@ -1707,28 +1727,35 @@ function updatePrepHint(){
         return e && e.checked;
     }).length;
     if(checked === 5){
-        el.textContent = '✅ 모든 준비가 완료됐습니다! 2단계 학생 의견 수집으로 이동하세요.';
-        el.style.color = '#34d399';
+        el.textContent = '✅ 준비 완료!';
+        el.style.color = 'var(--success)';
+        el.style.background = 'rgba(52,211,153,.12)';
+        el.style.padding = '2px 8px';
+        el.style.borderRadius = '999px';
     } else {
-        el.textContent = `📋 ${checked}/5 준비 완료 — 나머지 항목을 확인해 주세요.`;
+        el.textContent = `${checked}/5`;
         el.style.color = '#f0c040';
+        el.style.background = 'rgba(255,200,50,.12)';
+        el.style.padding = '2px 8px';
+        el.style.borderRadius = '999px';
     }
 }
 function updateLessonHints(){
     const el = document.getElementById('lesson-hint-list');
+    const section = document.getElementById('lesson-hint-section');
     if(!el) return;
-    const picked = concerns.filter(c=>selectedConcerns.includes(c.id));
-    if(!picked.length){
-        el.innerHTML = '<p class="text-sm" style="color:var(--text-lt)">걱정 항목을 선택하면 오늘 수업 힌트가 표시됩니다.</p>';
-        return;
-    }
+    const picked = concerns.filter(c=>selectedConcerns.includes(c.id) && c.title && c.title !== 'undefined');
+    // 걱정 항목 없으면 섹션 통째로 숨김
+    if(section) section.classList.toggle('hidden', picked.length === 0);
+    if(!picked.length){ el.innerHTML = ''; return; }
     const grade = currentGrade;
     el.innerHTML = picked.map(concern => {
+        if(!concern.title || concern.title === 'undefined') return '';
         const hint = grade<=2
-            ? `"${concern.title}" 장면의 그림 카드를 보여주며 "이런 일이 생기면 어떤 기분일까요?" 라고 물어보세요.`
+            ? `그림 카드를 보여주며 "이런 일이 생기면 어떤 기분일까요?" 라고 물어보세요.`
             : grade<=4
-            ? `"${concern.title}" 상황을 모둠에서 이야기하며 "어떻게 바뀌면 좋을까?" 의견을 모아보세요.`
-            : `"${concern.title}" 주제로 자유 토론 후 "우리 반 약속으로 어떻게 표현할까?" 문장 작성으로 연결하세요.`;
+            ? `모둠에서 이야기하며 "어떻게 바뀌면 좋을까?" 의견을 모아보세요.`
+            : `자유 토론 후 "우리 반 약속으로 어떻게 표현할까?" 문장 작성으로 연결하세요.`;
         return `<div class="rounded-lg p-3 text-sm" style="background:var(--card-lt);border:1px solid var(--border)">
             <div class="flex items-start gap-2">
                 <span class="text-base flex-shrink-0">${concern.emoji||'💬'}</span>
@@ -1738,7 +1765,7 @@ function updateLessonHints(){
                 </div>
             </div>
         </div>`;
-    }).join('');
+    }).filter(Boolean).join('');
 }
 window.addStudentRule = addStudentRule;
 window.toggleRefExamples = toggleRefExamples;
