@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학급규칙 도우미 - 처벌 대신 약속으로, 학생이 만드는 우리 반 규칙</title>
+    <title>학급규칙 설계소 - 수업 전 혼자 해보는 학급규칙 수립 시뮬레이션</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
@@ -338,6 +338,11 @@
         .recovery-idle  { background: var(--card-lt) !important;
                           color: var(--text-md) !important;
                           border-color: var(--border) !important; }
+        /* ── 앱 모드: 시뮬레이션 / 실제 수업 ── */
+        body.real-mode .sim-only { display: none !important; }
+        body.real-mode #mode-toggle-btn { background:rgba(52,211,153,.2) !important; color:#6ee7b7 !important; border-color:rgba(52,211,153,.4) !important; }
+        body:not(.real-mode) .real-only { display: none !important; }
+
         /* ── STEP 카드 설명: 첫 방문만 표시 ── */
         .first-visit-desc { transition: all .2s; }
         .step-desc-hidden .first-visit-desc { display: none !important; }
@@ -353,19 +358,17 @@
         <div onclick="switchTab('diagnosis')" class="flex items-center space-x-3 cursor-pointer hover:opacity-90 transition-opacity select-none" title="홈으로 이동">
             <span class="text-3xl">⚖️</span>
             <div>
-                <h1 class="text-2xl font-black tracking-tight">학급규칙 도우미</h1>
-                <p class="text-sm mt-1" style="color:rgba(255,255,255,.65)">처벌 대신 약속으로, 학생이 만드는 우리 반 규칙</p>
+                <h1 class="text-2xl font-black tracking-tight">학급규칙 설계소</h1>
+                <p class="text-sm mt-1" style="color:rgba(255,255,255,.65)">수업 전 혼자 해보는 학급규칙 수립 시뮬레이션</p>
             </div>
         </div>
-        <div class="flex items-center gap-2 text-sm flex-wrap justify-end">
-            <!-- 저장 상태 상시 표시 -->
-            <div id="save-status-bar" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.1)">
-                <span id="save-status-icon">💾</span>
-                <span id="save-status-text">저장 대기중</span>
-            </div>
-            <button onclick="exportData()" class="font-bold px-4 py-2 rounded-md text-sm transition-all" style="background:var(--gold);color:#1a1200" title="현재 데이터를 파일로 저장">💾 내보내기</button>
-            <button onclick="confirmImport()" class="font-bold px-4 py-2 rounded-md text-sm border transition-all" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.2)" title="저장한 파일 불러오기">📂 불러오기</button>
-            <input type="file" id="import-file-input" accept=".json" onchange="importData(event)" class="hidden">
+        <!-- 모드 토글 -->
+        <div class="flex items-center gap-2">
+            <button id="mode-toggle-btn" onclick="toggleAppMode()" class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-black text-sm transition-all" style="background:rgba(99,102,241,.45);color:#e0e7ff;border:2px solid rgba(99,102,241,.7);box-shadow:0 2px 12px rgba(99,102,241,.35)">
+                <span id="mode-icon">🎲</span>
+                <span id="mode-label">시뮬레이션 모드</span>
+                <span style="font-size:.65rem;opacity:.7;border-left:1px solid rgba(255,255,255,.3);padding-left:6px">전환 →</span>
+            </button>
         </div>
     </div>
 </header>
@@ -389,7 +392,7 @@
             </div>
             <!-- 수업 타이밍 뱃지 -->
             <div id="step-timing-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full inline-block" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.4)">
-                🟡 수업 전 준비
+                🎲 시뮬레이션 1단계
             </div>
         </div>
 
@@ -482,8 +485,27 @@
         <div class="content-body">
             <section id="tab-diagnosis" class="tab-content">
                 <div class="pb-5 mb-6" style="border-bottom:2px solid var(--border)">
-                    <h2 class="text-2xl font-black" style="color:var(--text)">🧭 수업 준비하기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(255,255,255,.07);color:var(--text-md)">🟡 수업 전 준비</span>
+                    <h2 class="text-2xl font-black" style="color:var(--text)">🧭 수업 준비하기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(255,255,255,.07);color:var(--text-md)">🎲 시뮬레이션 1단계</span>
                     <p class="text-base mt-2" style="color:var(--text-md)">학년 입력 → 걱정 장면 체크 → 준비 완료.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학년·학급 상황을 입력해 오늘 수업 방향을 잡으세요. 약속은 이 단계에서 결정하지 않습니다. 걱정 항목을 체크하면 수업 힌트가 자동으로 나타납니다.</span></span></p>
+                </div>
+
+                <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
+                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex-1">
+                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
+                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
+                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
+                                <span>✔ 예상 발언 자동 채우기</span>
+                                <span>✔ 가치 집계 자동 완성</span>
+                                <span>✔ 약속 자동 선정</span>
+                                <span>✔ 투표 결과 자동 추정</span>
+                            </div>
+                        </div>
+                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
+                            ⚡ 전체 시뮬레이션 실행
+                        </button>
+                    </div>
                 </div>
 
                 <!-- ▶ 지금 할 일 카드 -->
@@ -491,7 +513,7 @@
                     <div class="flex-shrink-0 flex items-center gap-2">
                         <span class="text-xs font-black px-2 py-1 rounded-full" style="background:var(--gold);color:#1a1200">STEP 1</span>
                         <span class="font-black text-base" style="color:var(--text)">수업 준비하기</span>
-                        <span class="text-[10px] px-1.5 py-0.5 rounded" style="background:rgba(255,200,50,.15);color:#f0c040">⏱️ 수업 전</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded" style="background:rgba(255,200,50,.15);color:#f0c040">⏱️ 준비 단계</span>
                     </div>
                     <div class="first-visit-desc flex-1 text-sm" style="color:var(--text-md)">학년 입력 → 걱정 장면 체크 → 다음 단계 이동</div>
                     <p class="first-visit-desc text-xs" style="color:rgba(201,168,76,.6)">💡 약속은 여기서 정하지 않습니다. 학생들과 함께 만드는 준비 단계예요.</p>
@@ -508,7 +530,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <label class="block md:col-span-2"><span class="text-sm font-bold" style="color:var(--text-md)">작성일 <span class="text-[10px] px-1.5 py-0.5 rounded font-black" style="background:rgba(255,255,255,.06);color:var(--text-lt)">선택</span></span><input id="doc-date" oninput="updateAll()" type="date" class="mt-1 w-full border rounded-lg px-2 py-2.5"></label>
                                 <label class="block"><span class="text-sm font-bold" style="color:var(--text-md)">학생 수 <span class="text-[10px] px-1.5 py-0.5 rounded font-black" style="background:rgba(239,68,68,.15);color:#fca5a5">필수</span></span><input id="student-count" oninput="onStudentCountChange()" type="number" value="24" min="1" class="mt-1 w-full border rounded-lg px-3 py-2.5"></label>
-                                <label class="block md:col-span-3"><span class="text-sm font-bold" style="color:var(--text-md)">학급 특성 <span class="text-[10px] px-1.5 py-0.5 rounded font-black" style="background:rgba(255,255,255,.06);color:var(--text-lt)">선택</span></span><select id="class-type" onchange="updateAll()" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option>일반학급</option><option>과밀학급</option><option>소규모학급</option><option>다문화 학생 포함</option><option>통합학급</option></select></label>
+                                <label class="block md:col-span-3"><span class="text-sm font-bold" style="color:var(--text-md)">학급 특성 <span class="text-[10px] px-1.5 py-0.5 rounded font-black" style="background:rgba(255,255,255,.06);color:var(--text-lt)">선택</span></span><select id="class-type" onchange="classTypeSelected=true; updateAll()" class="mt-1 w-full border rounded-lg px-3 py-2.5"><option>일반학급</option><option>과밀학급</option><option>소규모학급</option><option>다문화 학생 포함</option><option>통합학급</option></select></label>
                             </div>
                         </div>
                         <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
@@ -523,8 +545,38 @@
                             <h3 class="font-black text-lg mb-3" style="color:var(--text)">📌 우리 반 진단 요약</h3>
                             <div id="diagnosis-summary" class="space-y-3 text-sm"></div>
                         </div>
-                        <!-- 수업 준비 체크리스트 — 아이콘 행 -->
-                        <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
+                        <!-- 시뮬레이션 전용 체크리스트 -->
+                        <div class="sim-only rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-black text-base" style="color:var(--text)">🎲 시뮬레이션 준비</h3>
+                                <span id="sim-check-hint" class="text-xs font-bold px-2 py-0.5 rounded-full" style="color:#a5b4fc"></span>
+                            </div>
+                            <div class="grid grid-cols-1 gap-2" id="sim-checklist">
+                                <label class="flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-all" style="background:var(--card-lt);border:1px solid var(--border)" onclick="updateSimChecks()">
+                                    <input type="checkbox" id="schk1" class="w-4 h-4 accent-indigo-400" onchange="updateSimChecks()">
+                                    <span class="text-sm font-bold" style="color:var(--text)">학년 선택 완료</span>
+                                    <span class="text-xs ml-auto" style="color:var(--text-lt)">필수</span>
+                                </label>
+                                <label class="flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-all" style="background:var(--card-lt);border:1px solid var(--border)" onclick="updateSimChecks()">
+                                    <input type="checkbox" id="schk2" class="w-4 h-4 accent-indigo-400" onchange="updateSimChecks()">
+                                    <span class="text-sm font-bold" style="color:var(--text)">학급 특성 선택 완료</span>
+                                    <span class="text-xs ml-auto" style="color:var(--text-lt)">권장</span>
+                                </label>
+                                <label class="flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-all" style="background:var(--card-lt);border:1px solid var(--border)" onclick="updateSimChecks()">
+                                    <input type="checkbox" id="schk3" class="w-4 h-4 accent-indigo-400" onchange="updateSimChecks()">
+                                    <span class="text-sm font-bold" style="color:var(--text)">걱정 장면 1개 이상 체크</span>
+                                    <span class="text-xs ml-auto" style="color:var(--text-lt)">권장</span>
+                                </label>
+                                <label class="flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-all" style="background:var(--card-lt);border:1px solid var(--border)" onclick="updateSimChecks()">
+                                    <input type="checkbox" id="schk4" class="w-4 h-4 accent-indigo-400" onchange="updateSimChecks()">
+                                    <span class="text-sm font-bold" style="color:var(--text)">전체 시뮬레이션 실행</span>
+                                    <span class="text-xs ml-auto" style="color:var(--text-lt)">최종</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 실제 수업 준비 체크리스트 — 아이콘 행 (기존) -->
+                        <div class="real-only rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
                             <div class="flex items-center justify-between mb-3">
                                 <h3 class="font-black text-base" style="color:var(--text)">✅ 수업 준비</h3>
                                 <span id="prep-hint" class="text-xs font-bold px-2 py-0.5 rounded-full" style="color:#f0c040"></span>
@@ -571,14 +623,26 @@
                 </div>
             </section>
 
-
+            <!-- 시뮬레이션 안내 배너 (1단계 하단) — tab-diagnosis 내부 마지막 -->
+            <script>
+            // 1단계 섹션 끝에 배너 동적 추가
+            document.addEventListener('DOMContentLoaded', function(){
+                const diag = document.getElementById('tab-diagnosis');
+                if(!diag) return;
+                const banner = document.createElement('div');
+                banner.className = 'mt-4 rounded-xl px-5 py-3 flex items-center gap-3';
+                banner.style.cssText = 'background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)';
+                banner.innerHTML = '<span style="font-size:1.25rem;flex-shrink:0">🎲</span><p style="font-size:0.875rem;color:rgba(165,180,252,.85)">실제 수업 전 <b style="color:#a5b4fc">시뮬레이션</b>을 해보려면 2단계에서 <b style="color:#a5b4fc">「예상 응답으로 채우기」</b> 버튼을 누르세요. 학년과 걱정 장면을 반영해 예상 학생 발언이 자동으로 채워집니다.</p>';
+                diag.appendChild(banner);
+            });
+            </script>
 
             <section id="tab-student" class="tab-content hidden">
                 <div class="pb-5 mb-5" style="border-bottom:2px solid var(--border)">
                     <div class="flex flex-col xl:flex-row xl:justify-between xl:items-start gap-3">
                         <div>
                             <h2 class="text-2xl font-black" style="color:var(--text)">👥 학생 의견 모으기</h2>
-                            <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🟢 수업 중 사용</span>
+                            <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
                             <p class="text-sm mt-2" style="color:var(--text-md)">A. 개인 생각 → B. 전체 수집 → C. 모둠 토의 순서로 진행합니다.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학생이 먼저 스스로 생각한 뒤 의견을 냅니다. 바로 손들기로 들어가지 말고 개인 작성 시간을 먼저 주세요.</span></span></p>
                             <p class="text-sm mt-1 font-bold" id="grade-value-notice" style="color:var(--text-md)"></p>
                         </div>
@@ -669,7 +733,7 @@
                 <div id="student-input-low" class="hidden">
                     <div class="rounded-xl p-5 mb-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
                         <p class="text-sm font-bold mb-1" style="color:var(--text)">🖐️ 1~2학년 전용 모드</p>
-                        <p class="text-sm" style="color:var(--text-md)">모둠 구분 없이 전체 학급 단위로 진행합니다. 생활 장면 카드를 보여주고 "이럴 때 어떤 기분이에요?" 를 물어보세요. 손든 학생 수를 입력하면 집계됩니다.</p>
+                        <p class="text-sm" style="color:var(--text-md)">모둠 구분 없이 전체 학급 단위로 진행합니다. 생활 장면 카드를 보여주고 "이럴 때 어떤 기분이에요?" 를 물어보세요. 예상 찬성 수를 입력하면 집계됩니다.</p>
                     </div>
                     <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                         <div class="xl:col-span-5 space-y-4">
@@ -730,6 +794,25 @@
                 </div>
 
 
+                <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
+                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex-1">
+                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
+                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
+                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
+                                <span>✔ 예상 발언 자동 채우기</span>
+                                <span>✔ 가치 집계 자동 완성</span>
+                                <span>✔ 약속 자동 선정</span>
+                                <span>✔ 투표 결과 자동 추정</span>
+                            </div>
+                        </div>
+                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
+                            ⚡ 전체 시뮬레이션 실행
+                        </button>
+                    </div>
+                </div>
+
                 <!-- ▶ 지금 할 일 카드 -->
                 <div class="now-task-card rounded-xl px-5 py-4 mb-6 flex flex-col md:flex-row md:items-start gap-4" style="background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(201,168,76,.05));border:1.5px solid rgba(201,168,76,.35)">
                     <div class="flex-shrink-0 flex items-center gap-2">
@@ -744,10 +827,25 @@
                 <div id="step-panel-B" class="anchor-step-B">
                 <div id="sub-panel-A">
                 <!-- ── 학생 의견 수집 패널 ── -->
+                <!-- 🎲 시뮬레이션 버튼 -->
+                <div class="sim-only rounded-xl px-5 py-4 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(99,102,241,.03));border:1px solid rgba(99,102,241,.3)">
+                    <p class="text-xs font-black mb-2" style="color:rgba(165,180,252,.6)">🎲 2단계만 채우기 <span class="font-normal">(나머지 단계는 직접 진행)</span></p>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <p class="text-xs flex-1" style="color:rgba(165,180,252,.6)">학년·걱정 장면 기반 예상 발언만 채웁니다. 3~5단계는 직접 확인·수정하며 진행하고 싶을 때 사용하세요. 전체를 한 번에 돌리려면 <b style="color:#a5b4fc">1단계의 ⚡ 전체 시뮬레이션 실행</b>을 사용하세요.</p>
+                        <button onclick="runSimulation()" class="flex-shrink-0 px-4 py-2 rounded-lg font-bold text-xs transition-all" style="background:rgba(99,102,241,.3);color:#c7d2fe;border:1px solid rgba(99,102,241,.4)">
+                            2단계만 채우기
+                        </button>
+                    </div>
+                </div>
+                <!-- 실제 수업 모드 안내 -->
+                <div class="real-only rounded-xl px-5 py-3 mb-4 flex items-center gap-3" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25)">
+                    <span style="font-size:1.2rem">📋</span>
+                    <p class="text-sm" style="color:rgba(110,231,183,.85)">실제 수업 모드입니다. 학생이 발표한 내용을 아래에 직접 입력하세요.</p>
+                </div>
                 <!-- 학생 발언 직접 입력 — 메인 -->
                 <div class="rounded-xl p-5 mb-4" style="background:rgba(99,102,241,.1);border:2px solid rgba(99,102,241,.35)">
-                    <h3 class="font-black text-base mb-1" style="color:#a5b4fc">📝 학생이 한 말을 그대로 입력하세요</h3>
-                    <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">학생들이 쓴 포스트잇·활동지 내용을 그대로 입력하세요. 가치 태그가 자동으로 제안됩니다.</p>
+                    <h3 class="font-black text-base mb-1" style="color:#a5b4fc">📝 예상 학생 발언 목록</h3>
+                    <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">자동 채워진 예상 발언을 수정·추가하세요. 가치 태그가 자동으로 제안됩니다.</p>
                     <div class="flex gap-2 mb-2">
                         <input id="student-voice-direct" type="text" placeholder="예: 친구가 욕하지 않았으면 좋겠어요" maxlength="60"
                             class="flex-1 border rounded-lg px-3 py-2.5 text-sm"
@@ -779,7 +877,7 @@
                             <span class="text-xl">🏫</span>
                             <div>
                                 <span class="font-black text-sm" style="color:#a5b4fc">학생 의견 수집</span>
-                                <span class="text-xs ml-2 px-2 py-0.5 rounded-full font-bold" style="background:rgba(99,102,241,.2);color:#a5b4fc">TV에 띄워서 수업 중 사용</span>
+                                <span class="text-xs ml-2 px-2 py-0.5 rounded-full font-bold" style="background:rgba(99,102,241,.2);color:#a5b4fc">🎲 시뮬레이션 힌트 카드</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -800,7 +898,7 @@
                         </div>
                         <!-- 손들기 결과 입력 -->
                         <div id="wish-vote-section" class="mt-4 hidden">
-                            <p class="text-xs font-bold mb-2" style="color:#a5b4fc">✋ 손든 학생 수 기록</p>
+                            <p class="text-xs font-bold mb-2" style="color:#a5b4fc">✋ 예상 손들기 수</p>
                             <div id="wish-vote-inputs" class="space-y-2"></div>
                             <button onclick="applyWishResults()" class="mt-3 w-full py-2 rounded-lg text-sm font-bold transition-all"
                                 style="background:rgba(99,102,241,.3);color:#c7d2fe;border:1px solid rgba(99,102,241,.4)">
@@ -850,8 +948,27 @@
 
             <section id="tab-values" class="tab-content hidden">
                 <div class="pb-5 mb-6" style="border-bottom:2px solid var(--border)">
-                    <h2 class="text-2xl font-black" style="color:var(--text)">📊 핵심 가치 정하기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🟢 수업 중 사용</span>
-                    <p class="text-base mt-2" style="color:var(--text-md)">오른쪽 집계 결과를 학생들에게 보여주며 TOP3 가치를 함께 확인하세요.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">교사가 혼자 가치를 정하지 않습니다. 집계 결과 화면을 TV에 띄우고 "이 가치들이 가장 많이 나왔어요. 어떻게 생각하나요?" 라고 물어보세요. 학생들과 합의 후 아래 버튼을 누르세요.</span></span></p>
+                    <h2 class="text-2xl font-black" style="color:var(--text)">📊 핵심 가치 정하기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
+                    <p class="text-base mt-2" style="color:var(--text-md)">집계 결과를 확인하고 예상 TOP3 가치를 검토하세요.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">교사가 혼자 가치를 정하지 않습니다. 집계 결과를 화면에서 확인하고 예상 TOP3 가치를 검토하세요. 실제 수업에서는 학생들과 함께 합의합니다.</span></span></p>
+                </div>
+
+                <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
+                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex-1">
+                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
+                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
+                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
+                                <span>✔ 예상 발언 자동 채우기</span>
+                                <span>✔ 가치 집계 자동 완성</span>
+                                <span>✔ 약속 자동 선정</span>
+                                <span>✔ 투표 결과 자동 추정</span>
+                            </div>
+                        </div>
+                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
+                            ⚡ 전체 시뮬레이션 실행
+                        </button>
+                    </div>
                 </div>
 
                 <!-- ▶ 지금 할 일 카드 -->
@@ -859,7 +976,7 @@
                     <div class="flex-shrink-0 flex items-center gap-2">
                         <span class="text-xs font-black px-2 py-1 rounded-full" style="background:var(--gold);color:#1a1200">STEP 3</span>
                         <span class="font-black text-base" style="color:var(--text)">핵심 가치 정하기</span>
-                        <span class="text-[10px] px-1.5 py-0.5 rounded" style="background:rgba(52,211,153,.15);color:var(--success)">⏱️ 수업 중 10분</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded" style="background:rgba(52,211,153,.15);color:var(--success)">⏱️ 시뮬레이션 3단계</span>
                     </div>
                     <div class="first-visit-desc flex-1 text-sm" style="color:var(--text-md)">TOP3 가치 확인 → 학생과 함께 최종 선택</div>
                     <p class="first-visit-desc text-xs" style="color:rgba(201,168,76,.6)">💡 교사가 가치를 임의로 정하지 않습니다. 학생 의견 집계 결과를 화면에 보여주며 함께 확인하세요.</p>
@@ -876,7 +993,18 @@
                         <div class="rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
                             <h3 class="font-bold text-lg mb-3">핵심 가치 분석</h3>
                             <div id="value-analysis" class="space-y-3"></div>
-                            <button onclick="applyTopValuesToRules()" class="mt-4 w-full text-white rounded-md py-2.5 font-bold text-sm transition-all" style="background:var(--gold);color:#1a1200">✅ 이 가치들로 다음 단계 진행</button>
+                            <!-- 시뮬레이션: 교사 메모 인터페이스 -->
+                            <div class="sim-only mt-4 rounded-xl p-4" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
+                                <p class="text-xs font-black mb-2" style="color:#a5b4fc">🎲 시뮬레이션 판단 메모</p>
+                                <p class="text-xs mb-2" style="color:rgba(165,180,252,.7)">이 집계 결과가 우리 반 상황과 맞나요? 실제 수업 전 생각을 메모하세요.</p>
+                                <textarea id="value-teacher-memo" oninput="saveToStorage()" rows="3" class="w-full border rounded-lg p-2 text-xs leading-relaxed" placeholder="예: 존중이 1위인 건 예상됐음. 배움보다 배려가 낮게 나온 게 의외 → 수업 중 배려 장면을 더 강조해야 할 것 같음." style="background:var(--card-lt);color:var(--text);border-color:rgba(99,102,241,.3)"></textarea>
+                                <div class="flex gap-2 mt-2">
+                                    <button onclick="applyTopValuesToRules()" class="flex-1 text-white rounded-md py-2 font-bold text-sm transition-all" style="background:var(--gold);color:#1a1200">✅ 이 가치들로 진행</button>
+                                    <button onclick="document.getElementById('value-teacher-memo').value=''; saveToStorage();" class="px-3 rounded-md text-xs font-bold" style="background:rgba(255,255,255,.06);color:var(--text-lt);border:1px solid var(--border)">메모 지우기</button>
+                                </div>
+                            </div>
+                            <!-- 실제 수업 모드: 기존 버튼 -->
+                            <button class="real-only mt-4 w-full text-white rounded-md py-2.5 font-bold text-sm transition-all" onclick="applyTopValuesToRules()" style="background:var(--gold);color:#1a1200">✅ 이 가치들로 다음 단계 진행</button>
                         </div>
                         <div class="rounded-xl p-5" style="background:var(--card-lt);border:1px solid var(--border)">
                             <h3 class="font-bold text-lg mb-3">우리 반 가치 선언문</h3>
@@ -891,9 +1019,9 @@
                 <div class="pb-5 mb-4 flex flex-col xl:flex-row xl:justify-between xl:items-start gap-2" style="border-bottom:2px solid var(--border)">
                     <div>
                         <h2 class="text-2xl font-black" style="color:var(--text)">✏️ 약속 문장 검토</h2>
-                        <p class="text-sm mt-1" style="color:var(--text-md)">학생 발언 기록 → 교사 검토 → 5단계 투표 준비.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학생이 발표한 약속 표현을 기록하고, 각 약속에 대해 법적·발달 측면을 검토하세요. 검토 완료 후 5단계 투표를 진행합니다.</span></span></p>
+                        <p class="text-sm mt-1" style="color:var(--text-md)">학생 발언 기록 → 교사 검토 → 5단계 투표 준비.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 약속 표현을 검토하고 학년·발달 수준에 맞는지 확인하세요. 실제 수업에서는 학생 발언을 그대로 입력합니다.</span></span></p>
                     </div>
-                    <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#a5b4fc">🔵 수업 후 정리</span>
+                    <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#a5b4fc">🎲 시뮬레이션 단계</span>
                 </div>
 
                 <!-- ▶ 지금 할 일 카드 — 최상단 고정 -->
@@ -911,7 +1039,7 @@
                         <!-- 학생 직접 문장 작성 -->
                         <div class="rounded-xl p-5" style="background:rgba(99,102,241,.1);border:2px solid rgba(99,102,241,.35)">
                             <h3 class="font-black text-base mb-1" style="color:#a5b4fc">✏️ 학생이 직접 쓰는 약속 문장</h3>
-                            <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">학생이 발표한 약속 표현을 그대로 입력하세요. 아래 참고 예시는 힌트로만 활용하세요.</p>
+                            <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">예상 약속 표현을 수정·추가하세요. 시뮬레이션에서는 자동 채워진 내용을 검토하는 단계입니다.</p>
                             <div class="flex gap-2">
                                 <input id="student-rule-input" type="text" placeholder="예: 친구가 말할 때 끼어들지 않아요 (학생이 직접 말한 문장)" maxlength="60"
                                     class="flex-1 border rounded-lg px-3 py-2.5 text-sm"
@@ -973,9 +1101,28 @@
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <h2 class="text-2xl font-black" style="color:var(--text)">🗳️ 함께 투표하기</h2>
-                            <p class="text-sm mt-1" style="color:var(--text-md)">약속별 토론 → 찬성 수 입력 → 2/3 이상 합의 확정.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학생이 직접 쓴 약속을 TV에 띄우고 토론합니다. 찬성 수를 입력하면 2/3 이상 시 합의 확정. 교사 검토 완료 약속만 투표 가능합니다.</span></span></p>
+                            <p class="text-sm mt-1" style="color:var(--text-md)">약속별 토론 → 찬성 수 입력 → 2/3 이상 합의 확정.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 찬성률을 입력하거나 자동 추정값을 확인하세요. 실제 수업에서는 학생 손들기 결과를 입력합니다.</span></span></p>
                         </div>
-                        <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(52,211,153,.12);color:var(--success)">🟢 수업 중 사용</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
+                    </div>
+                </div>
+
+                <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
+                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="flex-1">
+                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
+                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
+                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
+                                <span>✔ 예상 발언 자동 채우기</span>
+                                <span>✔ 가치 집계 자동 완성</span>
+                                <span>✔ 약속 자동 선정</span>
+                                <span>✔ 투표 결과 자동 추정</span>
+                            </div>
+                        </div>
+                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
+                            ⚡ 전체 시뮬레이션 실행
+                        </button>
                     </div>
                 </div>
 
@@ -1265,7 +1412,7 @@
 
 <footer class="border-t py-4 text-center text-sm no-print" style="background:var(--sidebar);border-color:var(--border);color:var(--text-lt)">
         <p class="text-xs mb-3 opacity-40">⚠️ 이 도구는 학생생활규정과 고시를 참고하지만, 법적 판단이나 면책을 보장하지 않습니다.</p>
-    <p>© 2026 학급규칙 도우미. 대한민국 초등 교사들의 안전하고 체계적인 생활교육을 응원합니다.</p>
+    <p>© 2026 학급규칙 설계소. 대한민국 초등 교사들의 안전하고 체계적인 생활교육을 응원합니다.</p>
     <p class="text-color-lt/70 text-xs font-normal">만든이 2026 최창훈</p>
 </footer>
 
@@ -1338,6 +1485,439 @@ const ruleLibrary = {
     { id:'g6_e1', value:'책임', category:'environment', text:'졸업 전까지 학급과 학교 공간을 책임 있게 사용한다.', law:'제11조 물품 관리', why:'학교 공간은 다음 학생들에게 이어지는 공동 자산입니다.', devNote:'5~6학년: 권리와 책임을 연결해 자치 역량을 기릅니다.' }
   ]
 };
+/* ══════════════════════════════════════════════════════
+   시뮬레이션 DB — 학년군 × 걱정 장면별 예상 학생 발언
+   각 항목: { text, value, concern }
+   concern: concerns의 id와 매핑 (noise/tease/safety/clean/digital/passive)
+   value: 존중/안전/배움/책임/배려/자치
+══════════════════════════════════════════════════════ */
+const simulationVoiceDB = {
+    low: [ // 1~2학년
+        // 수업 분위기(noise)
+        {text:'선생님 말씀 잘 듣는 반이 됐으면 좋겠어요', value:'배움', concern:'noise'},
+        {text:'떠들지 않고 조용히 공부하면 좋겠어요', value:'배움', concern:'noise'},
+        {text:'친구가 발표할 때 웃지 않았으면 해요', value:'존중', concern:'noise'},
+        {text:'내 차례 기다리는 반이 됐으면 좋겠어요', value:'배움', concern:'noise'},
+        {text:'선생님 이야기 들을 때 장난치지 않으면 좋겠어요', value:'배움', concern:'noise'},
+        // 관계·언어(tease)
+        {text:'욕하지 않는 반이 됐으면 좋겠어요', value:'존중', concern:'tease'},
+        {text:'친구한테 나쁜 말 하지 않았으면 해요', value:'존중', concern:'tease'},
+        {text:'별명으로 놀리지 않는 반이 됐으면 해요', value:'존중', concern:'tease'},
+        {text:'혼자 있는 친구한테 같이 놀자고 하면 좋겠어요', value:'배려', concern:'tease'},
+        {text:'싸우지 않는 반이 됐으면 좋겠어요', value:'존중', concern:'tease'},
+        // 안전(safety)
+        {text:'복도에서 뛰지 않는 반이 됐으면 좋겠어요', value:'안전', concern:'safety'},
+        {text:'친구 밀고 당기지 않으면 좋겠어요', value:'안전', concern:'safety'},
+        {text:'계단에서 장난치지 않으면 해요', value:'안전', concern:'safety'},
+        // 정리정돈(clean)
+        {text:'사용한 물건 제자리에 놓는 반이 됐으면 해요', value:'책임', concern:'clean'},
+        {text:'청소 열심히 하는 반이 됐으면 좋겠어요', value:'책임', concern:'clean'},
+        {text:'내 자리 스스로 정리하면 좋겠어요', value:'책임', concern:'clean'},
+        // 일반
+        {text:'서로 도와주는 따뜻한 반이 됐으면 해요', value:'배려', concern:'tease'},
+        {text:'웃음이 많은 반이 됐으면 좋겠어요', value:'배려', concern:'tease'},
+        {text:'함께 잘 놀 수 있는 반이 됐으면 해요', value:'배려', concern:'tease'},
+        {text:'모두가 행복한 반이 됐으면 좋겠어요', value:'배려', concern:'tease'},
+    ],
+    mid: [ // 3~4학년
+        // 수업 분위기(noise)
+        {text:'모둠 활동 때 다 같이 참여하면 좋겠어요', value:'배움', concern:'noise'},
+        {text:'발표할 때 끼어들지 않으면 좋겠어요', value:'배움', concern:'noise'},
+        {text:'수업 시간에 딴짓하지 않는 반이 됐으면 해요', value:'배움', concern:'noise'},
+        {text:'친구 발표를 집중해서 듣는 반이 됐으면 해요', value:'배움', concern:'noise'},
+        {text:'모둠 토의할 때 모두 의견 내면 좋겠어요', value:'자치', concern:'noise'},
+        // 관계·언어(tease)
+        {text:'외모로 놀리거나 별명 부르지 않으면 좋겠어요', value:'존중', concern:'tease'},
+        {text:'비속어 쓰지 않는 반이 됐으면 해요', value:'존중', concern:'tease'},
+        {text:'친구 실수에 "괜찮아"라고 말해주는 반이 됐으면 해요', value:'배려', concern:'tease'},
+        {text:'무리 지어 따돌리지 않는 반이 됐으면 해요', value:'존중', concern:'tease'},
+        {text:'싸우고 나서 빨리 화해하는 반이 됐으면 해요', value:'배려', concern:'tease'},
+        // 안전(safety)
+        {text:'장난으로 몸 건드리지 않는 반이 됐으면 해요', value:'안전', concern:'safety'},
+        {text:'복도·계단 우측통행 잘 지키면 좋겠어요', value:'안전', concern:'safety'},
+        // 정리정돈(clean)
+        {text:'학급 공용 물건 소중히 쓰면 좋겠어요', value:'책임', concern:'clean'},
+        {text:'1인 1역 책임감 있게 하면 좋겠어요', value:'책임', concern:'passive'},
+        {text:'쓰레기 바닥에 버리지 않는 반이 됐으면 해요', value:'책임', concern:'clean'},
+        // 소극적(passive)
+        {text:'모둠에서 역할 빠지지 않고 다 하면 좋겠어요', value:'책임', concern:'passive'},
+        {text:'청소 당번 제대로 하면 좋겠어요', value:'책임', concern:'passive'},
+        // 일반
+        {text:'서로 의견 존중하는 반이 됐으면 해요', value:'존중', concern:'tease'},
+        {text:'힘든 친구 먼저 도와주는 반이 됐으면 해요', value:'배려', concern:'tease'},
+        {text:'다 같이 즐겁게 학교 오고 싶은 반이 됐으면 해요', value:'배려', concern:'tease'},
+    ],
+    high: [ // 5~6학년
+        // 수업 분위기(noise)
+        {text:'토론 중 상대 말 끝까지 듣는 반이 됐으면 한다', value:'배움', concern:'noise'},
+        {text:'수업 준비물 챙겨오는 반이 됐으면 한다', value:'책임', concern:'noise'},
+        {text:'발언권 침해 없이 순서 지키면 좋겠다', value:'배움', concern:'noise'},
+        {text:'수업 중 스마트폰 보지 않는 반이 됐으면 한다', value:'자치', concern:'digital'},
+        {text:'근거 들어 말하고 감정적으로 반박하지 않으면 좋겠다', value:'배움', concern:'noise'},
+        // 관계·언어(tease)
+        {text:'외모·문화 차이로 혐오 표현 쓰지 않으면 좋겠다', value:'존중', concern:'tease'},
+        {text:'온라인과 오프라인 모두에서 언어폭력 없는 반이 됐으면 한다', value:'존중', concern:'tease'},
+        {text:'단톡방에서 특정 친구 험담하지 않으면 좋겠다', value:'존중', concern:'digital'},
+        {text:'뒤에서 험담하지 않고 직접 말할 수 있는 반이 됐으면 한다', value:'존중', concern:'tease'},
+        {text:'다름을 틀림으로 보지 않는 반이 됐으면 한다', value:'존중', concern:'tease'},
+        // 안전(safety)
+        {text:'신체 접촉 장난 없는 반이 됐으면 한다', value:'안전', concern:'safety'},
+        {text:'위험한 상황 보면 그냥 지나치지 않으면 좋겠다', value:'안전', concern:'safety'},
+        // 디지털(digital)
+        {text:'SNS에 동의 없이 사진 올리지 않으면 좋겠다', value:'자치', concern:'digital'},
+        {text:'기기 수업 목적 외 사용 자제하면 좋겠다', value:'자치', concern:'digital'},
+        {text:'단톡방 메시지 함부로 캡처해 퍼뜨리지 않으면 좋겠다', value:'존중', concern:'digital'},
+        // 소극적(passive)
+        {text:'1인 1역 끝까지 책임지는 반이 됐으면 한다', value:'책임', concern:'passive'},
+        {text:'학급 회의 적극적으로 참여하면 좋겠다', value:'자치', concern:'passive'},
+        // 일반
+        {text:'졸업 후에도 기억에 남는 반이 됐으면 한다', value:'배려', concern:'tease'},
+        {text:'누군가 힘들 때 먼저 손 내밀 수 있는 반이 됐으면 한다', value:'배려', concern:'tease'},
+        {text:'서로의 다양성을 인정하는 반이 됐으면 한다', value:'존중', concern:'tease'},
+    ]
+};
+
+/* ── 학급 특성별 추가 발언 DB ── */
+const simulationClassTypeDB = {
+    '과밀학급': {
+        low:  [
+            {text:'교실이 복잡하지 않았으면 좋겠어요', value:'안전', concern:'safety'},
+            {text:'줄 설 때 밀지 않으면 좋겠어요', value:'안전', concern:'safety'},
+            {text:'쉬는 시간에 너무 시끄럽지 않으면 해요', value:'배움', concern:'noise'},
+        ],
+        mid:  [
+            {text:'복도가 좁으니까 뛰지 않았으면 해요', value:'안전', concern:'safety'},
+            {text:'물건을 내 자리 밖으로 두지 않으면 좋겠어요', value:'책임', concern:'clean'},
+            {text:'발표 순서 기다리는 반이 됐으면 해요', value:'배움', concern:'noise'},
+        ],
+        high: [
+            {text:'밀집 공간에서 신체 접촉 자제하면 좋겠다', value:'안전', concern:'safety'},
+            {text:'수업 중 이동 최소화해서 집중하는 반이 됐으면 한다', value:'배움', concern:'noise'},
+            {text:'좁은 공간에서도 서로 배려하는 반이 됐으면 한다', value:'배려', concern:'tease'},
+        ],
+    },
+    '소규모학급': {
+        low:  [
+            {text:'항상 같이 노는 반이 됐으면 해요', value:'배려', concern:'tease'},
+            {text:'소수라도 모두 발표할 수 있는 반이 됐으면 해요', value:'자치', concern:'passive'},
+        ],
+        mid:  [
+            {text:'모두가 1인 1역 책임지는 반이 됐으면 해요', value:'책임', concern:'passive'},
+            {text:'인원이 적어도 활발하게 의견 내는 반이 됐으면 해요', value:'자치', concern:'passive'},
+        ],
+        high: [
+            {text:'소수이지만 서로 더 잘 아는 반이 됐으면 한다', value:'배려', concern:'tease'},
+            {text:'모두가 리더 역할을 해볼 수 있는 반이 됐으면 한다', value:'자치', concern:'passive'},
+        ],
+    },
+    '다문화 학생 포함': {
+        low:  [
+            {text:'다른 나라 친구도 같이 놀면 좋겠어요', value:'배려', concern:'tease'},
+            {text:'말이 달라도 웃으면서 지내는 반이 됐으면 해요', value:'존중', concern:'tease'},
+            {text:'친구 이름 틀려도 놀리지 않으면 해요', value:'존중', concern:'tease'},
+        ],
+        mid:  [
+            {text:'다른 문화를 신기하게 여기고 존중하는 반이 됐으면 해요', value:'존중', concern:'tease'},
+            {text:'외모나 이름으로 놀리지 않는 반이 됐으면 해요', value:'존중', concern:'tease'},
+            {text:'말 잘 못해도 도와주는 반이 됐으면 해요', value:'배려', concern:'tease'},
+        ],
+        high: [
+            {text:'문화 차이를 이해하고 혐오 표현 없는 반이 됐으면 한다', value:'존중', concern:'tease'},
+            {text:'다양한 배경을 가진 친구를 있는 그대로 받아들이는 반이 됐으면 한다', value:'존중', concern:'tease'},
+            {text:'국적·언어 차이로 차별하지 않는 반이 됐으면 한다', value:'존중', concern:'tease'},
+        ],
+    },
+    '통합학급': {
+        low:  [
+            {text:'느린 친구도 기다려주는 반이 됐으면 해요', value:'배려', concern:'tease'},
+            {text:'다른 친구를 놀리지 않는 반이 됐으면 해요', value:'존중', concern:'tease'},
+            {text:'모두가 함께 참여할 수 있는 반이 됐으면 해요', value:'배려', concern:'passive'},
+        ],
+        mid:  [
+            {text:'특수 친구를 차별하지 않는 반이 됐으면 해요', value:'존중', concern:'tease'},
+            {text:'도움이 필요한 친구를 먼저 챙기는 반이 됐으면 해요', value:'배려', concern:'tease'},
+            {text:'모둠 활동에서 모두 역할 갖는 반이 됐으면 해요', value:'책임', concern:'passive'},
+        ],
+        high: [
+            {text:'장애·비장애 구분 없이 함께하는 반이 됐으면 한다', value:'배려', concern:'tease'},
+            {text:'도움을 주고받는 게 자연스러운 반이 됐으면 한다', value:'배려', concern:'tease'},
+            {text:'모든 구성원이 존중받는 반이 됐으면 한다', value:'존중', concern:'tease'},
+        ],
+    },
+};
+
+/* ── 모둠 토의 예상 결과 DB ── */
+const simulationGroupDB = {
+    low: [
+        {team:'1모둠', value1:'존중', value2:'배려', suggestion:'서로 사이좋게 지내는 반'},
+        {team:'2모둠', value1:'배움', value2:'안전', suggestion:'공부도 열심히 하고 안전한 반'},
+        {team:'3모둠', value1:'책임', value2:'배려', suggestion:'청소도 잘하고 도움 주는 반'},
+        {team:'4모둠', value1:'존중', value2:'배움', suggestion:'친구 말 잘 듣는 반'},
+    ],
+    mid: [
+        {team:'1모둠', value1:'존중', value2:'배움', suggestion:'서로 존중하며 함께 성장하는 반'},
+        {team:'2모둠', value1:'책임', value2:'자치', suggestion:'맡은 역할 책임지는 반'},
+        {team:'3모둠', value1:'배려', value2:'존중', suggestion:'힘든 친구 먼저 챙기는 반'},
+        {team:'4모둠', value1:'안전', value2:'책임', suggestion:'안전하고 깨끗한 교실 만드는 반'},
+        {team:'5모둠', value1:'배움', value2:'자치', suggestion:'모두가 의견 낼 수 있는 반'},
+    ],
+    high: [
+        {team:'1모둠', value1:'존중', value2:'자치', suggestion:'다양성을 인정하고 스스로 결정하는 반'},
+        {team:'2모둠', value1:'책임', value2:'배움', suggestion:'맡은 일 끝까지 해내는 반'},
+        {team:'3모둠', value1:'존중', value2:'배려', suggestion:'온·오프라인 모두 언어폭력 없는 반'},
+        {team:'4모둠', value1:'자치', value2:'책임', suggestion:'학급 회의로 스스로 문제 해결하는 반'},
+        {team:'5모둠', value1:'배움', value2:'존중', suggestion:'근거 있는 토론이 가능한 반'},
+        {team:'6모둠', value1:'배려', value2:'안전', suggestion:'서로 돕고 안전을 지키는 반'},
+    ]
+};
+
+/* ── 시뮬레이션 자동 채우기 함수 ── */
+function runSimulation(){
+    const band = gradeBand(); // 'low'|'mid'|'high'
+    const voicePool = simulationVoiceDB[band] || simulationVoiceDB.mid;
+
+    // 학급 특성별 추가 발언 병합
+    const classType = document.getElementById('class-type')?.value || '일반학급';
+    const classTypeExtra = (simulationClassTypeDB[classType] || {})[band] || [];
+
+    // 걱정 장면 기반 필터: 선택된 concern 우선, 나머지는 일반
+    const allVoices = [...voicePool, ...classTypeExtra];
+    const prioritized = allVoices.filter(v => selectedConcerns.includes(v.concern));
+    const general = allVoices.filter(v => !selectedConcerns.includes(v.concern));
+    // 우선 항목 섞기
+    const shuffled = [...prioritized.sort(()=>Math.random()-.5), ...general.sort(()=>Math.random()-.5)];
+
+    // 학생 수 기반 발언 수 결정 (학생 수의 약 60~70%)
+    const total = parseInt(document.getElementById('student-count')?.value || 24);
+    const count = Math.min(Math.round(total * 0.65), shuffled.length);
+    const picked = shuffled.slice(0, count);
+
+    // studentVoices 채우기 (중복 제거)
+    studentVoices = [];
+    picked.forEach(v => {
+        if(!studentVoices.includes(v.text)) studentVoices.push(v.text);
+    });
+
+    // 가치 집계(valueVotes) 업데이트
+    picked.forEach(v => {
+        valueVotes[v.value] = (valueVotes[v.value] || 0) + 1;
+    });
+
+    // 모둠 결과 채우기
+    const groupPool = simulationGroupDB[band] || simulationGroupDB.mid;
+    const groupCount = Math.max(1, Math.round(total / 5)); // 5명당 1모둠
+    groupRows = groupPool.slice(0, groupCount).map((g, i) => ({
+        team: `${i+1}모둠`,
+        value1: g.value1,
+        value2: g.value2,
+        suggestion: g.suggestion
+    }));
+
+    _userActed.student = true;
+    updateAll();
+
+    // 피드백 토스트
+    showToast(`✅ ${studentVoices.length}개 예상 발언 + ${groupRows.length}개 모둠 결과가 채워졌습니다. 수정·추가 후 다음 단계로 진행하세요.`, 'success', 4000);
+
+    // B 단계로 이동
+    switchStudentSubTab('B');
+    setTimeout(()=>scrollToStep('B'), 200);
+}
+window.runSimulation = runSimulation;
+
+/* ── 원클릭 전체 시뮬레이션 ── */
+function runFullSimulation(){
+    const grade = parseInt(document.getElementById('grade-select')?.value || 3);
+    if(!grade){
+        showToast('먼저 1단계에서 학년을 선택해 주세요.', 'warn');
+        switchTab('diagnosis');
+        return;
+    }
+    currentGrade = grade;
+
+    // 진행 토스트
+    showToast('🎲 전체 시뮬레이션 시작 중...', 'info', 1500);
+
+    setTimeout(()=>{
+        // 2단계: 학생 의견 자동 채우기
+        runSimulation();
+
+        setTimeout(()=>{
+            // 3단계: 가치 확정 (자동으로 TOP3 적용)
+            _userActed.values = true;
+
+            // 4단계: 약속 문장 추천 적용
+            applyRecommendedRules(false);
+            selectedRules = selectedRules.map(r => ({...r, teacherReviewed: true}));
+            _userActed.rules = true;
+
+            // 5단계: 예상 찬성 수 자동 입력 (학생 수의 80% 기준)
+            const total = parseInt(document.getElementById('student-count')?.value || 24);
+            const autoPass = Math.round(total * 0.82);
+            selectedRules.forEach(r => { votes[r.id] = autoPass; });
+            _userActed.agreement = true;
+
+            updateAll(false);
+
+            setTimeout(()=>{
+                // 출력 탭으로 이동
+                switchTab('constitution');
+                showSimulationSummary();
+            }, 300);
+        }, 400);
+    }, 200);
+}
+window.runFullSimulation = runFullSimulation;
+
+/* ── 시뮬레이션 체크리스트 자동 업데이트 ── */
+function updateSimChecks(){
+    const grade = parseInt(document.getElementById('grade-select')?.value || 0);
+    const classType = document.getElementById('class-type')?.value || '일반학급';
+    const hasConcern = selectedConcerns.length > 0;
+    const hasSimRun = _userActed.student;
+
+    const s1 = document.getElementById('schk1');
+    const s2 = document.getElementById('schk2');
+    const s3 = document.getElementById('schk3');
+    const s4 = document.getElementById('schk4');
+    if(s1) s1.checked = gradeManuallySet;
+    if(s2) s2.checked = classTypeSelected;
+    if(s3) s3.checked = hasConcern;
+    if(s4) s4.checked = hasSimRun;
+
+    const done = [s1,s2,s3,s4].filter(s=>s?.checked).length;
+    const hint = document.getElementById('sim-check-hint');
+    if(hint){
+        hint.textContent = done === 4 ? '✅ 준비 완료' : `${done}/4 완료`;
+        hint.style.color = done === 4 ? 'var(--success)' : '#a5b4fc';
+    }
+    // 체크 항목 시각적 표시
+    [1,2,3,4].forEach(n=>{
+        const chk = document.getElementById(`schk${n}`);
+        const label = chk?.closest('label');
+        if(label) label.style.borderColor = chk?.checked ? 'rgba(99,102,241,.5)' : 'var(--border)';
+    });
+}
+window.updateSimChecks = updateSimChecks;
+document.addEventListener('DOMContentLoaded', ()=>{ updateSimChecks(); });
+
+/* ── 시뮬레이션 결과 요약 모달 ── */
+function showSimulationSummary(){
+    const total = parseInt(document.getElementById('student-count')?.value || 24);
+    const pass  = Math.ceil(total * 2/3);
+    const band  = gradeBandLabel();
+    const classType = document.getElementById('class-type')?.value || '일반학급';
+
+    // 가치 집계
+    const valueCounts = {};
+    Object.entries(valueVotes).forEach(([v,c])=>{ if(c>0) valueCounts[v]=c; });
+    const topValues3 = Object.entries(valueCounts).sort((a,b)=>b[1]-a[1]).slice(0,3);
+
+    // 약속 통과율
+    const reviewed  = selectedRules.filter(r=>r.teacherReviewed);
+    const passed    = reviewed.filter(r=>(votes[r.id]||0)>=pass);
+    const failedRules = reviewed.filter(r=>(votes[r.id]||0)<pass);
+
+    // 금지형 표현 감지
+    const prohibitWords = ['하지 않', '금지', '안 된다', '못한다', '하지 마'];
+    const warnRules = selectedRules.filter(r=>{
+        const t = r.studentText || r.text || '';
+        return prohibitWords.some(w=>t.includes(w));
+    });
+
+    // 예상 소요 시간
+    const estMins = 35 + (selectedRules.length * 3) + (failedRules.length * 5);
+
+    const valueHtml = topValues3.map(([v,c])=>
+        `<span class="px-3 py-1 rounded-full text-sm font-black" style="background:rgba(201,168,76,.2);color:var(--gold)">${v} <span class="opacity-70">${c}표</span></span>`
+    ).join('');
+
+    const passHtml = passed.length > 0
+        ? passed.map(r=>`<li class="text-sm" style="color:var(--success)">✅ ${r.studentText||r.text}</li>`).join('')
+        : '<li class="text-sm" style="color:var(--text-lt)">없음 (약속 검토 후 재시뮬레이션 권장)</li>';
+
+    const warnHtml = warnRules.length > 0
+        ? warnRules.map(r=>`<li class="text-sm" style="color:#fca5a5">⚠️ "${r.studentText||r.text}" → 긍정형 표현으로 수정 권장</li>`).join('')
+        : '<li class="text-sm" style="color:var(--text-lt)">없음 — 표현이 적절합니다 👍</li>';
+
+    const html = `
+    <div id="sim-summary-modal" style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)closeSummaryModal()">
+      <div style="background:var(--sidebar);border:1px solid var(--border);border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:28px">
+        <div class="flex justify-between items-start mb-5">
+          <div>
+            <p class="text-xs font-black" style="color:rgba(99,102,241,.8)">🎲 시뮬레이션 결과 요약</p>
+            <h3 class="text-xl font-black mt-1" style="color:var(--text)">${currentGrade}학년 · ${classType} · ${total}명</h3>
+          </div>
+          <button onclick="closeSummaryModal()" style="color:var(--text-lt);font-size:1.4rem;line-height:1">✕</button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- 예상 핵심 가치 -->
+          <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
+            <p class="text-xs font-black mb-2" style="color:var(--text-md)">📊 예상 핵심 가치 TOP3</p>
+            <div class="flex flex-wrap gap-2">${valueHtml || '<span class="text-sm" style="color:var(--text-lt)">데이터 없음</span>'}</div>
+          </div>
+
+          <!-- 통과 약속 -->
+          <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
+            <p class="text-xs font-black mb-2" style="color:var(--text-md)">✅ 예상 통과 약속 <span style="color:var(--success)">${passed.length}개</span> / 전체 ${reviewed.length}개</p>
+            <ul class="space-y-1">${passHtml}</ul>
+          </div>
+
+          <!-- 표현 주의 -->
+          <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)">
+            <p class="text-xs font-black mb-2" style="color:var(--text-md)">🔤 표현 주의 약속</p>
+            <ul class="space-y-1">${warnHtml}</ul>
+          </div>
+
+          <!-- 교사 메모 (3단계에서 입력한 내용) -->
+          <div id="sim-memo-section" class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border);display:none">
+            <p class="text-xs font-black mb-2" style="color:var(--text-md)">💭 교사 판단 메모 (3단계에서 입력)</p>
+            <p id="sim-memo-display" class="text-sm leading-relaxed" style="color:var(--text);border-left:2px solid rgba(99,102,241,.4);padding-left:10px"></p>
+          </div>
+
+          <!-- 예상 소요 시간 -->
+          <div class="rounded-xl p-4 flex items-center gap-3" style="background:var(--card);border:1px solid var(--border)">
+            <span style="font-size:1.5rem">⏱️</span>
+            <div>
+              <p class="text-xs font-black" style="color:var(--text-md)">예상 실제 수업 소요 시간</p>
+              <p class="text-lg font-black" style="color:var(--gold)">약 ${estMins}분</p>
+              <p class="text-xs" style="color:var(--text-lt)">${failedRules.length > 0 ? `재토론 약속 ${failedRules.length}개 포함 기준` : '모든 약속 1회 통과 기준'}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-xl px-4 py-3 flex items-start gap-3" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25)">
+          <span style="font-size:1.1rem;flex-shrink:0">💡</span>
+          <div>
+            <p class="text-xs font-black" style="color:#6ee7b7">시뮬레이션이 완료됐습니다</p>
+            <p class="text-xs mt-0.5" style="color:rgba(110,231,183,.75)">결과를 바탕으로 실제 수업을 준비하려면 헤더의 <b>「시뮬레이션 모드 → 전환」</b> 버튼을 눌러 실제 수업 모드로 전환하세요. 데이터가 초기화되고 학생 발언을 직접 입력할 수 있습니다.</p>
+          </div>
+        </div>
+        <div class="mt-3 flex gap-2">
+          <button onclick="closeSummaryModal()" class="flex-1 py-2.5 rounded-lg font-bold text-sm" style="background:rgba(255,255,255,.07);color:var(--text-md);border:1px solid var(--border)">닫기</button>
+          <button onclick="closeSummaryModal(); switchTab('constitution')" class="flex-1 py-2.5 rounded-lg font-bold text-sm" style="background:rgba(99,102,241,.5);color:#e0e7ff;border:1px solid rgba(99,102,241,.6)">📜 예상 학급헌법 보기</button>
+          <button onclick="closeSummaryModal(); toggleAppMode()" class="flex-1 py-2.5 rounded-lg font-bold text-sm" style="background:rgba(52,211,153,.3);color:#6ee7b7;border:1px solid rgba(52,211,153,.4)">📋 실제 수업 모드로</button>
+        </div>
+      </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', html);
+    // 교사 메모 표시
+    const memo = document.getElementById('value-teacher-memo')?.value?.trim();
+    const memoSection = document.getElementById('sim-memo-section');
+    const memoDisplay = document.getElementById('sim-memo-display');
+    if(memo && memoSection && memoDisplay){
+        memoDisplay.textContent = memo;
+        memoSection.style.display = 'block';
+    }
+}
+function closeSummaryModal(){
+    document.getElementById('sim-summary-modal')?.remove();
+}
+window.showSimulationSummary = showSimulationSummary;
+window.closeSummaryModal = closeSummaryModal;
+
 const bestPracticeRules = [
     {grade:'1~2학년', text:'교실과 복도에서는 걸어서 이동해요.', reason:'저학년 안전 규칙으로 이해가 쉽고 즉시 실천 가능'},
     {grade:'1~2학년', text:'친구에게 고운 말로 이야기해요.', reason:'언어 습관 형성기에 효과적'},
@@ -1626,7 +2206,7 @@ function onStudentCountChange(){
     }
     updateAll();
 }
-function updateAll(doSave=true){ updateDiagnosis(false); renderGroupInput(); renderStudentVoices(); renderValueAnalysis(); renderLibraryPool(); updateMyRulesView(); renderWorksheet(); renderVoteBoard(); renderLessonPlan(); renderConstitution(); renderWishPanel(); updateLessonHints(); renderDirectVoiceList(); updateStudentFlowGuide(); updateStepAHint(); if(doSave) saveToStorage(); }
+function updateAll(doSave=true){ updateDiagnosis(false); updateSimChecks(); renderGroupInput(); renderStudentVoices(); renderValueAnalysis(); renderLibraryPool(); updateMyRulesView(); renderWorksheet(); renderVoteBoard(); renderLessonPlan(); renderConstitution(); renderWishPanel(); updateLessonHints(); renderDirectVoiceList(); updateStudentFlowGuide(); updateStepAHint(); if(doSave) saveToStorage(); }
 function renderConcernChecks(){ const el=document.getElementById('concern-checks'); el.innerHTML=concerns.map(c=>`<label class="flex items-center gap-3 rounded-lg p-3 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><input type="checkbox" value="${c.id}" onchange="toggleConcern('${c.id}', this.checked)"><span class="text-sm font-medium">${c.label}</span><span class="ml-auto text-xs px-2 py-1 rounded" style="background:var(--gold-dim);color:var(--gold)">${c.value}</span></label>`).join(''); }
 function toggleConcern(id, checked){ selectedConcerns = checked ? [...new Set([...selectedConcerns,id])] : selectedConcerns.filter(x=>x!==id); _userActed.diagnosis=true; updateAll(); }
 function updateDiagnosis(doSave=true){ currentGrade=parseInt(document.getElementById('grade-select').value||currentGrade); document.querySelectorAll('#concern-checks input').forEach(i=>i.checked=selectedConcerns.includes(i.value)); const picked=concerns.filter(c=>selectedConcerns.includes(c.id)); const priority=[...new Set([...picked.map(c=>c.value), ...topValues(3)])].slice(0,3); const count=document.getElementById('student-count').value||24; const type=document.getElementById('class-type').value||'일반학급'; document.getElementById('diagnosis-summary').innerHTML=`<div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>${currentGrade}학년 ${count}명 · ${type}</b><br><span class="text-mid-a">발달 단계: ${gradeDevelopmentText(currentGrade)}</span></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>우선 가치 TOP3</b><div class="mt-2 flex flex-wrap gap-2">${priority.map(v=>`<span class="px-2 py-1 rounded-full text-xs font-bold" style="background:var(--gold-dim);color:var(--gold)">${v}</span>`).join('')||'<span class="text-lt-a">선택된 걱정 장면 없음</span>'}</div></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>학년별 추천 명칭</b><p class="mt-2 text-mid-a">${currentGrade<=2?'우리 반 약속 · 그림/카드 중심':currentGrade<=4?'우리 반 약속 · 토론/합의 중심':'학급헌법 · 자치/책임 중심'}</p></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>추천 흐름</b><ol class="list-decimal ml-5 mt-2 text-mid-a leading-7"><li>모둠 토의 결과를 교사가 입력</li><li>핵심 가치를 3개 이하로 압축</li><li>약속은 5개 이하로 합의</li><li>위반 시 처벌보다 회복 책임 연결</li></ol></div>`; if(doSave) saveToStorage(); }
@@ -1637,7 +2217,8 @@ function applyRecommendedRules(doSave=true){ const picked=concerns.filter(c=>sel
 function applyTopValuesToRules(){ const targets=topValues(3); const pool=ruleLibrary[currentGrade]||ruleLibrary[1]; selectedRules=pool.filter(r=>targets.includes(r.value)).slice(0,5).map(ruleWithRestorative); if(selectedRules.length<3) applyRecommendedRules(false); updateAll(); switchTab('rules'); }
 function ruleWithRestorative(r){ const options=restorativeOptions[r.category]||restorativeOptions.class; return {...r, recovery: r.recovery||options[0], approved:false}; }
 function renderGradeButtons(){ const el=document.getElementById('grade-buttons'); el.innerHTML=[1,2,3,4,5,6].map(g=>`<button onclick="setGrade(${g})" id="grade-btn-${g}" class="grade-chip px-4 py-2 rounded-full text-sm font-bold">${g}학년</button>`).join(''); }
-function setGrade(g){ currentGrade=g; document.getElementById('grade-select').value=g; applyGradeTexts(); applyRecommendedRules(false); _userActed.diagnosis=true; updateAll(); }
+function setGrade(g){ gradeManuallySet = true;
+ currentGrade=g; document.getElementById('grade-select').value=g; applyGradeTexts(); applyRecommendedRules(false); _userActed.diagnosis=true; updateAll(); }
 function recalcValueVotesFromGroups(){
     const counts={};
     groupRows.forEach(row=>{
@@ -2051,8 +2632,74 @@ function renderWorksheet(){
         <div class="mt-5 border border-gray-200 rounded-lg p-4 text-xs"><b class="text-gray-800">최종 합의 문장</b><div class="mt-3 border-b border-gray-300 h-8 text-gray-300">우리 반은 __________________________ 을/를 실천하겠습니다.</div><div class="mt-3 border-b border-gray-300 h-8 text-gray-300">실수했을 때는 __________________________ 으로 회복하겠습니다.</div></div>
     </div>`;
 }
+/* ── 예상 통과 가능성 분석 (숫자 대신 정성 설명) ── */
+function estimatePassRate(rule, grade){
+    // 하위 호환성 유지 (기존 호출부에서 숫자 사용 시)
+    return estimatePassQuality(rule, grade).score;
+}
+
+function estimatePassQuality(rule, grade){
+    const text = rule.studentText || rule.text || '';
+    const reasons = [];
+    const warnings = [];
+    let score = 70;
+
+    // 긍정형 표현
+    const isNegative = ['하지 않', '금지', '안 된다', '못한다', '하지 마'].some(w=>text.includes(w));
+    if(!isNegative){ score += 10; reasons.push('긍정형 표현'); }
+    else { score -= 5; warnings.push('금지형 표현 → 긍정형으로 수정 권장'); }
+
+    // 구체적 행동
+    const isConcrete = ['한다','해요','합니다','지킨다','말한다','듣는다','올린다','내린다'].some(w=>text.includes(w));
+    if(isConcrete){ score += 8; reasons.push('행동이 구체적'); }
+    else { warnings.push('행동이 추상적 → 더 구체적인 표현 고려'); }
+
+    // 학년 적합 문장 길이
+    if(grade <= 2){
+        if(text.length <= 18){ score += 5; reasons.push('저학년 적합 길이'); }
+        else { score -= 8; warnings.push('저학년에 문장이 너무 김'); }
+    } else if(grade <= 4){
+        if(text.length >= 10 && text.length <= 25){ score += 5; reasons.push('학년 수준 적합'); }
+    } else {
+        if(text.length >= 12){ score += 3; reasons.push('고학년 수준 적합'); }
+    }
+
+    // 가치별 특성
+    const valueBias = {존중:5, 안전:8, 배움:3, 책임:2, 배려:6, 자치:-2};
+    const vb = valueBias[rule.value] || 0;
+    if(vb > 0) reasons.push(`${rule.value} 가치 — 학생 공감도 높음`);
+    if(vb < 0) warnings.push(`${rule.value} 가치 — 학생 저항감 있을 수 있음`);
+    score += vb;
+
+    // 학생 직접 작성
+    if(rule.isStudentMade){ score += 5; reasons.push('학생이 직접 제안한 표현'); }
+
+    score = Math.min(95, Math.max(45, Math.round(score)));
+    const level = score >= 80 ? 'high' : score >= 60 ? 'mid' : 'low';
+    return { score, level, reasons, warnings };
+}
+
+function applyEstimate(ruleId, estCount, total){
+    syncVote(ruleId, estCount, 'input');
+}
+window.applyEstimate = applyEstimate;
+
 function renderVoteBoard(){ renderWorksheet(); const total=parseInt(document.getElementById('student-count')?.value||24); const pass=Math.ceil(total*2/3); const el=document.getElementById('vote-board');
-    if(!selectedRules.length){ el.innerHTML='<p class="text-sm text-center py-12" style="color:var(--text-md)">이전 단계(학생 문장 작성)에서 약속을 추가해 주세요.</p>'; return; }
+    if(!selectedRules.length){
+        const isSimMode = appMode === 'simulation';
+        el.innerHTML = isSimMode
+            ? `<div class="text-center py-10 space-y-3">
+                <p class="text-3xl">🎲</p>
+                <p class="font-black" style="color:var(--text)">아직 약속이 없습니다</p>
+                <p class="text-sm" style="color:var(--text-md)">1단계에서 <b style="color:#a5b4fc">⚡ 전체 시뮬레이션 실행</b>을 먼저 눌러주세요.<br>또는 4단계에서 약속을 직접 추가할 수 있습니다.</p>
+                <div class="flex justify-center gap-3 mt-4">
+                    <button onclick="switchTab('diagnosis')" class="px-4 py-2 rounded-lg font-bold text-sm" style="background:rgba(99,102,241,.3);color:#c7d2fe;border:1px solid rgba(99,102,241,.4)">1단계로 이동</button>
+                    <button onclick="switchTab('rules')" class="px-4 py-2 rounded-lg font-bold text-sm" style="background:rgba(255,255,255,.07);color:var(--text-md);border:1px solid var(--border)">4단계로 이동</button>
+                </div>
+               </div>`
+            : '<p class="text-sm text-center py-12" style="color:var(--text-md)">이전 단계(학생 문장 작성)에서 약속을 추가해 주세요.</p>';
+        return;
+    }
     el.innerHTML = selectedRules.map((r,i)=>{
         const v = votes[r.id] ?? 0;
         const ok = v >= pass;
@@ -2061,8 +2708,24 @@ function renderVoteBoard(){ renderWorksheet(); const total=parseInt(document.get
         const displayRecovery = r.studentRecovery || r.recovery;
         const opacity = reviewed ? '1' : '0.45';
         const borderColor = reviewed ? 'var(--border)' : 'rgba(239,68,68,.3)';
+        // 예상 통과 가능성 분석 (정성 설명)
+        const estQ = estimatePassQuality(r, currentGrade);
+        const estCount = Math.round(total * estQ.score / 100);
+        const estIcon = estQ.level === 'high' ? '✅' : estQ.level === 'mid' ? '💬' : '⚠️';
+        const estLevelText = estQ.level === 'high' ? '통과 가능성 높음' : estQ.level === 'mid' ? '재토론 가능성' : '표현 수정 권장';
+        const estLabel = `${estIcon} ${estLevelText}`;
+        const estDetailHtml = [
+            ...estQ.reasons.map(r=>`<span style="color:var(--success)">· ${r}</span>`),
+            ...estQ.warnings.map(w=>`<span style="color:#fca5a5">· ${w}</span>`)
+        ].join('<br>');
+        const estColor = estQ.level === 'high' ? 'rgba(52,211,153,.12)' : estQ.level === 'mid' ? 'rgba(201,168,76,.12)' : 'rgba(239,68,68,.1)';
+        const estTextColor = estQ.level === 'high' ? 'var(--success)' : estQ.level === 'mid' ? 'var(--gold)' : '#fca5a5';
         return `<div class="rounded-xl p-4 transition-all" style="background:var(--card-lt);border:1px solid ${borderColor};opacity:${opacity}">
             ${!reviewed ? '<div class="text-xs font-bold mb-2 px-2 py-1 rounded" style="background:rgba(239,68,68,.1);color:#fca5a5">⚠️ 교사 검토 미완료 — 이전 단계에서 검토 체크 후 투표하세요</div>' : ''}
+            <div class="mb-2 px-3 py-2 rounded-lg" style="background:${estColor};border:1px solid ${estTextColor}20">
+                <p class="text-xs font-black" style="color:${estTextColor}">${estLabel}</p>
+                <div class="text-[11px] mt-1 space-y-0.5 leading-5">${estDetailHtml}</div>
+            </div>
             ${r.isStudentMade ? '<span class="text-[10px] font-black px-1.5 py-0.5 rounded mr-1" style="background:rgba(99,102,241,.2);color:#a5b4fc">🟣 학생 작성</span>' : ''}
             <div class="flex justify-between gap-3">
                 <div class="flex-1">
@@ -2079,6 +2742,7 @@ function renderVoteBoard(){ renderWorksheet(); const total=parseInt(document.get
                 <input type="range" min="0" max="${total}" value="${v}" oninput="syncVote('${r.id}', this.value, 'slider')" class="flex-1" style="accent-color:var(--gold)">
                 <input type="number" min="0" max="${total}" value="${v}" id="vote-num-${r.id}" oninput="syncVote('${r.id}', this.value, 'input')" class="w-16 border rounded-lg px-2 py-1 text-sm font-black text-gold-a text-center">
                 <span class="text-sm" style="color:var(--text-md)">/ ${total}</span>
+                <button onclick="applyEstimate('${r.id}', ${estCount}, ${total})" class="text-xs px-2 py-1 rounded-full font-bold flex-shrink-0" style="background:rgba(99,102,241,.2);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)" title="예상 찬성 수 자동 입력 (추정값)">추정 적용</button>
             </div>
             <div class="mt-1 flex justify-between text-xs" style="color:var(--text-lt)">
                 <span>합의 기준: ${pass}명 이상</span>
@@ -3484,11 +4148,11 @@ function updateStepUI(tabId){
     const timingBadge = document.getElementById('step-timing-badge');
     if(timingBadge){
         const timingMap = {
-            diagnosis: { label:'🟡 수업 전 준비', bg:'rgba(255,200,50,.15)', color:'#f0c040' },
-            student:   { label:'🟢 수업 중 · 의견 수집 20분', bg:'rgba(52,211,153,.15)', color:'var(--success)' },
-            values:    { label:'🟢 수업 중 · 가치 정하기 10분', bg:'rgba(52,211,153,.15)', color:'var(--success)' },
-            agreement: { label:'🟢 수업 중 · 투표 15분', bg:'rgba(52,211,153,.15)', color:'var(--success)' },
-            rules:     { label:'🔵 수업 후 · 약속 검토 후 투표 준비', bg:'rgba(99,102,241,.15)', color:'#a5b4fc' },
+            diagnosis: { label:'🎲 시뮬레이션 1단계', bg:'rgba(255,200,50,.15)', color:'#f0c040' },
+            student:   { label:'🎲 시뮬레이션 2단계 · 의견 수집', bg:'rgba(52,211,153,.15)', color:'var(--success)' },
+            values:    { label:'🎲 시뮬레이션 3단계 · 가치 정하기', bg:'rgba(52,211,153,.15)', color:'var(--success)' },
+            agreement: { label:'🎲 시뮬레이션 5단계 · 투표', bg:'rgba(52,211,153,.15)', color:'var(--success)' },
+            rules:     { label:'🎲 시뮬레이션 4단계 · 약속 검토', bg:'rgba(99,102,241,.15)', color:'#a5b4fc' },
         };
         const t = timingMap[tabId];
         if(t){
@@ -3498,7 +4162,7 @@ function updateStepUI(tabId){
             timingBadge.classList.remove('hidden');
         } else {
             // 도구 탭
-            timingBadge.textContent = '🔵 수업 후 정리';
+            timingBadge.textContent = '🎲 시뮬레이션 단계';
             timingBadge.style.background = 'rgba(99,102,241,.15)';
             timingBadge.style.color = '#818cf8';
             timingBadge.classList.remove('hidden');
@@ -3698,6 +4362,36 @@ function showToast(msg, type='info', duration=3000){
 
 window.addEventListener('DOMContentLoaded', init);
 window.addEventListener('beforeunload', e=>{ e.preventDefault(); e.returnValue=''; });
+
+/* ── 앱 모드 전환 ── */
+let appMode = localStorage.getItem('appMode') || 'simulation';
+let gradeManuallySet = false;   // 교사가 직접 학년을 선택했는지
+let classTypeSelected = false;  // 교사가 직접 학급 특성을 선택했는지 // 'simulation' | 'real'
+function applyAppMode(){
+    const isReal = appMode === 'real';
+    document.body.classList.toggle('real-mode', isReal);
+    document.getElementById('mode-icon').textContent  = isReal ? '📋' : '🎲';
+    document.getElementById('mode-label').textContent = isReal ? '실제 수업 모드' : '시뮬레이션 모드';
+}
+function toggleAppMode(){
+    if(appMode === 'simulation'){
+        if(!confirm('실제 수업 모드로 전환하면 시뮬레이션 데이터가 초기화됩니다. 계속하시겠습니까?')) return;
+        appMode = 'real';
+        // 데이터 초기화
+        studentVoices=[]; groupRows=[]; valueVotes={}; selectedRules=[]; votes={};
+        _userActed={diagnosis:false,student:false,values:false,rules:false,agreement:false};
+        updateAll(false);
+        switchTab('diagnosis');
+        showToast('📋 실제 수업 모드로 전환했습니다. 학생 발언을 직접 입력하세요.', 'success', 4000);
+    } else {
+        appMode = 'simulation';
+        showToast('🎲 시뮬레이션 모드로 전환했습니다.', 'info', 2500);
+    }
+    localStorage.setItem('appMode', appMode);
+    applyAppMode();
+}
+window.toggleAppMode = toggleAppMode;
+document.addEventListener('DOMContentLoaded', applyAppMode);
 
 /* ── 첫 방문 감지: 재방문 시 STEP 카드 설명 숨김 ── */
 (function(){
