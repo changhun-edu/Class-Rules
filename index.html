@@ -2199,7 +2199,7 @@ function switchTab(tabId){ updateMobBar(tabId); document.querySelectorAll('.tab-
     const refTabs = ['situation'];
     if(toolTabs.includes(tabId)) toggleToolsPanel(true);
     if(refTabs.includes(tabId)) toggleRefPanel(true);
-    if(tabId==='student'){ switchStudentInputMode(); updateStudentFlowGuide(); updateStepAHint(); highlightStepBtn('A'); } if(tabId==='agreement') renderVoteBoard(); if(tabId==='lesson') renderLessonPlan(); if(tabId==='constitution') renderConstitution(); updateStepUI(tabId); updateTabMarkers(); const coreTabsScroll=['diagnosis','student','values','rules','agreement']; if(!coreTabsScroll.includes(tabId)) window.scrollTo({top:0,behavior:'smooth'}); }
+    if(tabId==='student'){ switchStudentInputMode(); updateStudentFlowGuide(); updateStepAHint(); highlightStepBtn('A'); } if(tabId==='agreement') renderVoteBoard(); if(tabId==='lesson') renderLessonPlan(); if(tabId==='constitution') renderConstitution(); updateStepUI(tabId); updateTabMarkers(); window.scrollTo({top:0,behavior:'smooth'}); }
 function goToNextStep(){ const current=tabsOrder.find(id=>!document.getElementById(`tab-${id}`).classList.contains('hidden')); const idx=tabsOrder.indexOf(current); switchTab(idx===tabsOrder.length-1?'diagnosis':tabsOrder[idx+1]); }
 function printComponent(divId){
     if(divId==='worksheet-view') renderWorksheet();
