@@ -671,9 +671,13 @@
                         <!-- 좌: 교사 안내 -->
                         <div class="xl:col-span-5 space-y-4">
                             <!-- 교사 멘트 카드 -->
-                            <div class="rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.3)">
+                            <div class="real-only rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.3)">
                                 <p class="text-xs font-black mb-2" style="color:var(--text-md)">📢 교사가 먼저 이렇게 말해 주세요</p>
                                 <p class="text-base leading-7 font-bold" id="step-a-teacher-ment" style="color:var(--text)"></p>
+                            </div>
+                            <div class="sim-only rounded-xl p-5" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
+                                <p class="text-xs font-black mb-2" style="color:#a5b4fc">🎲 시뮬레이션 2단계</p>
+                                <p class="text-sm" style="color:rgba(165,180,252,.8)">아래 「2단계만 채우기」를 누르면 예상 발언이 자동 채워집니다. 또는 1단계의 <b style="color:#c7d2fe">⚡ 전체 시뮬레이션</b>을 사용하세요.</p>
                             </div>
                             <!-- 진행 방법 -->
                             <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
@@ -681,7 +685,7 @@
                                 <ol class="list-decimal ml-5 space-y-2 text-sm" style="color:var(--text-md)" id="step-a-procedure"></ol>
                             </div>
                             <!-- 하단 버튼 -->
-                            <div class="flex gap-3">
+                            <div class="real-only flex gap-3">
                                 <button onclick="openFullscreenForm()" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all" style="background:var(--card-lt);color:var(--text-md);border:1px solid var(--border)">
                                     📺 TV 전체화면
                                 </button>
@@ -689,13 +693,13 @@
                                     🖨️ 활동지 인쇄
                                 </button>
                             </div>
-                            <button onclick="switchStudentStep('B')" class="w-full py-3 rounded-xl font-black text-sm transition-all" style="background:var(--gold);color:#1a1200">
+                            <button onclick="switchStudentStep('B')" class="w-full py-3 rounded-xl font-black text-sm transition-all" style="background:var(--gold);color:#1a1200" class="real-only">
                                 ✅ 학생들이 다 썼어요 → B. 발언 받기로 이동 ↓
                             </button>
                         </div>
 
-                        <!-- 우: 학생 양식 미리보기 (TV 표시용) -->
-                        <div class="xl:col-span-7">
+                        <!-- 우: 학생 양식 미리보기 (TV 표시용) — 실제 수업 모드만 -->
+                        <div class="real-only xl:col-span-7">
                             <div class="rounded-xl overflow-hidden shadow-lg" style="border:1px solid rgba(255,255,255,.15)">
                                 <div class="flex items-center justify-between px-4 py-2.5" style="background:#f1f5f9;border-bottom:1px solid #e2e8f0">
                                     <span class="text-xs font-black" style="color:#64748b">📋 학생 작성 양식 미리보기</span>
@@ -779,7 +783,7 @@
                                 <h3 class="font-bold text-lg mb-3">집계 결과</h3>
                                 <div id="low-result-summary" class="space-y-3 text-sm"></div>
                             </div>
-                            <div class="rounded-xl p-5" style="background:var(--card-lt);border:1px solid var(--border)">
+                            <div class="real-only rounded-xl p-5" style="background:var(--card-lt)x solid var(--border)">
                                 <h3 class="font-bold text-lg mb-3">1~2학년 수업 진행 방법</h3>
                                 <ol class="list-decimal ml-5 text-sm leading-8" style="color:var(--text-md)">
                                     <li>필터로 오늘 수업에 쓸 장면 카드를 추려 선택하세요.</li>
@@ -794,31 +798,12 @@
                 </div>
 
 
-                <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
-                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div class="flex-1">
-                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
-                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
-                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
-                                <span>✔ 예상 발언 자동 채우기</span>
-                                <span>✔ 가치 집계 자동 완성</span>
-                                <span>✔ 약속 자동 선정</span>
-                                <span>✔ 투표 결과 자동 추정</span>
-                            </div>
-                        </div>
-                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
-                            ⚡ 전체 시뮬레이션 실행
-                        </button>
-                    </div>
-                </div>
-
                 <!-- ▶ 지금 할 일 카드 -->
                 <div class="now-task-card rounded-xl px-5 py-4 mb-6 flex flex-col md:flex-row md:items-start gap-4" style="background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(201,168,76,.05));border:1.5px solid rgba(201,168,76,.35)">
                     <div class="flex-shrink-0 flex items-center gap-2">
                         <span class="text-xs font-black px-2 py-1 rounded-full" style="background:var(--gold);color:#1a1200">STEP 2</span>
                         <span class="font-black text-base" style="color:var(--text)">학생 의견 모으기</span>
-                        <span class="text-[10px] px-1.5 py-0.5 rounded" style="background:rgba(52,211,153,.15);color:var(--success)">⏱️ 수업 중 20분</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded" style="background:rgba(52,211,153,.15);color:var(--success)">🎲 시뮬레이션 2단계</span>
                     </div>
                     <div class="first-visit-desc flex-1 text-sm" style="color:var(--text-md)">희망 카드 수집 → 손들기 기록 → 모둠 결과 입력</div>
                     <p class="first-visit-desc text-xs" style="color:rgba(201,168,76,.6)">💡 아직 약속 문장을 확정하지 마세요. 학생 의견을 그대로 기록하는 단계입니다.</p>
@@ -831,7 +816,7 @@
                 <div class="sim-only rounded-xl px-5 py-4 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(99,102,241,.03));border:1px solid rgba(99,102,241,.3)">
                     <p class="text-xs font-black mb-2" style="color:rgba(165,180,252,.6)">🎲 2단계만 채우기 <span class="font-normal">(나머지 단계는 직접 진행)</span></p>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                        <p class="text-xs flex-1" style="color:rgba(165,180,252,.6)">학년·걱정 장면 기반 예상 발언만 채웁니다. 3~5단계는 직접 확인·수정하며 진행하고 싶을 때 사용하세요. 전체를 한 번에 돌리려면 <b style="color:#a5b4fc">1단계의 ⚡ 전체 시뮬레이션 실행</b>을 사용하세요.</p>
+                        <p class="text-xs flex-1" style="color:rgba(165,180,252,.6)">발언만 채우고 나머지 단계는 직접 진행. 전체 자동 실행은 1단계 <b style="color:#a5b4fc">⚡ 전체 시뮬레이션</b>을 사용하세요.</p>
                         <button onclick="runSimulation()" class="flex-shrink-0 px-4 py-2 rounded-lg font-bold text-xs transition-all" style="background:rgba(99,102,241,.3);color:#c7d2fe;border:1px solid rgba(99,102,241,.4)">
                             2단계만 채우기
                         </button>
@@ -952,25 +937,6 @@
                     <p class="text-base mt-2" style="color:var(--text-md)">집계 결과를 확인하고 예상 TOP3 가치를 검토하세요.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">교사가 혼자 가치를 정하지 않습니다. 집계 결과를 화면에서 확인하고 예상 TOP3 가치를 검토하세요. 실제 수업에서는 학생들과 함께 합의합니다.</span></span></p>
                 </div>
 
-                <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
-                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div class="flex-1">
-                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
-                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
-                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
-                                <span>✔ 예상 발언 자동 채우기</span>
-                                <span>✔ 가치 집계 자동 완성</span>
-                                <span>✔ 약속 자동 선정</span>
-                                <span>✔ 투표 결과 자동 추정</span>
-                            </div>
-                        </div>
-                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
-                            ⚡ 전체 시뮬레이션 실행
-                        </button>
-                    </div>
-                </div>
-
                 <!-- ▶ 지금 할 일 카드 -->
                 <div class="now-task-card rounded-xl px-5 py-4 mb-6 flex flex-col md:flex-row md:items-start gap-4" style="background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(201,168,76,.05));border:1.5px solid rgba(201,168,76,.35)">
                     <div class="flex-shrink-0 flex items-center gap-2">
@@ -978,8 +944,8 @@
                         <span class="font-black text-base" style="color:var(--text)">핵심 가치 정하기</span>
                         <span class="text-[10px] px-1.5 py-0.5 rounded" style="background:rgba(52,211,153,.15);color:var(--success)">⏱️ 시뮬레이션 3단계</span>
                     </div>
-                    <div class="first-visit-desc flex-1 text-sm" style="color:var(--text-md)">TOP3 가치 확인 → 학생과 함께 최종 선택</div>
-                    <p class="first-visit-desc text-xs" style="color:rgba(201,168,76,.6)">💡 교사가 가치를 임의로 정하지 않습니다. 학생 의견 집계 결과를 화면에 보여주며 함께 확인하세요.</p>
+                    <div class="first-visit-desc flex-1 text-sm" style="color:var(--text-md)">TOP3 가치 분포 확인 → 시뮬레이션 예상 결과 검토</div>
+                    <p class="first-visit-desc text-xs" style="color:rgba(201,168,76,.6)">💡 교사가 가치를 임의로 정하지 않습니다. 집계 결과를 확인하고 시뮬레이션 예상 TOP3 가치를 검토하세요.</p>
                 </div>
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:flex xl:flex-row-reverse">
                     <div class="xl:w-1/2 space-y-4">
@@ -991,7 +957,8 @@
                     </div>
                     <div class="xl:w-1/2 space-y-4">
                         <div class="rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
-                            <h3 class="font-bold text-lg mb-3">핵심 가치 분석</h3>
+                            <h3 class="font-bold text-lg mb-1">핵심 가치 분석</h3>
+                            <p class="sim-only text-xs mb-3" style="color:rgba(201,168,76,.75)">🎲 시뮬레이션 예상 집계입니다. 아래 가치 분포가 우리 반 상황과 맞는지 판단하고, 필요하면 메모를 남긴 뒤 진행하세요.</p>
                             <div id="value-analysis" class="space-y-3"></div>
                             <!-- 시뮬레이션: 교사 메모 인터페이스 -->
                             <div class="sim-only mt-4 rounded-xl p-4" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
@@ -1030,7 +997,7 @@
                         <span class="text-xs font-black px-2 py-1 rounded-full" style="background:rgba(99,102,241,.5);color:#e0e7ff">STEP 4</span>
                         <span class="font-black text-base" style="color:var(--text)">약속 문장 검토</span>
                     </div>
-                    <div class="first-visit-desc flex-1 text-sm" style="color:var(--text-md)">학생 발언 입력 → 회복 책임 기록 → 교사 검토 완료 체크</div>
+                    <div class="first-visit-desc flex-1 text-sm" style="color:var(--text-md)">예상 약속 검토 → 표현 수정 → 교사 검토 완료 체크</div>
                     <p class="first-visit-desc text-xs" style="color:rgba(165,180,252,.6)">💡 학생이 직접 말한 표현이 우선입니다. DB 문장은 참고만 하세요.</p>
                 </div>
                 <div id="rule-warning" class="hidden mb-5 rounded-xl p-4 text-sm leading-relaxed" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5"></div>
@@ -1038,8 +1005,12 @@
                     <div class="xl:col-span-7 space-y-5">
                         <!-- 학생 직접 문장 작성 -->
                         <div class="rounded-xl p-5" style="background:rgba(99,102,241,.1);border:2px solid rgba(99,102,241,.35)">
-                            <h3 class="font-black text-base mb-1" style="color:#a5b4fc">✏️ 학생이 직접 쓰는 약속 문장</h3>
-                            <p class="text-xs mb-3" style="color:rgba(165,180,252,.7)">예상 약속 표현을 수정·추가하세요. 시뮬레이션에서는 자동 채워진 내용을 검토하는 단계입니다.</p>
+                            <h3 class="font-black text-base mb-1" style="color:#a5b4fc">
+                                <span class="sim-only">✏️ 예상 약속 문장 검토</span>
+                                <span class="real-only">✏️ 학생이 직접 쓰는 약속 문장</span>
+                            </h3>
+                            <p class="text-xs mb-3 sim-only" style="color:rgba(165,180,252,.7)">자동 선정된 예상 약속을 검토하세요. 표현을 수정하거나 삭제·추가할 수 있습니다.</p>
+                            <p class="text-xs mb-3 real-only" style="color:rgba(165,180,252,.7)">학생이 발표한 약속 표현을 그대로 입력하세요. 아래 참고 예시는 힌트로만 활용하세요.</p>
                             <div class="flex gap-2">
                                 <input id="student-rule-input" type="text" placeholder="예: 친구가 말할 때 끼어들지 않아요 (학생이 직접 말한 문장)" maxlength="60"
                                     class="flex-1 border rounded-lg px-3 py-2.5 text-sm"
@@ -1104,25 +1075,6 @@
                             <p class="text-sm mt-1" style="color:var(--text-md)">약속별 토론 → 찬성 수 입력 → 2/3 이상 합의 확정.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 찬성률을 입력하거나 자동 추정값을 확인하세요. 실제 수업에서는 학생 손들기 결과를 입력합니다.</span></span></p>
                         </div>
                         <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
-                    </div>
-                </div>
-
-                <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
-                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div class="flex-1">
-                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
-                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
-                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
-                                <span>✔ 예상 발언 자동 채우기</span>
-                                <span>✔ 가치 집계 자동 완성</span>
-                                <span>✔ 약속 자동 선정</span>
-                                <span>✔ 투표 결과 자동 추정</span>
-                            </div>
-                        </div>
-                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
-                            ⚡ 전체 시뮬레이션 실행
-                        </button>
                     </div>
                 </div>
 
@@ -1774,7 +1726,7 @@ function updateSimChecks(){
     const grade = parseInt(document.getElementById('grade-select')?.value || 0);
     const classType = document.getElementById('class-type')?.value || '일반학급';
     const hasConcern = selectedConcerns.length > 0;
-    const hasSimRun = _userActed.student;
+    const hasSimRun = _userActed.agreement || _userActed.student;  // 전체 시뮬레이션 or 2단계만 실행
 
     const s1 = document.getElementById('schk1');
     const s2 = document.getElementById('schk2');
