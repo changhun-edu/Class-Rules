@@ -342,7 +342,7 @@
 </head>
 <body class="min-h-screen flex flex-col" style="background:var(--bg);color:var(--text)">
 
-<header class="text-white shadow-md no-print" style="background:var(--sidebar);border-bottom:1px solid var(--border)">
+<header id="page-header" class="text-white shadow-md no-print" style="background:var(--sidebar);border-bottom:1px solid var(--border)">
     <div class="container mx-auto px-6 py-5 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
         <div onclick="switchTab('diagnosis')" class="flex items-center space-x-3 cursor-pointer hover:opacity-90 transition-opacity select-none" title="홈으로 이동">
             <span class="text-3xl">⚖️</span>
@@ -3532,8 +3532,11 @@ switchTab = function(tabId){
     if(tabId==='parent') renderParentLetter();
     updateStepUI(tabId);
     updateTabMarkers();
-    window.scrollTo({top:0, behavior:'instant'});
-    setTimeout(()=>{ window.scrollTo({top:0, behavior:'instant'}); initScrollFades(); }, 50);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo(0, 0);
+    document.getElementById('page-header')?.scrollIntoView({behavior:'instant', block:'start'});
+    setTimeout(()=>{ document.documentElement.scrollTop = 0; document.body.scrollTop = 0; window.scrollTo(0,0); initScrollFades(); }, 80);
 };
 
 goToNextStep = function(){ const current=tabsOrder.find(id=>!document.getElementById(`tab-${id}`)?.classList.contains('hidden')); const idx=tabsOrder.indexOf(current); switchTab(idx===tabsOrder.length-1?'diagnosis':tabsOrder[idx+1]); };
