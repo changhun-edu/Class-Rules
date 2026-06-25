@@ -3193,7 +3193,7 @@ renderLessonPlan = function(){
     const view=document.getElementById('lesson-plan-view');
     if(view && !view.querySelector('[data-habit-lesson="v33"]')){
         const rows=relevantHabits(null,5);
-        view.insertAdjacentHTML('beforeend', `<div data-habit-lesson="v33" class="mt-5 rounded-xl p-4 text-sm" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3)"><b style="color:var(--success)">🌱 생활습관 미니 루틴</b><p class="mt-2" style="color:var(--text)">합의한 약속이 일회성 포스터로 끝나지 않도록, 수업 마무리에서 하루 한 가지 실천 습관을 정합니다.</p><ul class="list-disc ml-5 mt-2 leading-7" style="color:var(--text)">${rows.map(h=>`<li>${h.habit}</li>`).join('')}</ul></div>`);
+        view.insertAdjacentHTML('beforeend', `<div data-habit-lesson="v33" class="mt-5 rounded-xl p-4 text-sm" style="background:rgba(52,211,153,.22);border:1.5px solid rgba(52,211,153,.55)"><b style="color:#6ee7b7;font-size:1rem">🌱 생활습관 미니 루틴</b><p class="mt-2" style="color:#d1fae5">합의한 약속이 일회성 포스터로 끝나지 않도록, 수업 마무리에서 하루 한 가지 실천 습관을 정합니다.</p><ul class="list-disc ml-5 mt-2 leading-7" style="color:#d1fae5">${rows.map(h=>`<li>${h.habit}</li>`).join('')}</ul></div>`);
     }
 };
 
