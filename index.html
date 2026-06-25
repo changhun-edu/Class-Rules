@@ -4050,30 +4050,28 @@ function updateStepUI(tabId){
         else si.textContent = '도구';
     }
 
-    // ── 5칸 진행 바 업데이트 ──
+    // ── 5칸 진행 바 업데이트 (현재 탭 위치 기준) ──
     const segs = document.querySelectorAll('.step-seg');
     segs.forEach((seg, idx) => {
-        const done = getTabDoneState();
-        const stepId = coreSteps[idx];
-        const isCurrent = idx === coreIdx;
-        const isDone = done[stepId];
-        if(isDone){
+        if(coreIdx < 0){
+            // 도구 탭 등 핵심 흐름 외: 모두 회색
+            seg.style.background = 'var(--border)';
+        } else if(idx < coreIdx){
             seg.style.background = 'var(--success)';
-        } else if(isCurrent){
+        } else if(idx === coreIdx){
             seg.style.background = 'var(--gold)';
         } else {
             seg.style.background = 'var(--border)';
         }
     });
 
-    // ── 단계 번호 뱃지 갱신 ──
-    const done = getTabDoneState();
+    // ── 단계 번호 뱃지 갱신 (현재 탭 위치 기준) ──
     coreSteps.forEach((id, idx) => {
         const btn = document.getElementById('btn-'+id);
         if(!btn) return;
         const numEl = btn.querySelector('.step-num');
         if(!numEl) return;
-        if(done[id]){
+        if(coreIdx >= 0 && idx < coreIdx){
             numEl.textContent = '✓';
             numEl.style.background = 'var(--success)';
             numEl.style.color = '#fff';
