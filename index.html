@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학급규칙 설계소 - 수업 전 혼자 해보는 학급규칙 수립 시뮬레이션</title>
+    <title>학급규칙 설계소 - 교사 학습 모드 + 수업 설계 시뮬레이션</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
@@ -348,6 +348,26 @@
         .step-desc-hidden .first-visit-desc { display: none !important; }
         /* 재방문: now-task-card 높이 줄이기 */
         .step-desc-hidden.now-task-card { padding-top: 10px; padding-bottom: 10px; }
+
+        /* ══ 교사 학습 모드 ══ */
+        body.learn-mode .sim-nav      { display: none !important; }
+        body:not(.learn-mode) .learn-nav { display: none !important; }
+        body.learn-mode #quickstart-modal,
+        body.learn-mode #floating-next-btn,
+        body.learn-mode #mobile-tab-bar,
+        body.learn-mode #mobile-more-panel,
+        body.learn-mode #mobile-more-overlay { display: none !important; }
+        body.learn-mode #main-layout-wrapper { --learn-accent: var(--gold); }
+        #ui-mode-switch .ui-mode-btn  { transition: all .18s; }
+        /* 모바일: 학습 모드는 본문 pill 목차만 쓰고 사이드바를 숨깁니다 */
+        @media (max-width: 767px) {
+            body.learn-mode #main-layout-wrapper > aside { display: none !important; }
+            #learn-pills { position: sticky; top: 0; z-index: 20; padding: 8px 0;
+                           background: var(--card); margin: 0 -8px 16px; padding-left: 8px; padding-right: 8px; }
+        }
+        #tab-learn table              { border-collapse: collapse; }
+        #tab-learn input[type=checkbox]{ accent-color: #c9a84c; }
+        @media print { #tab-learn { display: none !important; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col" style="background:var(--bg);color:var(--text)">
@@ -359,16 +379,24 @@
             <span class="text-3xl">⚖️</span>
             <div>
                 <h1 class="text-2xl font-black tracking-tight">학급규칙 설계소</h1>
-                <p class="text-sm mt-1" style="color:rgba(255,255,255,.65)">수업 전 혼자 해보는 학급규칙 수립 시뮬레이션</p>
+                <p class="text-sm mt-1" style="color:rgba(255,255,255,.65)">교사가 수업 전에 공부하고, 우리 반 수업을 설계하는 곳</p>
             </div>
         </div>
-        <!-- 모드 토글 -->
-        <div class="flex items-center gap-2">
-            <button id="mode-toggle-btn" onclick="toggleAppMode()" class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-black text-sm transition-all" style="background:rgba(99,102,241,.45);color:#e0e7ff;border:2px solid rgba(99,102,241,.7);box-shadow:0 2px 12px rgba(99,102,241,.35)">
-                <span id="mode-icon">🎲</span>
-                <span id="mode-label">시뮬레이션 모드</span>
-                <span style="font-size:.65rem;opacity:.7;border-left:1px solid rgba(255,255,255,.3);padding-left:6px">전환 →</span>
-            </button>
+        <!-- 모드 스위치: 학습 / 시뮬레이션 -->
+        <div class="flex flex-col items-start lg:items-end gap-1.5">
+            <div id="ui-mode-switch" class="flex items-center gap-1 p-1 rounded-xl" style="background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12)">
+                <button class="ui-mode-btn flex items-center gap-2 px-4 py-2 rounded-lg font-black text-sm" data-mode="learn" onclick="setUiMode('learn')">
+                    <span>📚</span><span>학습 모드</span>
+                </button>
+                <button class="ui-mode-btn flex items-center gap-2 px-4 py-2 rounded-lg font-black text-sm" data-mode="sim" onclick="setUiMode('sim')">
+                    <span>🎲</span><span>시뮬레이션</span>
+                </button>
+            </div>
+            <p class="text-[11px]" style="color:rgba(255,255,255,.4)">
+                <span class="learn-nav">읽고 판단 기준 세우기 · 입력 없음</span>
+                <span class="sim-nav">우리 반 조건으로 수업안 만들기</span>
+            </p>
+            <button id="mode-toggle-btn" onclick="toggleAppMode()" class="hidden"><span id="mode-icon"></span><span id="mode-label"></span></button>
         </div>
     </div>
 </header>
@@ -376,8 +404,30 @@
 <div id="main-layout-wrapper" class="container mx-auto px-4 py-8 flex-1 no-print" style="background:var(--bg);display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start">
     <aside style="width:300px;min-width:300px;flex-shrink:0;background:var(--sidebar);box-shadow:0 4px 24px rgba(0,0,0,.4);border:1px solid var(--border);border-radius:12px;padding:20px;position:sticky;top:16px;max-height:calc(100vh - 2rem);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent">
 
+        <!-- ── 학습 모드 목차 ── -->
+        <div class="learn-nav px-1 mb-3">
+            <p class="text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5" style="color:rgba(255,255,255,.35)">
+                <span style="display:inline-block;width:16px;height:1px;background:var(--gold);opacity:.5"></span>
+                학습 목차
+                <span style="display:inline-block;flex:1;height:1px;background:var(--gold);opacity:.5"></span>
+            </p>
+            <div class="space-y-1">
+                <button onclick="learnGo('home')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2" style="color:rgba(255,255,255,.75);background:rgba(255,255,255,.05)"><span>🏠</span><span class="flex-1">학습 목차</span></button>
+                <button onclick="learnGo('p1')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>🧩</span><span class="flex-1">단계별 원리</span></button>
+                <button onclick="learnGo('p2')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>📏</span><span class="flex-1">학년 발달 비교</span></button>
+                <button onclick="learnGo('p3')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>✏️</span><span class="flex-1">문장 검토 학습기</span></button>
+                <button onclick="learnGo('p4')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>⚠️</span><span class="flex-1">흔한 실패 6가지</span></button>
+                <button onclick="learnGo('p5')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>✅</span><span class="flex-1">자가 점검 5문항</span></button>
+                <button onclick="learnGo('p6')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>⚖️</span><span class="flex-1">규정 근거 정리</span></button>
+            </div>
+            <div class="mt-3 rounded-lg p-3" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25)">
+                <p class="text-[11px] leading-5" style="color:rgba(240,224,168,.85)">이 모드에는 입력 칸이 없습니다. 다 읽고 나면 시뮬레이션에서 우리 반 수업안을 만드세요.</p>
+                <button onclick="setUiMode('sim')" class="mt-2 w-full py-2 rounded-lg font-bold text-xs" style="background:rgba(99,102,241,.5);color:#e0e7ff;border:1px solid rgba(99,102,241,.6)">🎲 시뮬레이션으로 →</button>
+            </div>
+        </div>
+
         <!-- ── 5단계 진행 표시바 ── -->
-        <div class="px-1 mb-3">
+        <div class="sim-nav px-1 mb-3">
             <div class="flex items-center justify-between mb-2">
                 <p class="text-xs font-black uppercase tracking-widest" style="color:rgba(255,255,255,.35)">진행 단계</p>
                 <span id="header-step-indicator" class="text-xs font-bold px-2 py-0.5 rounded-full" style="background:var(--gold-dim);color:var(--gold)"></span>
@@ -397,7 +447,7 @@
         </div>
 
         <!-- ── CORE: 핵심 흐름 ── -->
-        <div class="px-1 pb-1">
+        <div class="sim-nav px-1 pb-1">
             <p class="text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5" style="color:rgba(255,255,255,.35)">
                 <span style="display:inline-block;width:16px;height:1px;background:var(--gold);opacity:.5"></span>
                 핵심 흐름
@@ -428,10 +478,10 @@
         </div>
 
         <!-- 구분선 -->
-        <div class="my-1" style="border-top:1px solid var(--border)"></div>
+        <div class="sim-nav my-1" style="border-top:1px solid var(--border)"></div>
 
         <!-- ── TOOLS: 출력·활용 도구 (기본 펼침) ── -->
-        <div class="px-1 pb-1">
+        <div class="sim-nav px-1 pb-1">
             <button onclick="toggleToolsPanel()" id="tools-panel-toggle"
                 class="w-full flex items-center justify-between text-[10px] font-black uppercase tracking-widest mb-2 py-1 transition-all"
                 style="color:rgba(255,255,255,.55)">
@@ -451,10 +501,10 @@
         </div>
 
         <!-- 구분선 -->
-        <div class="my-1" style="border-top:1px solid var(--border)"></div>
+        <div class="sim-nav my-1" style="border-top:1px solid var(--border)"></div>
 
         <!-- ── REFERENCE: 참고 자료 ── -->
-        <div class="px-1 pb-1">
+        <div class="sim-nav px-1 pb-1">
             <button onclick="toggleRefPanel()" id="ref-panel-toggle"
                 class="w-full flex items-center justify-between text-[10px] font-black uppercase tracking-widest mb-2 py-1 transition-all"
                 style="color:rgba(255,255,255,.35)">
@@ -470,7 +520,7 @@
         </div>
 
         <!-- 하단 버튼 영역 -->
-        <div class="mt-2 space-y-2">
+        <div class="sim-nav mt-2 space-y-2">
             <button onclick="showQuickStart()" class="w-full flex items-center justify-center gap-2 font-bold px-4 py-2.5 rounded-lg transition-all text-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:1px solid var(--border)">
                 <span>❓</span><span>처음 사용 안내</span>
             </button>
@@ -934,7 +984,7 @@
             <section id="tab-values" class="tab-content hidden">
                 <div class="pb-5 mb-6" style="border-bottom:2px solid var(--border)">
                     <h2 class="text-2xl font-black" style="color:var(--text)">📊 핵심 가치 정하기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
-                    <p class="text-base mt-2" style="color:var(--text-md)">집계 결과를 확인하고 예상 TOP3 가치를 검토하세요.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">교사가 혼자 가치를 정하지 않습니다. 집계 결과를 화면에서 확인하고 예상 TOP3 가치를 검토하세요. 실제 수업에서는 학생들과 함께 합의합니다.</span></span></p>
+                    <p class="text-base mt-2" style="color:var(--text-md)">집계 결과를 확인하고 예상 TOP3 가치를 검토하세요.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">교사가 혼자 가치를 정하지 않습니다. 집계 결과를 확인하고 예상 TOP3 가치를 검토하세요. 교실에서는 학생들의 문장을 묶고 그 묶음에 아이들이 이름을 붙이게 합니다.</span></span></p>
                 </div>
 
                 <!-- ▶ 지금 할 일 카드 -->
@@ -986,7 +1036,7 @@
                 <div class="pb-5 mb-4 flex flex-col xl:flex-row xl:justify-between xl:items-start gap-2" style="border-bottom:2px solid var(--border)">
                     <div>
                         <h2 class="text-2xl font-black" style="color:var(--text)">✏️ 약속 문장 검토</h2>
-                        <p class="text-sm mt-1" style="color:var(--text-md)">학생 발언 기록 → 교사 검토 → 5단계 투표 준비.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 약속 표현을 검토하고 학년·발달 수준에 맞는지 확인하세요. 실제 수업에서는 학생 발언을 그대로 입력합니다.</span></span></p>
+                        <p class="text-sm mt-1" style="color:var(--text-md)">학생 발언 기록 → 교사 검토 → 5단계 투표 준비.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 약속 표현을 검토하고 학년·발달 수준에 맞는지 확인하세요. 수업은 활동지로 진행하고, 여기서는 어떤 표현이 나올지 미리 가늠합니다. 판단 기준은 「📚 학습 모드 → 문장 검토 학습기」에 있습니다.</span></span></p>
                     </div>
                     <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#a5b4fc">🎲 시뮬레이션 단계</span>
                 </div>
@@ -1072,7 +1122,7 @@
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <h2 class="text-2xl font-black" style="color:var(--text)">🗳️ 함께 투표하기</h2>
-                            <p class="text-sm mt-1" style="color:var(--text-md)">약속별 토론 → 찬성 수 입력 → 2/3 이상 합의 확정.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 찬성률을 입력하거나 자동 추정값을 확인하세요. 실제 수업에서는 학생 손들기 결과를 입력합니다.</span></span></p>
+                            <p class="text-sm mt-1" style="color:var(--text-md)">약속별 토론 → 찬성 수 입력 → 2/3 이상 합의 확정.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 찬성률을 입력하거나 자동 추정값을 확인하세요. 3분의 2에 못 미칠 것 같은 문장을 미리 찾아 두는 것이 이 단계의 목적입니다.</span></span></p>
                         </div>
                         <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
                     </div>
@@ -1231,6 +1281,85 @@
             </section>
             </div><!-- /content-body -->
         <!-- next-step-btn은 floating 버튼으로 대체됨 -->
+            <!-- ══════════════════════════════════════════════════════
+                 교사 학습 모드 (learn mode) — 입력 없이 읽고 판단 기준 세우기
+                 ══════════════════════════════════════════════════════ -->
+            <section id="tab-learn" class="tab-content hidden">
+
+                <div class="pb-5 mb-6" style="border-bottom:2px solid var(--border)">
+                    <h2 class="text-2xl font-black" style="color:var(--text)">📚 교사 학습 모드</h2>
+                    <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(201,168,76,.15);color:var(--gold)">수업 전에 읽고 판단 기준을 세우는 곳</span>
+                    <p class="text-base mt-2" style="color:var(--text-md)">
+                        여기에는 우리 반 정보를 넣는 칸이 없습니다. 학급규칙 수업을 <b style="color:var(--text)">어떻게</b> 해야 하는지,
+                        그 자리에서 <b style="color:var(--text)">무엇을 판단해야</b> 하는지만 다룹니다.
+                        읽고 나서 「🎲 시뮬레이션」으로 넘어가면 우리 반 수업안을 만들 수 있습니다.
+                    </p>
+                </div>
+
+                <!-- 학습 목차 pill (모바일·본문용) -->
+                <div id="learn-pills" class="flex flex-wrap gap-2 mb-6"></div>
+
+                <!-- 홈 -->
+                <div id="learn-home" class="learn-panel">
+                    <div class="rounded-xl p-5 mb-5" style="background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(201,168,76,.04));border:1.5px solid rgba(201,168,76,.35)">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <div class="flex-1">
+                                <p class="font-black text-base" style="color:var(--gold-lt)">이 모드를 다 읽는 데 25분쯤 걸립니다</p>
+                                <p class="text-sm mt-1" style="color:var(--text-md)">순서대로 읽어도 되고, 지금 막힌 대목만 골라 읽어도 됩니다. 읽은 항목은 자동으로 표시됩니다.</p>
+                            </div>
+                            <div class="flex-shrink-0 text-center">
+                                <p class="text-3xl font-black" style="color:var(--gold)"><span id="learn-progress-num">0</span><span class="text-lg" style="color:var(--text-lt)">/6</span></p>
+                                <p class="text-[11px] mt-0.5" style="color:var(--text-lt)">읽은 항목</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-1 mt-3" id="learn-progress-bar"></div>
+                    </div>
+                    <div id="learn-index" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                    <div class="mt-6 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center gap-3" style="background:var(--card-lt);border:1px solid var(--border)">
+                        <p class="flex-1 text-sm" style="color:var(--text-md)">다 읽으셨다면 우리 반 조건을 넣고 수업안을 만들어 봅니다.</p>
+                        <button onclick="setUiMode('sim')" class="flex-shrink-0 px-5 py-2.5 rounded-lg font-black text-sm" style="background:rgba(99,102,241,.6);color:#e0e7ff;border:1px solid rgba(99,102,241,.8)">🎲 시뮬레이션으로 이동 →</button>
+                    </div>
+                </div>
+
+                <!-- ① 단계별 원리 -->
+                <div id="learn-p1" class="learn-panel hidden">
+                    <div id="learn-p1-body" class="space-y-4"></div>
+                </div>
+
+                <!-- ② 학년 발달 비교 -->
+                <div id="learn-p2" class="learn-panel hidden">
+                    <div id="learn-p2-body"></div>
+                </div>
+
+                <!-- ③ 문장 검토 학습기 -->
+                <div id="learn-p3" class="learn-panel hidden">
+                    <div id="learn-p3-body"></div>
+                </div>
+
+                <!-- ④ 흔한 실패 -->
+                <div id="learn-p4" class="learn-panel hidden">
+                    <div id="learn-p4-body" class="space-y-4"></div>
+                </div>
+
+                <!-- ⑤ 자가 점검 -->
+                <div id="learn-p5" class="learn-panel hidden">
+                    <div id="learn-p5-body"></div>
+                </div>
+
+                <!-- ⑥ 규정 근거 -->
+                <div id="learn-p6" class="learn-panel hidden">
+                    <div id="learn-p6-body"></div>
+                </div>
+
+                <!-- 하단 이동 -->
+                <div id="learn-footer-nav" class="mt-8 pt-5 flex items-center justify-between gap-3 hidden" style="border-top:1px solid var(--border)">
+                    <button onclick="learnGo('home')" class="px-4 py-2.5 rounded-lg font-bold text-sm" style="background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)">← 학습 목차</button>
+                    <button id="learn-next-btn" onclick="learnNext()" class="px-5 py-2.5 rounded-lg font-black text-sm" style="background:var(--gold);color:#1a1200"></button>
+                </div>
+
+            </section>
+
+
     </main>
 </div>
 
@@ -1838,13 +1967,13 @@ function showSimulationSummary(){
           <span style="font-size:1.1rem;flex-shrink:0">💡</span>
           <div>
             <p class="text-xs font-black" style="color:#6ee7b7">시뮬레이션이 완료됐습니다</p>
-            <p class="text-xs mt-0.5" style="color:rgba(110,231,183,.75)">결과를 바탕으로 실제 수업을 준비하려면 헤더의 <b>「시뮬레이션 모드 → 전환」</b> 버튼을 눌러 실제 수업 모드로 전환하세요. 데이터가 초기화되고 학생 발언을 직접 입력할 수 있습니다.</p>
+            <p class="text-xs mt-0.5" style="color:rgba(110,231,183,.75)">여기까지가 <b>예상값</b>입니다. 수업은 이 화면이 아니라 인쇄물로 진행합니다. 아래에서 수업안과 활동지를 뽑아 교실로 가져가세요. 수업 원리가 헷갈리면 헤더의 <b>「📚 학습 모드」</b>로 돌아가 확인할 수 있습니다.</p>
           </div>
         </div>
         <div class="mt-3 flex gap-2">
           <button onclick="closeSummaryModal()" class="flex-1 py-2.5 rounded-lg font-bold text-sm" style="background:rgba(255,255,255,.07);color:var(--text-md);border:1px solid var(--border)">닫기</button>
           <button onclick="closeSummaryModal(); switchTab('constitution')" class="flex-1 py-2.5 rounded-lg font-bold text-sm" style="background:rgba(99,102,241,.5);color:#e0e7ff;border:1px solid rgba(99,102,241,.6)">📜 예상 학급헌법 보기</button>
-          <button onclick="closeSummaryModal(); toggleAppMode()" class="flex-1 py-2.5 rounded-lg font-bold text-sm" style="background:rgba(52,211,153,.3);color:#6ee7b7;border:1px solid rgba(52,211,153,.4)">📋 실제 수업 모드로</button>
+          <button onclick="closeSummaryModal(); setUiMode('learn')" class="flex-1 py-2.5 rounded-lg font-bold text-sm" style="background:rgba(201,168,76,.25);color:#f0e0a8;border:1px solid rgba(201,168,76,.45)">📚 학습 모드로</button>
         </div>
       </div>
     </div>`;
@@ -4359,6 +4488,717 @@ document.addEventListener('DOMContentLoaded', applyAppMode);
     });
     };
 })();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   교사 학습 모드 (learn mode)
+   ① 단계별 원리  ② 학년 발달 비교  ③ 문장 검토 학습기
+   ④ 흔한 실패    ⑤ 자가 점검      ⑥ 규정 근거
+   ────────────────────────────────────────────────────────────────
+   수업 중 입력을 전제하지 않습니다. 읽고 판단 기준을 세우는 층입니다.
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+
+/* ── 학습 목차 정의 ───────────────────────────────────────────── */
+const LEARN_MENU = [
+    { id:'p1', icon:'🧩', title:'단계별 원리',        sub:'각 단계에서 무엇을 하고, 무엇을 하지 않는가', mins:'6분' },
+    { id:'p2', icon:'📏', title:'학년 발달 비교',      sub:'1~2 / 3~4 / 5~6학년이 같은 단계에서 달라지는 점', mins:'4분' },
+    { id:'p3', icon:'✏️', title:'문장 검토 학습기',    sub:'어떤 문장이 왜 걸리는가 — 직접 넣어 보기', mins:'6분' },
+    { id:'p4', icon:'⚠️', title:'흔한 실패 여섯 가지', sub:'해마다 되풀이되는 여섯 가지와 대안', mins:'5분' },
+    { id:'p5', icon:'✅', title:'자가 점검 5문항',      sub:'수업에 들어가기 전 마지막 확인', mins:'2분' },
+    { id:'p6', icon:'⚖️', title:'규정 근거 정리',       sub:'학급 약속으로 정할 수 있는 것과 없는 것', mins:'4분' },
+];
+
+/* ── ① 단계별 원리 카드 ──────────────────────────────────────── */
+const PRINCIPLES = [
+{
+    step:'1단계 · 수업 준비하기', title:'약속 문장은 준비 단계에서 정하지 않는다',
+    why:'준비 단계에서 정할 것은 <b>문장</b>이 아니라 <b>어떤 장면을 다룰지</b>입니다. 교사가 문장을 미리 써 두면 수업은 만드는 시간이 아니라 동의를 받는 절차로 줄어듭니다. 학생은 그 차이를 정확히 알아챕니다.',
+    wrong:'걱정되는 장면을 체크한 뒤, 그 자리에서 “복도에서 뛰지 않기” 같은 문장까지 적어 두고 교실에 들어간다.',
+    right:'걱정 장면은 세 개 이내로 좁히고, 그 장면을 <b>보여 줄 방법</b>(카드·사진·상황 묘사)만 준비한다. 문장 칸은 비워 둔다.',
+    say:'“오늘은 선생님이 정해 온 규칙이 없어요. 여러분이 만들 거예요.”'
+},
+{
+    step:'2단계 · 학생 의견 모으기', title:'손들기 전에 혼자 쓰는 시간을 먼저 준다',
+    why:'가장 먼저 말한 아이의 의견이 나머지 아이들의 기준이 됩니다. 3~5분의 개인 작성 시간은 이 쏠림을 막습니다. 말이 빠른 아이와 느린 아이가 같은 출발선에 서는 유일한 장치이기도 합니다.',
+    wrong:'“어떤 반이 되면 좋을까요?” 하고 바로 손들기를 받는다. 다섯 명쯤 발표하면 나머지는 “저도요”가 된다.',
+    right:'개인 작성(A) → 전체 수집(B) → 모둠 토의(C)의 순서를 지킨다. A를 건너뛰면 C에서 회복되지 않는다.',
+    say:'“먼저 3분 동안 혼자 적어 봅니다. 아직 발표하지 않아요.”'
+},
+{
+    step:'2단계 · 학생 의견 모으기', title:'“하지 말 것”이 아니라 “되고 싶은 모습”을 묻는다',
+    why:'무엇을 묻느냐가 무엇이 나오느냐를 결정합니다. 금지 목록을 물으면 금지 목록이 나오고, 그 목록은 서로를 감시하는 도구가 됩니다. 바라는 모습을 물으면 지킬 수 있는 행동이 나옵니다.',
+    wrong:'“우리 반에서 없어졌으면 하는 행동을 적어 보세요.” → 특정 학생을 가리키는 문장이 쏟아진다.',
+    right:'“기분 좋게 지낸 날”을 떠올리게 하고, 그날 교실이 어땠는지를 적게 한다. 불편했던 장면은 <b>상황 카드</b>로 교사가 제시한다.',
+    say:'“우리 반이 이랬으면 좋겠다 싶은 장면을 하나 떠올려 보세요.”'
+},
+{
+    step:'3단계 · 핵심 가치 정하기', title:'교사가 가치를 먼저 정하지 않는다 — 집계에서 나오게 한다',
+    why:'존중·안전·배움은 어느 교실에나 맞는 말이라, 교사가 먼저 꺼내면 학생 의견은 그 아래에 끼워 맞춰집니다. 아이들의 문장을 묶어 올라온 가치라야 “우리가 정했다”가 성립합니다.',
+    wrong:'“우리 반 가치는 존중, 배려, 책임이에요. 여기에 맞는 약속을 만들어 봅시다.”',
+    right:'수집한 문장을 칠판에서 비슷한 것끼리 묶고, 묶음에 <b>아이들이</b> 이름을 붙이게 한다. 그 이름이 가치가 된다.',
+    say:'“이 다섯 개는 왜 같이 묶었을까요? 여기에 이름을 붙인다면?”'
+},
+{
+    step:'4단계 · 약속 문장 만들기', title:'학생의 표현을 살리고, 교사는 검토만 한다',
+    why:'교사가 다듬은 문장은 어법에 맞지만 아무도 외우지 못합니다. 어색해도 아이들의 말이 남아야 9월에도 기억됩니다. 교사가 손댈 자리는 <b>세 가지</b>뿐입니다 — 금지형, 대상이 특정되는 표현, 지킬 수 없는 약속.',
+    wrong:'“의자에 앉을 때 뒤로 안 젖히기”를 “바른 자세로 앉는다”로 고친다. 뜻은 정확해졌지만 그 반의 문장이 아니게 된다.',
+    right:'금지형만 되물어 바꾼다. “뒤로 안 젖히기” → “의자는 네 다리를 다 붙이고 앉아요”. 어휘는 그대로 둔다.',
+    say:'“이걸 하지 말자는 말이지요? 그럼 대신 뭘 하자는 걸까요?”'
+},
+{
+    step:'5단계 · 함께 투표하기', title:'다수결이 아니라 3분의 2, 그리고 부결도 결과다',
+    why:'과반은 절반 가까운 반대를 남긴 채 통과시킵니다. 남은 아이들은 그 약속을 지킬 이유가 없습니다. 3분의 2는 “반대하는 사람이 몇 명 이하일 때만 우리 약속”이라는 뜻입니다. 그래서 <b>부결은 실패가 아니라 정보</b>입니다.',
+    wrong:'찬성이 적게 나온 약속을 “그래도 필요하니까” 하고 교사 권한으로 넣는다. 그 순간 투표가 형식이 된다.',
+    right:'부결된 문장은 지우지 말고 남긴다. “왜 반대했는지”를 듣고 표현을 고쳐 다시 묻는다. 두 번째도 안 되면 <b>다음에 다시 이야기하기로</b> 하고 넘어간다.',
+    say:'“이 약속은 아직 우리 약속이 아니에요. 무엇이 걸렸는지 들어 볼게요.”'
+},
+];
+
+/* ── ② 학년 발달 비교 ────────────────────────────────────────── */
+const GRADE_ROWS = [
+{ k:'결과물의 이름', low:'우리 반 약속', mid:'우리 반 약속', high:'학급헌법' },
+{ k:'의견 수집 방법', low:'장면 카드를 보여 주고 <b>손들기</b>. 글로 받지 않는다', mid:'개인 쪽지 → 모둠 토의 → 모둠 대표 의견', high:'개인 작성 → 모둠 토의 → 조항 초안 작성' },
+{ k:'모둠 운영', low:'모둠 없이 <b>전체 학급 단위</b>로 진행', mid:'4~6명 모둠, 기록자 1명', high:'모둠별 담당 가치를 나눠 분담' },
+{ k:'문장 형태', low:'“~해요” 한 문장, 15자 안팎', mid:'“~합니다” 행동 서술, 25자 안팎', high:'“제○조 (○○)” 조항형, 이유 포함' },
+{ k:'약속 개수', low:'3~4개', mid:'5개', high:'5~7개 (전문 + 조항)' },
+{ k:'회복 책임', low:'교사가 두 가지 중 고르게 함', mid:'모둠에서 제안 → 전체 선택', high:'조항마다 학생이 직접 문안 작성' },
+{ k:'합의 방법', low:'손들기 (교사가 세어 칠판에 기록)', mid:'거수 투표, 3분의 2 기준', high:'조항별 표결, 부결 시 재상정' },
+{ k:'걸리는 시간', low:'1차시 40분 (2차시는 그림 활동)', mid:'2차시 80분', high:'2차시 80분 + 서명·선포 10분' },
+{ k:'교사가 가장 조심할 것', low:'문장을 대신 써 주게 되기 쉽다', mid:'말 잘하는 아이 몇 명이 다 정한다', high:'조문 형식에 눌려 내용이 형식적이 된다' },
+{ k:'3월 이후', low:'그림 포스터를 눈높이에 붙이고 매일 한 줄씩 짚기', mid:'주 1회 학급회의에서 한 약속만 점검', high:'학기 중간 개정 절차를 미리 정해 두기' },
+];
+
+/* ── ③ 문장 검토 학습기 — 예시 갤러리 ────────────────────────── */
+const SENTENCE_PAIRS = [
+{ bad:'복도에서 뛰지 않기', good:'복도에서는 걸어서 이동해요', tag:'금지형',
+  note:'“하지 않기”는 무엇을 하면 되는지 알려 주지 않습니다. 지킨 순간을 칭찬할 수 없는 문장이기도 합니다.' },
+{ bad:'떠들지 않기', good:'친구가 말할 때는 끝까지 듣고 이야기해요', tag:'금지형 + 기준 없음',
+  note:'“떠든다”의 기준은 사람마다 다릅니다. 다툼이 생겼을 때 이 문장으로는 판단할 수 없습니다.' },
+{ bad:'친하게 지내기', good:'쉬는 시간에 혼자 있는 친구에게 먼저 말을 걸어요', tag:'추상 → 행동',
+  note:'마음은 약속할 수 없습니다. 약속할 수 있는 것은 눈에 보이는 행동뿐입니다.' },
+{ bad:'수업 준비 잘하기', good:'쉬는 시간이 끝나기 전에 다음 시간 책을 책상에 올려요', tag:'“잘”이 들어간 문장',
+  note:'“잘”은 판단 기준이 교사에게만 있다는 뜻입니다. 시점과 행동을 넣으면 학생도 스스로 확인할 수 있습니다.' },
+{ bad:'휴대전화 사용 금지', good:'휴대전화는 수업 시작 전에 보관함에 넣어요', tag:'금지 → 절차',
+  note:'금지는 어기는 순간에만 작동하고, 절차는 매일 작동합니다. 다만 <b>수거 방식은 학교생활규정 사항</b>이니 규정을 먼저 확인하세요.' },
+{ bad:'서로 존중하기', good:'별명 대신 이름을 불러요', tag:'가치어 → 행동',
+  note:'존중은 약속이 아니라 가치입니다. 가치는 3단계에서 정하고, 4단계에서는 그 가치를 드러내는 행동 하나를 고릅니다.' },
+{ bad:'청소 열심히 하기', good:'내 자리 주변은 하교 전에 내가 정리해요', tag:'주체 없음',
+  note:'주어가 없으면 아무도 자기 일이라고 느끼지 않습니다. “내가”를 넣으면 책임의 자리가 생깁니다.' },
+{ bad:'친구를 때리거나 욕하지 않기', good:'① 몸으로 장난치지 않고 말로 이야기해요 ② 화가 나면 세 걸음 떨어졌다가 말해요', tag:'한 문장에 두 가지',
+  note:'한 문장에 두 행동이 들어가면 투표할 때 어느 쪽에 찬성하는지 알 수 없습니다. 나눠서 각각 묻습니다.' },
+{ bad:'우리 반은 서로의 다양성을 존중하며 민주적으로 소통한다', good:'친구 말을 끝까지 들어요', tag:'저학년 어휘',
+  note:'1~2학년이 읽을 수 없는 문장은 약속이 아니라 게시물입니다. 저학년은 15자 안팎, 아는 낱말로만.' },
+{ bad:'약속을 어기면 청소 당번을 한다', good:'약속을 지키지 못했을 때는 그 친구에게 먼저 사과의 말을 해요', tag:'벌칙 → 회복',
+  note:'청소를 벌로 쓰면 청소가 나쁜 일이 됩니다. 회복 책임은 <b>깨진 관계를 고치는 행동</b>이어야 합니다.' },
+];
+
+/* ── ④ 흔한 실패 여섯 가지 ──────────────────────────────────── */
+const PITFALLS = [
+{ n:'1', title:'작년 것을 몇 줄만 고쳐 붙인다',
+  looks:'지난해 학급 파일을 열어 학년만 바꾸고, 어색한 두어 줄을 손본 뒤 코팅해서 뒤판에 붙인다. 3월 첫 주에 30분이면 끝난다.',
+  why:'빠르지만, 그 문장은 올해 아이들이 한 번도 입에 올린 적 없는 문장입니다. 지도할 때 “우리가 정했잖아”라고 말할 근거가 없습니다.',
+  instead:'작년 문장은 <b>참고 자료로만</b> 씁니다. 올해 아이들의 말로 문장을 다시 만들고, 작년과 겹치는 문장이 나오면 그때 반가워하면 됩니다.',
+  here:'이 사이트의 「내 DB」는 작년 문장을 <b>그대로 쓰기 위해서가 아니라</b>, 아이들이 말한 뒤 비교해 보기 위해 저장하는 칸입니다.' },
+{ n:'2', title:'교사가 미리 써 두고 투표만 시킨다',
+  looks:'다섯 문장을 띄워 놓고 “이거 어때요? 찬성하는 사람 손” 하고 묻는다. 전원 찬성으로 5분 만에 끝난다.',
+  why:'반대할 수 없는 자리에서 받은 찬성은 합의가 아닙니다. 아이들은 이것이 “정해진 걸 확인하는 시간”이라는 것을 첫 문장에서 압니다. 두 번째 학급회의부터 손이 잘 올라오지 않습니다.',
+  instead:'문장은 비워 두고 갑니다. 시간이 없으면 <b>가짓수를 줄이되</b>(3개), 만드는 과정은 줄이지 않습니다.',
+  here:'시뮬레이션 모드는 “아이들이 어떤 말을 할지” 미리 보는 곳이지, 그 문장을 그대로 쓰는 곳이 아닙니다.' },
+{ n:'3', title:'스무 개를 나열한다',
+  looks:'나온 의견을 하나도 빠뜨리지 않고 다 적는다. 아이들이 “제 것도 넣어 주세요” 하면 거절하기 어렵다.',
+  why:'스무 개는 아무도 외우지 못합니다. 기억되지 않는 약속은 지도할 때 쓸 수 없고, 결국 벽 장식이 됩니다.',
+  instead:'다섯 개로 압축합니다. 버리는 게 아니라 <b>묶는 것</b>입니다. “복도에서 걷기”와 “계단에서 뛰지 않기”는 한 문장으로 합칩니다. 빠진 의견은 “회복 책임” 칸이나 학급회의 안건으로 옮겨 살립니다.',
+  here:'4단계의 「✂️ 5개 핵심 약속으로 압축」이 이 일을 합니다. 압축 과정을 아이들과 함께 하면 그 자체가 좋은 토의가 됩니다.' },
+{ n:'4', title:'벌칙 중심으로 만든다',
+  looks:'“어기면 ○○한다”가 문장마다 붙는다. 상벌점표를 함께 만들기도 한다.',
+  why:'벌칙은 “걸리지 않으면 된다”를 가르칩니다. 그리고 상벌점·연대책임·신체적 제재는 <b>학급이 정할 수 있는 범위를 벗어납니다</b>(⑥ 규정 근거 참고).',
+  instead:'벌 대신 <b>회복 책임</b>을 씁니다. 어긴 사람이 아니라 <b>깨진 것</b>에 초점을 둡니다 — 누가 불편했는지, 어떻게 되돌릴지.',
+  here:'모든 약속에 「실수했을 때의 회복 책임」 칸이 붙어 있는 이유가 이것입니다. 비워 두지 마세요.' },
+{ n:'5', title:'3월에 붙인 뒤로 다시 보지 않는다',
+  looks:'4월이 되면 아무도 그 종이를 읽지 않는다. 다툼이 생겼을 때도 약속을 꺼내지 않고 그때그때 지도한다.',
+  why:'약속은 만든 날이 아니라 <b>다시 꺼낸 날</b>에 힘이 생깁니다. 한 번도 꺼내지 않은 약속은 처음부터 없었던 것과 같습니다.',
+  instead:'만드는 날에 <b>다시 볼 날짜를 함께 정합니다.</b> 1학기 중간, 2학기 초, 학기말. 점검에서 “못 지키는 약속”이 나오면 그 문장을 고칩니다. 고칠 수 있다는 걸 아는 것이 자치입니다.',
+  here:'「🔎 중간점검」 탭이 이때 쓰는 화면입니다. 점검지를 인쇄해 손가락 투표나 스티커로 표시하면 됩니다.' },
+{ n:'6', title:'학부모에게 알리지 않는다',
+  looks:'교실 안에서만 정하고 끝낸다. 학부모는 학기말에 아이 말로 처음 듣는다.',
+  why:'가정에서 다른 기준이 적용되면 아이가 두 기준 사이에서 흔들립니다. 생활지도 상황이 생겼을 때 “그런 약속이 있는 줄 몰랐다”는 말이 나옵니다.',
+  instead:'만든 <b>그 주에</b> 안내합니다. 문장만 보내지 말고 <b>어떻게 만들었는지</b>를 함께 적습니다. 학부모가 신뢰하는 것은 문장이 아니라 절차입니다.',
+  here:'「👨‍👩‍👧 학부모 안내문」은 합의된 약속과 회복 책임, 그리고 학생 참여 과정을 함께 담아 초안을 만듭니다.' },
+];
+
+/* ── ⑤ 자가 점검 5문항 ──────────────────────────────────────── */
+const SELFCHECK = [
+{ q:'이번 수업에서 다룰 걱정 장면을 세 개 이내로 좁혔는가',
+  hint:'다섯 개가 넘으면 40분 안에 다루지 못하고, 아이들도 무엇을 말해야 할지 흩어집니다. 나머지는 다음 학급회의로.' },
+{ q:'개인 작성 시간을 몇 분 줄지 정했는가',
+  hint:'저학년은 이 단계를 손들기로 대신합니다. 3학년 이상은 3~5분. 정해 두지 않으면 현장에서 거의 생략됩니다.' },
+{ q:'학생이 “하지 마” 문장을 냈을 때 되물을 발문을 준비했는가',
+  hint:'준비된 한 줄이 있어야 그 자리에서 고칠 수 있습니다. 예) “그럼 대신 뭘 하자는 걸까요?”' },
+{ q:'부결된 약속을 어떻게 처리할지 정했는가',
+  hint:'3분의 2를 못 넘긴 문장을 그 자리에서 어떻게 할지 정해 두지 않으면, 교사가 밀어붙이거나 없던 일로 만들게 됩니다.' },
+{ q:'다시 볼 날짜와 학부모 안내 시점을 정했는가',
+  hint:'중간점검 시기와 안내문 발송일. 이 두 날짜가 없으면 5번·6번 실패가 그대로 재현됩니다.' },
+];
+
+/* ── ⑥ 규정 근거 ─────────────────────────────────────────────── */
+const LEGAL_HIERARCHY = [
+{ lv:'법령',        ex:'초·중등교육법, 같은 법 시행령, 교육부 고시', who:'국가', note:'학교가 바꿀 수 없음' },
+{ lv:'학칙(학교규칙)', ex:'포상·징계, 학생생활지도에 관한 사항 등', who:'학교장(학교운영위원회 심의)', note:'학급이 바꿀 수 없음' },
+{ lv:'학교생활규정',  ex:'등교·복장·휴대전화·상벌 절차', who:'학교 구성원 협의', note:'학급 약속은 이 안에서만 유효' },
+{ lv:'학년 공통 약속', ex:'학년 특별실 이용, 학년 행사 규칙', who:'학년 협의회', note:'학급마다 달라 혼란이 생길 때 맞춤' },
+{ lv:'학급 약속',    ex:'우리 반 다섯 가지 약속과 회복 책임', who:'담임 + 학생', note:'이 사이트가 다루는 층' },
+];
+
+const LEGAL_CAN = [
+'교실 안에서 서로 지킬 <b>행동</b>을 정하는 것 (듣기, 이동, 정리, 말투)',
+'약속을 지키지 못했을 때의 <b>회복 책임</b>을 정하는 것 (사과, 되돌리기, 다시 하기)',
+'학급 자리 배치·1인 1역·모둠 운영 방식 등 <b>학급 운영 방법</b>',
+'학급회의 안건 상정 절차와 약속 개정 절차',
+];
+
+const LEGAL_CANNOT = [
+'<b>상벌점제</b> 운영 — 학칙·학교생활규정 사항입니다',
+'<b>징계</b>에 해당하는 조치 (교내봉사, 출석정지 등) — 법령과 학칙이 정합니다',
+'신체적 고통을 주는 제재, 얼차려 — 어떤 층에서도 정할 수 없습니다',
+'<b>연대책임</b> (한 사람의 잘못으로 모둠·학급 전체에 불이익)',
+'소지품 검사, 휴대전화 <b>강제 수거</b> 방식 — 학교생활규정에서 정한 범위 안에서만',
+'급식·화장실 이용 제한 등 기본 생활 관련 제한',
+'특정 학생을 지목하는 문장, 이름·위반 사실을 교실에 게시하는 방식',
+];
+
+const LEGAL_REFS = [
+{ t:'초·중등교육법 제8조 (학교 규칙)', d:'학교의 장은 <b>법령의 범위에서</b> 학생의 학교생활에 관한 학칙을 제정·개정할 수 있습니다. 학급 약속은 이 학칙 아래에 놓입니다. 학칙에 적을 사항(포상·징계 등)은 같은 법 시행령 제9조가 정하고 있습니다.' },
+{ t:'초·중등교육법 제20조의2 (학교의 장 및 교원의 학생생활지도)', d:'학교의 장과 교원은 학생의 인권을 보호하고 교원의 교육활동을 위하여 필요한 경우 <b>법령과 학칙으로 정하는 바에 따라</b> 학생을 지도할 수 있습니다. 학급 약속은 이 지도의 <b>근거이자 한계</b>가 됩니다.' },
+{ t:'같은 법 시행령 제40조의3 (학생생활지도)', d:'지도의 방법을 <b>조언·상담·주의·훈육·훈계 등</b>으로 정하고, 이 경우 <b>도구나 신체를 이용해 학생의 신체에 고통을 가하는 방법은 쓸 수 없다</b>고 못박고 있습니다. 왼쪽 「정할 수 없는 것」의 근거가 여기입니다.' },
+{ t:'교육부 고시 제2023-28호 「교원의 학생생활지도에 관한 고시」 (2023. 9. 1.)', d:'위 시행령의 위임을 받아 지도 권한의 범위와 방식을 정한 고시입니다. 학교마다 이에 맞춰 학교생활규정을 정비했으므로, <b>우리 학교 규정을 먼저 확인</b>하십시오.' },
+{ t:'교육기본법 제12조 (학습자)', d:'학생의 인격이 존중되고 개성이 중시되는 교육을 받을 권리를 정하고 있습니다. 약속의 문장이 특정 학생을 낙인찍지 않아야 하는 근거입니다.' },
+{ t:'시·도 학생인권조례 (해당 지역)', d:'조례가 있는 지역은 두발·복장·소지품 검사 등에 관한 별도 기준을 두고 있습니다. 있는 지역인지, 있다면 무엇을 정하고 있는지 확인하세요.' },
+];
+
+/* ══ 렌더링 ═══════════════════════════════════════════════════ */
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const cardStyle = 'background:var(--card-lt);border:1px solid var(--border)';
+
+function renderPills(active){
+    const el = document.getElementById('learn-pills'); if(!el) return;
+    const visited = getVisited();
+    el.innerHTML =
+        `<button onclick="learnGo('home')" class="px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="${active==='home'?'background:var(--gold);color:#1a1200':'background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)'}">🏠 목차</button>` +
+        LEARN_MENU.map(m=>`<button onclick="learnGo('${m.id}')" class="px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="${active===m.id?'background:var(--gold);color:#1a1200':'background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)'}">${m.icon} ${m.title}${visited[m.id]&&active!==m.id?' <span style="opacity:.6">✓</span>':''}</button>`).join('');
+}
+
+function getVisited(){
+    try { return JSON.parse(localStorage.getItem('learnVisited')||'{}'); } catch(e){ return {}; }
+}
+function markVisited(id){
+    if(id==='home') return;
+    const v = getVisited(); v[id]=1;
+    try { localStorage.setItem('learnVisited', JSON.stringify(v)); } catch(e){}
+    renderHome();
+}
+
+function renderHome(){
+    const visited = getVisited();
+    const n = LEARN_MENU.filter(m=>visited[m.id]).length;
+    const numEl = document.getElementById('learn-progress-num'); if(numEl) numEl.textContent = n;
+    const bar = document.getElementById('learn-progress-bar');
+    if(bar) bar.innerHTML = LEARN_MENU.map(m=>`<div class="flex-1 h-1.5 rounded-full" style="background:${visited[m.id]?'var(--gold)':'var(--border)'}"></div>`).join('');
+    const idx = document.getElementById('learn-index');
+    if(idx) idx.innerHTML = LEARN_MENU.map((m,i)=>`
+        <button onclick="learnGo('${m.id}')" class="text-left rounded-xl p-4 transition-all hover:opacity-90" style="${cardStyle}">
+            <div class="flex items-start gap-3">
+                <span class="text-2xl flex-shrink-0">${m.icon}</span>
+                <div class="flex-1 min-w-0">
+                    <p class="font-black text-sm" style="color:var(--text)">${i+1}. ${m.title}
+                        ${visited[m.id]?'<span class="text-[10px] font-bold px-1.5 py-0.5 rounded ml-1" style="background:rgba(52,211,153,.15);color:var(--success)">읽음</span>':''}
+                    </p>
+                    <p class="text-xs mt-1 leading-5" style="color:var(--text-md)">${m.sub}</p>
+                    <p class="text-[11px] mt-1.5" style="color:var(--text-lt)">⏱️ ${m.mins}</p>
+                </div>
+            </div>
+        </button>`).join('');
+}
+
+function sectionHead(icon, title, lead){
+    return `<div class="mb-5">
+        <h3 class="text-xl font-black" style="color:var(--text)">${icon} ${title}</h3>
+        <p class="text-sm mt-1.5 leading-6" style="color:var(--text-md)">${lead}</p>
+    </div>`;
+}
+
+/* ① */
+function renderP1(){
+    const el = document.getElementById('learn-p1-body'); if(!el) return;
+    el.innerHTML = sectionHead('🧩','단계별 원리',
+        '다섯 단계에는 각각 <b>하지 말아야 할 일</b>이 하나씩 있습니다. 그것이 이 도구가 단계를 나눈 이유입니다. 여섯 장을 읽고 나면 화면의 💡 안내가 왜 그렇게 쓰였는지 알게 됩니다.')
+    + PRINCIPLES.map((p,i)=>`
+        <div class="rounded-xl p-5" style="${cardStyle}">
+            <span class="inline-block text-[10px] font-black px-2 py-0.5 rounded-full mb-2" style="background:var(--gold-dim);color:var(--gold)">${p.step}</span>
+            <p class="font-black text-base leading-6" style="color:var(--text)">${i+1}. ${p.title}</p>
+            <p class="text-sm mt-2.5 leading-7" style="color:var(--text-md)">${p.why}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                <div class="rounded-lg p-3" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25)">
+                    <p class="text-[11px] font-black mb-1" style="color:#fca5a5">✗ 이렇게 하면 어긋납니다</p>
+                    <p class="text-xs leading-6" style="color:var(--text-md)">${p.wrong}</p>
+                </div>
+                <div class="rounded-lg p-3" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25)">
+                    <p class="text-[11px] font-black mb-1" style="color:var(--success)">✓ 대신 이렇게</p>
+                    <p class="text-xs leading-6" style="color:var(--text-md)">${p.right}</p>
+                </div>
+            </div>
+            <p class="text-sm mt-3 pl-3" style="border-left:3px solid var(--gold);color:var(--gold-lt)">🗣️ ${p.say}</p>
+        </div>`).join('');
+}
+
+/* ② */
+function renderP2(){
+    const el = document.getElementById('learn-p2-body'); if(!el) return;
+    const g = (typeof gradeModeDB!=='undefined') ? gradeModeDB : null;
+    const th = 'padding:10px 12px;font-weight:900;font-size:12px;text-align:left;background:var(--card-lt);color:var(--text);border-bottom:1px solid var(--border)';
+    const td = 'padding:10px 12px;font-size:12px;line-height:1.7;color:var(--text-md);border-bottom:1px solid var(--border);vertical-align:top';
+    const tdk = 'padding:10px 12px;font-size:12px;font-weight:900;color:var(--text);background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);white-space:nowrap;vertical-align:top';
+    el.innerHTML = sectionHead('📏','학년 발달 비교',
+        '같은 다섯 단계를 밟아도 1학년과 6학년의 교실 풍경은 전혀 다릅니다. 이 사이트가 학년에 따라 화면을 바꾸는 지점을 한자리에 모았습니다. <b>가로로 읽으면</b> 한 항목이 학년에 따라 어떻게 달라지는지 보이고, <b>세로로 읽으면</b> 그 학년의 수업 한 시간이 그려집니다.')
+    + `<div class="rounded-xl overflow-x-auto" style="border:1px solid var(--border)">
+        <table style="width:100%;min-width:720px;border-collapse:collapse">
+            <thead><tr>
+                <th style="${th};width:130px">항목</th>
+                <th style="${th}">1~2학년</th>
+                <th style="${th}">3~4학년</th>
+                <th style="${th}">5~6학년</th>
+            </tr></thead>
+            <tbody>${GRADE_ROWS.map(r=>`<tr>
+                <td style="${tdk}">${r.k}</td>
+                <td style="${td}">${r.low}</td>
+                <td style="${td}">${r.mid}</td>
+                <td style="${td}">${r.high}</td>
+            </tr>`).join('')}</tbody>
+        </table>
+    </div>`
+    + (g ? `<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+        ${['low','mid','high'].map(b=>`<div class="rounded-xl p-4" style="${cardStyle}">
+            <p class="font-black text-sm" style="color:var(--gold-lt)">${g[b].title}</p>
+            <p class="text-xs mt-2" style="color:var(--text-md)"><b style="color:var(--text)">중심 활동</b><br>${g[b].focus}</p>
+            <p class="text-xs mt-2" style="color:var(--text-md)"><b style="color:var(--text)">결과물</b><br>${g[b].output}</p>
+        </div>`).join('')}
+    </div>` : '')
+    + `<div class="rounded-xl p-4 mt-4" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3)">
+        <p class="text-sm font-black" style="color:var(--gold)">📌 학년이 바뀌면 화면도 바뀝니다</p>
+        <p class="text-xs mt-1.5 leading-6" style="color:var(--text-md)">
+        1~2학년을 고르면 2단계가 <b>장면 카드 손들기 모드</b>로 바뀌고 모둠 입력 칸이 사라집니다.
+        3학년 이상은 모둠 토의 칸이 나타납니다. 5~6학년은 결과물 이름이 「학급헌법」으로, 문장 번호가 「제○조」로 바뀝니다.
+        통합학급·과밀학급·다문화 학생 포함을 고르면 준비 단계의 수업 힌트가 함께 달라집니다.</p>
+    </div>`;
+}
+
+/* ③ */
+function renderP3(){
+    const el = document.getElementById('learn-p3-body'); if(!el) return;
+    el.innerHTML = sectionHead('✏️','문장 검토 학습기',
+        '4단계에서 화면이 문장에 경고를 붙이는데, 그 판단 기준을 미리 알아 두는 곳입니다. <b>교실에서는 이 화면을 볼 수 없습니다.</b> 아이가 말한 문장을 그 자리에서 판단하는 것은 교사이므로, 기준이 교사 머릿속에 들어 있어야 합니다.')
+    + `<div class="rounded-xl p-5 mb-5" style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(99,102,241,.04));border:1.5px solid rgba(99,102,241,.4)">
+        <p class="font-black text-sm mb-1" style="color:#c7d2fe">🔎 문장을 넣어 보세요</p>
+        <p class="text-xs mb-3" style="color:rgba(199,210,254,.7)">아이가 말할 법한 문장이나, 지난해 쓰던 약속을 그대로 넣어 보십시오. 무엇이 왜 걸리는지 알려 줍니다.</p>
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input id="learn-sentence-input" type="text" placeholder="예) 복도에서 뛰지 않기"
+                onkeydown="if(event.key==='Enter')learnCheckSentence()"
+                class="flex-1 rounded-lg px-3 py-2.5 text-sm" style="background:var(--card);border:1px solid var(--border-lt);color:var(--text)">
+            <select id="learn-sentence-grade" class="rounded-lg px-3 py-2.5 text-sm" style="background:var(--card);border:1px solid var(--border-lt);color:var(--text)">
+                <option value="1">1학년</option><option value="2">2학년</option>
+                <option value="3">3학년</option><option value="4" selected>4학년</option>
+                <option value="5">5학년</option><option value="6">6학년</option>
+            </select>
+            <button onclick="learnCheckSentence()" class="px-5 py-2.5 rounded-lg font-black text-sm whitespace-nowrap" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:1px solid rgba(99,102,241,.8)">검토하기</button>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+            <span class="text-[11px] self-center" style="color:rgba(199,210,254,.5)">빠른 예시:</span>
+            ${['떠들지 않기','서로 존중하기','수업 준비 잘하기','우리는 상호 존중의 태도를 견지한다'].map(s=>`<button onclick="document.getElementById('learn-sentence-input').value='${s}';learnCheckSentence()" class="text-[11px] px-2 py-1 rounded" style="background:rgba(255,255,255,.07);color:rgba(199,210,254,.8)">${s}</button>`).join('')}
+        </div>
+        <div id="learn-sentence-result" class="mt-4"></div>
+    </div>
+
+    <p class="font-black text-sm mb-3" style="color:var(--text)">📚 고쳐 쓴 예시 ${SENTENCE_PAIRS.length}가지</p>
+    <div class="space-y-3">
+    ${SENTENCE_PAIRS.map(p=>`
+        <div class="rounded-xl p-4" style="${cardStyle}">
+            <div class="flex items-start gap-3 flex-wrap">
+                <span class="text-[10px] font-black px-2 py-0.5 rounded-full flex-shrink-0" style="background:rgba(239,68,68,.15);color:#fca5a5">${p.tag}</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-2 items-center mt-3">
+                <p class="text-sm px-3 py-2 rounded-lg" style="background:rgba(239,68,68,.08);color:var(--text-md);text-decoration:line-through;text-decoration-color:rgba(239,68,68,.5)">${p.bad}</p>
+                <span class="text-center" style="color:var(--text-lt)">→</span>
+                <p class="text-sm px-3 py-2 rounded-lg font-bold" style="background:rgba(52,211,153,.1);color:var(--text)">${p.good}</p>
+            </div>
+            <p class="text-xs mt-2.5 leading-6" style="color:var(--text-md)">${p.note}</p>
+        </div>`).join('')}
+    </div>
+    <div class="rounded-xl p-4 mt-5" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3)">
+        <p class="text-sm font-black" style="color:var(--gold)">⚠️ 다만, 고치는 사람은 아이여야 합니다</p>
+        <p class="text-xs mt-1.5 leading-6" style="color:var(--text-md)">위 예시의 오른쪽 문장을 교사가 대신 써 주면 원리를 지키고도 4단계 원칙을 어기게 됩니다.
+        기준을 아는 이유는 <b>더 좋은 문장을 주기 위해서가 아니라, 더 좋은 질문을 하기 위해서</b>입니다.
+        “이걸 하지 말자는 말이지요? 그럼 대신 뭘 하자는 걸까요?” — 이 한 줄이면 아이가 스스로 오른쪽 문장에 도달합니다.</p>
+    </div>`;
+}
+
+window.learnCheckSentence = function(){
+    const input = document.getElementById('learn-sentence-input');
+    const out = document.getElementById('learn-sentence-result');
+    if(!input || !out) return;
+    const text = (input.value||'').trim();
+    if(!text){ out.innerHTML = `<p class="text-xs" style="color:#fca5a5">문장을 입력해 주세요.</p>`; return; }
+    const grade = parseInt(document.getElementById('learn-sentence-grade').value||4);
+
+    /* ── 축 1. 약속 문장으로서의 완성도 (학습 모드에서 새로 판단) ── */
+    const issues = [];
+    if(/않|금지|말자|말기|하지 마|안 된|안된|안 돼|못한다|금하|삼가/.test(text))
+        issues.push({ t:'금지형', d:'무엇을 하면 되는지 알려 주지 않습니다. 지킨 순간을 알아볼 수 없으니 칭찬할 수도 없습니다.', fix:'“그럼 대신 뭘 하자는 걸까요?”로 되물어 학생이 긍정형으로 바꾸게 하세요.' });
+    if(/잘하|잘 하|열심히|바르게|착하게|성실히|똑바로|제대로/.test(text))
+        issues.push({ t:'기준이 어른에게만 있는 말', d:'“잘·열심히·바르게”는 지켰는지 아닌지를 교사만 판단할 수 있습니다.', fix:'언제(시점)와 무엇을(행동)을 넣으면 학생도 스스로 확인할 수 있습니다.' });
+    const hasValueWord = /존중|배려|협력|소통|민주|다양성|인성|화합|우애|정직|성실|예의|질서 의식/.test(text);
+    const hasConcreteAct = /걷|걸어|앉|들어|듣|말해|말하|이야기|부르|올리|내리|넣|정리|치우|줍|기다|손을|줄을|자리|책상|물건|인사|사과|비켜|건네|씻|닫|열|앉아|보관|가져/.test(text);
+    if(hasValueWord && !hasConcreteAct)
+        issues.push({ t:'가치어', d:'이것은 약속이 아니라 <b>가치</b>입니다. 가치는 눈에 보이지 않아 지켰는지 확인할 수 없습니다.', fix:'가치는 3단계에서 정하고, 4단계에서는 그 가치가 드러나는 <b>행동 하나</b>를 고릅니다. 존중 → “별명 대신 이름을 불러요”.' });
+    if(/견지|제고|함양|도모|준수|고취|지향|영위|배양|형성한다|확립|정립|의식을/.test(text))
+        issues.push({ t:'학생이 쓰지 않는 말', d:'아이들이 입에 올리지 않는 어휘입니다. 어른의 문장을 아이들이 외울 수는 없습니다.', fix:'그 반 아이가 실제로 한 말을 그대로 옮겨 적으세요. 어색해도 그 문장이 9월까지 기억됩니다.' });
+    if(/(그리고|하거나|거나|하고,|,)/.test(text) && text.length > 14)
+        issues.push({ t:'한 문장에 두 가지', d:'행동이 둘 이상이면 투표할 때 어느 쪽에 찬성하는 것인지 알 수 없습니다.', fix:'문장을 나눠 각각 묻습니다. 한 문장 = 한 행동.' });
+    if(grade<=2 && text.length>18)
+        issues.push({ t:'저학년에 긴 문장', d:`${text.length}자입니다. 1~2학년이 읽지 못하는 문장은 약속이 아니라 게시물이 됩니다.`, fix:'15자 안팎으로, 아이들이 아는 낱말로만 줄이세요.' });
+    if(/벌|당번|반성문|감점|점수|벌점|청소를 한다|청소하기/.test(text) && /어기|안 지키|못 지키|않으면/.test(text))
+        issues.push({ t:'벌칙', d:'벌은 “걸리지 않으면 된다”를 가르칩니다. 상벌점은 학급이 정할 수 있는 범위 밖이기도 합니다.', fix:'<b>회복 책임</b>(깨진 관계를 되돌리는 행동)으로 바꾸세요. 벌은 어긴 사람에게, 회복은 상한 관계에 초점을 둡니다.' });
+    if(/[가-힣]{2,4}(이|가|는|은)\s|친구 ○○|○○이/.test(text) && /못하게|하지 못|때문에/.test(text))
+        issues.push({ t:'특정 학생을 가리키는 문장', d:'누구를 겨냥한 문장인지 아이들이 먼저 압니다. 그 문장은 약속이 아니라 낙인이 됩니다.', fix:'행동만 남기고 사람은 지웁니다.' });
+
+    const level = issues.length === 0 ? 'good' : issues.length === 1 ? 'fix' : 'redo';
+    const meta = {
+        good:{ c:'var(--success)', bg:'rgba(52,211,153,.1)', i:'✅', l:'약속 문장으로 쓸 수 있습니다' },
+        fix :{ c:'var(--gold)',    bg:'rgba(201,168,76,.1)', i:'✏️', l:'한 군데만 고치면 됩니다' },
+        redo:{ c:'#fca5a5',        bg:'rgba(239,68,68,.1)',  i:'⚠️', l:'문장을 다시 만드는 편이 좋습니다' },
+    }[level];
+
+    /* ── 축 2. 학생 합의 예상 (4단계 화면과 같은 로직) ── */
+    let r = { score:70, level:'mid', reasons:[], warnings:[] };
+    try { if(typeof estimatePassQuality === 'function') r = estimatePassQuality({ text:text, value:'존중' }, grade); } catch(e){}
+    const vLabel = r.level==='high' ? '쉽게 찬성할 것 같음' : r.level==='mid' ? '재토론이 필요할 수 있음' : '표현 수정 권장';
+    const vColor = r.level==='high' ? 'var(--success)' : r.level==='mid' ? 'var(--gold)' : '#fca5a5';
+
+    /* 두 판단이 엇갈릴 때가 이 학습기의 핵심입니다 */
+    const gap = (level !== 'good' && r.level === 'high');
+
+    out.innerHTML = `
+    <div class="rounded-lg p-4" style="background:${meta.bg};border:1px solid ${meta.c}">
+        <p class="font-black text-sm" style="color:${meta.c}">${meta.i} ${meta.l}</p>
+        <p class="text-xs mt-1" style="color:var(--text-md)">입력한 문장: <b style="color:var(--text)">“${esc(text)}”</b> · ${grade}학년 기준 · ${text.length}자</p>
+
+        ${issues.length ? `<div class="mt-3 space-y-3">
+            ${issues.map(x=>`<div class="rounded-lg p-3" style="background:rgba(0,0,0,.18)">
+                <p class="text-xs font-black" style="color:${meta.c}">· ${x.t}</p>
+                <p class="text-xs leading-6 mt-1" style="color:var(--text-md)">${x.d}</p>
+                <p class="text-xs leading-6 mt-1.5 pl-2" style="border-left:2px solid var(--border-lt);color:var(--text-md)"><b style="color:var(--text)">교실에서는</b> ${x.fix}</p>
+            </div>`).join('')}
+        </div>` : `<p class="text-xs mt-2 leading-6" style="color:var(--text-md)">금지형·가치어·모호한 기준·두 가지 행동 — 어디에도 걸리지 않았습니다. 학생이 이 문장을 냈다면 그대로 살리세요.</p>`}
+
+        <div class="mt-3 pt-3" style="border-top:1px dashed var(--border-lt)">
+            <p class="text-[11px] font-black mb-1" style="color:var(--text-lt)">참고 · 4단계 화면이 표시하는 「학생 합의 예상」</p>
+            <p class="text-xs" style="color:${vColor}">${vLabel}</p>
+            <p class="text-[11px] mt-1 leading-5" style="color:var(--text-lt)">${[...r.reasons, ...r.warnings].join(' · ')}</p>
+        </div>
+
+        ${gap ? `<div class="mt-3 rounded-lg p-3" style="background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.35)">
+            <p class="text-xs font-black" style="color:#c7d2fe">📌 두 판단이 엇갈렸습니다 — 여기가 중요한 대목입니다</p>
+            <p class="text-xs mt-1.5 leading-6" style="color:rgba(199,210,254,.9)">
+            아이들은 이 문장에 <b>쉽게 찬성합니다.</b> 반대할 이유가 없으니까요.
+            하지만 지켰는지 확인할 수 없는 문장이라 9월에 다툼이 생겼을 때 꺼낼 수가 없습니다.
+            <b>찬성을 많이 받는 문장과 쓸모 있는 문장은 다릅니다.</b> 투표에서 만장일치가 나오면 오히려 한 번 더 물어보세요 —
+            “이 약속을 지킨 걸 어떻게 알 수 있을까요?”</p>
+        </div>` : ''}
+    </div>`;
+};
+
+/* ④ */
+function renderP4(){
+    const el = document.getElementById('learn-p4-body'); if(!el) return;
+    el.innerHTML = sectionHead('⚠️','흔한 실패 여섯 가지',
+        '학급규칙 수업이 무너지는 자리는 대체로 정해져 있습니다. 여섯 가지 모두 <b>나쁜 의도에서 나오지 않는다</b>는 점이 공통점입니다. 시간이 없어서, 아이들을 아껴서, 공평하려고 하다가 그렇게 됩니다.')
+    + PITFALLS.map(p=>`
+        <div class="rounded-xl p-5" style="${cardStyle}">
+            <div class="flex items-start gap-3">
+                <span class="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs flex-shrink-0" style="background:rgba(239,68,68,.15);color:#fca5a5">${p.n}</span>
+                <p class="font-black text-base leading-6 flex-1" style="color:var(--text)">${p.title}</p>
+            </div>
+            <div class="mt-3 space-y-2.5 pl-10">
+                <div><p class="text-[11px] font-black" style="color:var(--text-lt)">이런 모습</p>
+                     <p class="text-sm leading-7" style="color:var(--text-md)">${p.looks}</p></div>
+                <div><p class="text-[11px] font-black" style="color:#fca5a5">무엇이 문제인가</p>
+                     <p class="text-sm leading-7" style="color:var(--text-md)">${p.why}</p></div>
+                <div><p class="text-[11px] font-black" style="color:var(--success)">대신 이렇게</p>
+                     <p class="text-sm leading-7" style="color:var(--text-md)">${p.instead}</p></div>
+                <div class="rounded-lg p-3 mt-1" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
+                     <p class="text-xs leading-6" style="color:rgba(199,210,254,.85)"><b>이 사이트에서는</b> — ${p.here}</p></div>
+            </div>
+        </div>`).join('');
+}
+
+/* ⑤ */
+function renderP5(){
+    const el = document.getElementById('learn-p5-body'); if(!el) return;
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem('learnSelfCheck')||'{}'); } catch(e){}
+    el.innerHTML = sectionHead('✅','자가 점검 5문항',
+        '수업에 들어가기 전 마지막 확인입니다. 다섯 가지 모두 <b>수업 중에는 정할 수 없는 것</b>들입니다. 그 자리에서 정하려 하면 교사가 대신 결정하게 됩니다.')
+    + `<div class="space-y-3">
+        ${SELFCHECK.map((c,i)=>`
+        <label class="flex items-start gap-3 rounded-xl p-4 cursor-pointer transition-all" style="${cardStyle}">
+            <input type="checkbox" class="learn-check mt-0.5 w-5 h-5 flex-shrink-0" data-i="${i}" ${saved[i]?'checked':''} onchange="learnSaveCheck()">
+            <div class="flex-1 min-w-0">
+                <p class="font-bold text-sm leading-6" style="color:var(--text)">${i+1}. ${c.q}</p>
+                <p class="text-xs mt-1.5 leading-6" style="color:var(--text-md)">${c.hint}</p>
+            </div>
+        </label>`).join('')}
+    </div>
+    <div id="learn-check-result" class="rounded-xl p-4 mt-4"></div>
+    <div class="flex gap-2 mt-3">
+        <button onclick="learnResetCheck()" class="px-4 py-2 rounded-lg text-xs font-bold" style="background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)">체크 지우기</button>
+        <button onclick="learnPrintCheck()" class="px-4 py-2 rounded-lg text-xs font-bold" style="background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)">🖨️ 점검표 인쇄</button>
+    </div>`;
+    updateCheckResult();
+}
+window.learnSaveCheck = function(){
+    const o = {};
+    document.querySelectorAll('.learn-check').forEach(c=>{ if(c.checked) o[c.dataset.i]=1; });
+    try { localStorage.setItem('learnSelfCheck', JSON.stringify(o)); } catch(e){}
+    updateCheckResult();
+};
+window.learnResetCheck = function(){
+    try { localStorage.removeItem('learnSelfCheck'); } catch(e){}
+    document.querySelectorAll('.learn-check').forEach(c=>c.checked=false);
+    updateCheckResult();
+};
+function updateCheckResult(){
+    const el = document.getElementById('learn-check-result'); if(!el) return;
+    const n = document.querySelectorAll('.learn-check:checked').length;
+    const all = n === SELFCHECK.length;
+    el.style.background = all ? 'rgba(52,211,153,.1)' : 'rgba(255,255,255,.04)';
+    el.style.border = '1px solid ' + (all ? 'rgba(52,211,153,.35)' : 'var(--border)');
+    el.innerHTML = all
+        ? `<p class="font-black text-sm" style="color:var(--success)">✅ 다섯 가지를 모두 정하셨습니다</p>
+           <p class="text-xs mt-1.5 leading-6" style="color:var(--text-md)">이제 시뮬레이션 모드에서 우리 반 조건을 넣고 수업안과 활동지를 뽑으시면 됩니다.</p>
+           <button onclick="setUiMode('sim')" class="mt-3 px-4 py-2 rounded-lg font-black text-xs" style="background:rgba(99,102,241,.6);color:#e0e7ff;border:1px solid rgba(99,102,241,.8)">🎲 시뮬레이션으로 이동 →</button>`
+        : `<p class="text-sm font-bold" style="color:var(--text-md)">${n} / ${SELFCHECK.length} 항목 확인</p>
+           <p class="text-xs mt-1" style="color:var(--text-lt)">남은 항목은 수업 전에 정해 두세요. 교실에서는 정할 틈이 없습니다.</p>`;
+}
+window.learnPrintCheck = function(){
+    const w = window.open('', '_blank');
+    if(!w) return;
+    w.document.write(`<html><head><meta charset="utf-8"><title>학급규칙 수업 전 자가 점검</title>
+    <style>body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;padding:40px;color:#111}
+    h1{font-size:20px;border-bottom:2px solid #333;padding-bottom:10px}
+    li{margin:18px 0;font-size:14px;line-height:1.8}
+    .hint{color:#666;font-size:12px;margin-top:4px}
+    .box{display:inline-block;width:14px;height:14px;border:1.5px solid #333;margin-right:8px;vertical-align:-2px}
+    .memo{border-bottom:1px dotted #999;display:block;height:22px;margin-top:8px}</style></head><body>
+    <h1>학급규칙 수업 전 자가 점검</h1>
+    <p style="font-size:12px;color:#666">학년 ______  반 ______  담임 ____________  작성일 ______________</p>
+    <ol style="padding-left:18px">${SELFCHECK.map(c=>`<li><span class="box"></span><b>${c.q}</b><div class="hint">${c.hint.replace(/<[^>]+>/g,'')}</div><span class="memo"></span></li>`).join('')}</ol>
+    <p style="font-size:11px;color:#999;margin-top:30px">학급규칙 설계소 · 교사 학습 모드</p>
+    </body></html>`);
+    w.document.close();
+    setTimeout(()=>{ try{ w.print(); }catch(e){} }, 400);
+};
+
+/* ⑥ */
+function renderP6(){
+    const el = document.getElementById('learn-p6-body'); if(!el) return;
+    const th = 'padding:10px 12px;font-weight:900;font-size:12px;text-align:left;background:var(--card-lt);color:var(--text);border-bottom:1px solid var(--border)';
+    const td = 'padding:10px 12px;font-size:12px;line-height:1.7;color:var(--text-md);border-bottom:1px solid var(--border);vertical-align:top';
+    el.innerHTML = sectionHead('⚖️','규정 근거 정리',
+        '학급 약속은 규정 체계의 <b>가장 아래층</b>에 놓입니다. 위층에서 이미 정한 것은 학급이 다시 정할 수 없고, 위층이 정하지 않은 자리에서만 학급의 결정이 효력을 가집니다. 이 경계를 모르면 아이들과 정성껏 만든 약속이 “그건 학급에서 정할 수 없습니다”라는 말로 무너집니다.')
+    + `<p class="font-black text-sm mb-2" style="color:var(--text)">🗂️ 어디에 놓이는가</p>
+    <div class="rounded-xl overflow-x-auto mb-5" style="border:1px solid var(--border)">
+        <table style="width:100%;min-width:640px;border-collapse:collapse">
+        <thead><tr><th style="${th};width:120px">층</th><th style="${th}">여기서 정하는 것</th><th style="${th};width:150px">정하는 주체</th><th style="${th};width:180px">학급과의 관계</th></tr></thead>
+        <tbody>${LEGAL_HIERARCHY.map((h,i)=>`<tr style="${i===LEGAL_HIERARCHY.length-1?'background:rgba(201,168,76,.07)':''}">
+            <td style="${td};font-weight:900;color:${i===LEGAL_HIERARCHY.length-1?'var(--gold)':'var(--text)'};white-space:nowrap">${'　'.repeat(i)}${h.lv}</td>
+            <td style="${td}">${h.ex}</td><td style="${td}">${h.who}</td><td style="${td}">${h.note}</td></tr>`).join('')}</tbody>
+        </table>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="rounded-xl p-4" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3)">
+            <p class="font-black text-sm mb-2" style="color:var(--success)">○ 학급 약속으로 정할 수 있는 것</p>
+            <ul class="space-y-1.5">${LEGAL_CAN.map(x=>`<li class="text-xs leading-6" style="color:var(--text-md)">· ${x}</li>`).join('')}</ul>
+        </div>
+        <div class="rounded-xl p-4" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3)">
+            <p class="font-black text-sm mb-2" style="color:#fca5a5">× 학급 약속으로 정할 수 없는 것</p>
+            <ul class="space-y-1.5">${LEGAL_CANNOT.map(x=>`<li class="text-xs leading-6" style="color:var(--text-md)">· ${x}</li>`).join('')}</ul>
+        </div>
+    </div>
+
+    <p class="font-black text-sm mb-2" style="color:var(--text)">📖 관련 법령</p>
+    <div class="space-y-2 mb-5">
+        ${LEGAL_REFS.map(r=>`<div class="rounded-lg p-3.5" style="${cardStyle}">
+            <p class="text-sm font-black" style="color:var(--gold-lt)">${r.t}</p>
+            <p class="text-xs mt-1 leading-6" style="color:var(--text-md)">${r.d}</p>
+        </div>`).join('')}
+    </div>
+
+    <div class="rounded-xl p-4 mb-5" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3)">
+        <p class="font-black text-sm" style="color:var(--gold)">⚠️ 조문 번호는 학교마다 다릅니다</p>
+        <p class="text-xs mt-1.5 leading-6" style="color:var(--text-md)">
+        출력물의 약속마다 붙는 「참고 근거: 제○조 ○○」는 이 사이트가 붙여 주는 <b>예시 조문 번호</b>입니다.
+        학교생활규정은 학교마다 조문 순서가 다르므로, 학부모 안내문이나 학급헌법을 내보내기 전에
+        <b>우리 학교 학교생활규정과 대조해</b> 번호를 바꾸거나 지우십시오. 아래 칸에 적어 두면 이 화면에서 다시 확인할 수 있습니다.</p>
+        <div class="mt-3 space-y-2" id="learn-law-map"></div>
+        <button onclick="learnSaveLawMap()" class="mt-3 px-4 py-2 rounded-lg text-xs font-bold" style="background:var(--gold);color:#1a1200">우리 학교 조문으로 저장</button>
+        <span id="learn-law-saved" class="text-xs ml-2" style="color:var(--success)"></span>
+    </div>
+
+    <div class="rounded-xl p-4" style="${cardStyle}">
+        <p class="font-black text-sm" style="color:var(--text)">🧭 경계에 부딪혔을 때</p>
+        <p class="text-xs mt-1.5 leading-6" style="color:var(--text-md)">
+        아이들이 “휴대전화는 아침에 걷자”처럼 규정 사항을 제안하는 일은 자주 있습니다. 이때 “안 돼요”로 끊지 말고
+        <b>어디서 정하는 일인지</b> 알려 주는 편이 낫습니다. “이건 우리 반이 아니라 학교 전체가 정하는 일이에요.
+        학생회에 안건으로 올려 볼까요?” — 그 한마디가 자치를 학급 밖으로 넓힙니다.
+        규정 개정이 필요한 사안이면 학년 협의회나 학생회 안건으로 옮겨 적어 두십시오.</p>
+    </div>`;
+    renderLawMap();
+}
+const DEFAULT_LAWS = ['제7조 학업 분위기','제8조 안전','제10조 조언·주의','제10조 품위·존중','제11조 물품 관리'];
+function renderLawMap(){
+    const box = document.getElementById('learn-law-map'); if(!box) return;
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem('learnLawMap')||'{}'); } catch(e){}
+    box.innerHTML = DEFAULT_LAWS.map((l,i)=>`
+        <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs w-40 flex-shrink-0" style="color:var(--text-lt)">${l}</span>
+            <span style="color:var(--text-lt)">→</span>
+            <input type="text" class="learn-law-input flex-1 rounded px-2 py-1.5 text-xs" data-i="${i}"
+                placeholder="우리 학교 규정의 해당 조문 (없으면 '해당 없음')" value="${saved[i]?esc(saved[i]):''}"
+                style="min-width:180px;background:var(--card);border:1px solid var(--border-lt);color:var(--text)">
+        </div>`).join('');
+}
+window.learnSaveLawMap = function(){
+    const o = {};
+    document.querySelectorAll('.learn-law-input').forEach(inp=>{ if(inp.value.trim()) o[inp.dataset.i]=inp.value.trim(); });
+    try { localStorage.setItem('learnLawMap', JSON.stringify(o)); } catch(e){}
+    const s = document.getElementById('learn-law-saved');
+    if(s){ s.textContent = '저장했습니다'; setTimeout(()=>{ s.textContent=''; }, 2500); }
+};
+
+/* ══ 패널 전환 ═══════════════════════════════════════════════ */
+const RENDERERS = { p1:renderP1, p2:renderP2, p3:renderP3, p4:renderP4, p5:renderP5, p6:renderP6 };
+
+window.learnGo = function(id){
+    document.querySelectorAll('.learn-panel').forEach(el=>el.classList.add('hidden'));
+    const target = document.getElementById(id==='home' ? 'learn-home' : 'learn-'+id);
+    if(target) target.classList.remove('hidden');
+    if(RENDERERS[id]) RENDERERS[id]();
+    if(id==='home') renderHome();
+    markVisited(id);
+    renderPills(id);
+
+    // 하단 이동 버튼
+    const nav = document.getElementById('learn-footer-nav');
+    const nextBtn = document.getElementById('learn-next-btn');
+    if(nav && nextBtn){
+        if(id==='home'){ nav.classList.add('hidden'); }
+        else {
+            nav.classList.remove('hidden');
+            const i = LEARN_MENU.findIndex(m=>m.id===id);
+            if(i >= 0 && i < LEARN_MENU.length-1){
+                const nx = LEARN_MENU[i+1];
+                nextBtn.textContent = `${nx.icon} ${nx.title} →`;
+                nextBtn.dataset.next = nx.id;
+            } else {
+                nextBtn.textContent = '🎲 시뮬레이션으로 이동 →';
+                nextBtn.dataset.next = '__sim';
+            }
+        }
+    }
+    try { window.scrollTo(0,0); document.getElementById('page-top')?.scrollIntoView(); } catch(e){}
+};
+window.learnNext = function(){
+    const nx = document.getElementById('learn-next-btn')?.dataset.next;
+    if(nx === '__sim') setUiMode('sim');
+    else if(nx) learnGo(nx);
+};
+
+/* ══ 모드 전환 (학습 / 시뮬레이션) ═══════════════════════════ */
+window.setUiMode = function(mode, silent){
+    const isLearn = mode === 'learn';
+    document.body.classList.toggle('learn-mode', isLearn);
+    try { localStorage.setItem('uiMode', mode); } catch(e){}
+
+    // 헤더 스위치 표시
+    document.querySelectorAll('#ui-mode-switch .ui-mode-btn').forEach(b=>{
+        const on = b.dataset.mode === mode;
+        b.style.background = on ? (b.dataset.mode==='learn' ? 'var(--gold)' : 'rgba(99,102,241,.75)') : 'transparent';
+        b.style.color      = on ? (b.dataset.mode==='learn' ? '#1a1200' : '#e0e7ff') : 'rgba(255,255,255,.55)';
+        b.style.boxShadow  = on ? '0 2px 10px rgba(0,0,0,.25)' : 'none';
+    });
+
+    if(isLearn){
+        document.querySelectorAll('.tab-content').forEach(el=>el.classList.add('hidden'));
+        const t = document.getElementById('tab-learn');
+        if(t) t.classList.remove('hidden');
+        learnGo(_lastLearnPanel || 'home');
+        if(!silent && typeof showToast === 'function') showToast('📚 학습 모드입니다. 입력 없이 읽는 곳이에요.', 'info', 2600);
+    } else {
+        const t = document.getElementById('tab-learn');
+        if(t) t.classList.add('hidden');
+        if(typeof switchTab === 'function') switchTab('diagnosis');
+        if(!silent && typeof showToast === 'function') showToast('🎲 시뮬레이션 모드입니다. 우리 반 조건을 넣어 수업안을 만들어 보세요.', 'info', 3000);
+        // 빠른 시작 안내는 학습 모드가 아니라 시뮬레이션에 처음 들어올 때 띄웁니다.
+        try {
+            if(!localStorage.getItem('qsSimShown')){
+                localStorage.setItem('qsSimShown','1');
+                setTimeout(()=>{ try{ showQuickStart(); }catch(e){} }, 400);
+            }
+        } catch(e){}
+    }
+    try { window.scrollTo(0,0); } catch(e){}
+};
+let _lastLearnPanel = 'home';
+const _origLearnGo = window.learnGo;
+window.learnGo = function(id){ _lastLearnPanel = id; _origLearnGo(id); };
+
+/* ══ 초기화 ══════════════════════════════════════════════════ */
+function initLearn(){
+    // 원본 문서의 div 짝이 맞지 않아 파서가 <main>을 일찍 닫습니다.
+    // 학습 섹션이 main 밖으로 밀려나므로 여기서 제자리에 붙입니다.
+    try {
+        const sec  = document.getElementById('tab-learn');
+        const main = document.getElementById('main-content');
+        if(sec && main && sec.parentElement !== main) main.appendChild(sec);
+    } catch(e){}
+
+    // 구 모드(real) 흔적 제거 — 실제 수업 중 입력은 더 이상 쓰지 않습니다.
+    try {
+        if(typeof appMode !== 'undefined' && appMode === 'real'){ appMode = 'simulation'; }
+        localStorage.setItem('appMode','simulation');
+        document.body.classList.remove('real-mode');
+    } catch(e){}
+
+    // 학습 모드에서는 빠른 시작 모달이 뜨지 않도록 닫아 둡니다.
+    try { document.getElementById('quickstart-modal')?.classList.add('hidden'); } catch(e){}
+
+    renderHome();
+    renderPills('home');
+
+    const saved = (function(){ try { return localStorage.getItem('uiMode'); } catch(e){ return null; } })();
+    // 처음 오는 사람은 학습 모드부터
+    setUiMode(saved || 'learn', true);
+}
+
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ()=>setTimeout(initLearn, 60));
+else setTimeout(initLearn, 60);
+
+})();
+
 </script>
 </body>
 </html>
