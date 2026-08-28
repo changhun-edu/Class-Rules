@@ -550,27 +550,15 @@
         <div class="content-body">
             <section id="tab-diagnosis" class="tab-content">
                 <div class="pb-5 mb-6" style="border-bottom:2px solid var(--border)">
-                    <h2 class="text-2xl font-black" style="color:var(--text)">🧭 수업 준비하기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(255,255,255,.07);color:var(--text-md)">🎲 시뮬레이션 1단계</span>
-                    <p class="text-base mt-2" style="color:var(--text-md)">학년 입력 → 걱정 장면 체크 → 준비 완료.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학년·학급 상황을 입력해 오늘 수업 방향을 잡으세요. 약속은 이 단계에서 결정하지 않습니다. 걱정 항목을 체크하면 수업 힌트가 자동으로 나타납니다.</span></span></p>
+                    <h2 class="text-2xl font-black" style="color:var(--text)">🧭 수업 준비하기<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학년·학급 상황을 입력해 오늘 수업 방향을 잡으세요. 약속은 이 단계에서 결정하지 않습니다. 걱정 항목을 체크하면 수업 힌트가 자동으로 나타납니다.</span></span></h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(255,255,255,.07);color:var(--text-md)">🎲 시뮬레이션 1단계</span>
                 </div>
 
                 <!-- ── 원클릭 전체 시뮬레이션 — 전체 너비, 최상단 ── -->
-                <div class="sim-only rounded-xl p-5 mb-4" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.07));border:2px solid rgba(99,102,241,.6);box-shadow:0 4px 20px rgba(99,102,241,.2)">
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div class="flex-1">
-                            <p class="font-black text-base" style="color:#c7d2fe">⚡ 전체 시뮬레이션 실행</p>
-                            <p class="text-sm mt-1" style="color:rgba(199,210,254,.75)">학년·학급 특성·걱정 장면을 아래에서 입력한 뒤 버튼을 클릭하면 2→5단계가 자동 실행되고 예상 학급헌법까지 완성됩니다.</p>
-                            <div class="flex flex-wrap gap-3 mt-2 text-xs" style="color:rgba(165,180,252,.6)">
-                                <span>✔ 예상 발언 자동 채우기</span>
-                                <span>✔ 가치 집계 자동 완성</span>
-                                <span>✔ 약속 자동 선정</span>
-                                <span>✔ 투표 결과 자동 추정</span>
-                            </div>
-                        </div>
-                        <button onclick="runFullSimulation()" class="flex-shrink-0 px-7 py-3.5 rounded-xl font-black text-base transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:2px solid rgba(99,102,241,.8);box-shadow:0 4px 20px rgba(99,102,241,.4);white-space:nowrap">
-                            ⚡ 전체 시뮬레이션 실행
-                        </button>
-                    </div>
+                <div class="sim-only rounded-xl px-5 py-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-3" style="background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(99,102,241,.06));border:1.5px solid rgba(99,102,241,.5)">
+                    <p class="flex-1 text-sm" style="color:rgba(199,210,254,.9)"><b style="color:#c7d2fe">⚡ 전체 시뮬레이션</b> — 아래를 채운 뒤 누르면 2→5단계가 한 번에 돌아갑니다.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 학생 발언, 가치 집계, 약속 선정, 투표 결과 추정이 모두 자동으로 채워지고 예상 학급헌법까지 만들어집니다.</span></span></p>
+                    <button onclick="runFullSimulation()" class="flex-shrink-0 px-6 py-2.5 rounded-lg font-black text-sm transition-all" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:1px solid rgba(99,102,241,.8);white-space:nowrap">
+                        ⚡ 실행
+                    </button>
                 </div>
 
                 <!-- ▶ 지금 할 일 카드 -->
@@ -697,8 +685,8 @@
                 const banner = document.createElement('div');
                 banner.className = 'mt-4 rounded-xl px-5 py-3 flex items-center gap-3';
                 banner.style.cssText = 'background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)';
-                banner.innerHTML = '<span style="font-size:1.25rem;flex-shrink:0">🎲</span><p style="font-size:0.875rem;color:rgba(165,180,252,.85)">실제 수업 전 <b style="color:#a5b4fc">시뮬레이션</b>을 해보려면 2단계에서 <b style="color:#a5b4fc">「예상 응답으로 채우기」</b> 버튼을 누르세요. 학년과 걱정 장면을 반영해 예상 학생 발언이 자동으로 채워집니다.</p>';
-                diag.appendChild(banner);
+                banner.innerHTML = '';
+                // 상단 ⚡ 전체 시뮬레이션 박스와 같은 내용이라 표시하지 않는다.
             });
             </script>
 
@@ -706,19 +694,13 @@
                 <div class="pb-5 mb-5" style="border-bottom:2px solid var(--border)">
                     <div class="flex flex-col xl:flex-row xl:justify-between xl:items-start gap-3">
                         <div>
-                            <h2 class="text-2xl font-black" style="color:var(--text)">👥 학생 의견 모으기</h2>
+                            <h2 class="text-2xl font-black" style="color:var(--text)">👥 학생 의견 모으기<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학생이 먼저 스스로 생각한 뒤 의견을 냅니다. 바로 손들기로 들어가지 말고 개인 작성 시간을 먼저 주세요. 이 단계에서 약속 문장을 미리 정하지 않습니다.</span></span></h2>
                             <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
-                            <p class="text-sm mt-2" style="color:var(--text-md)">A. 개인 생각 → B. 전체 수집 → C. 모둠 토의 순서로 진행합니다.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">학생이 먼저 스스로 생각한 뒤 의견을 냅니다. 바로 손들기로 들어가지 말고 개인 작성 시간을 먼저 주세요.</span></span></p>
                             <p class="text-sm mt-1 font-bold" id="grade-value-notice" style="color:var(--text-md)"></p>
                         </div>
 
                     </div>
                 </div>
-                <!-- 핵심 원칙 배너 -->
-                <div class="rounded-lg px-4 py-2.5 mb-4 text-sm" style="background:var(--neutral);border:1px solid var(--neutral-border);color:var(--text-md)">
-                    <b>핵심 원칙</b> 이 단계에서 약속 문장을 미리 정하지 않습니다. 학생 의견·희망·바라는 반의 모습을 있는 그대로 수집하세요.
-                </div>
-
                 <!-- ── 진행 표시 (탭 전환 없이 세로 스크롤) ── -->
                 <div class="flex items-center gap-2 mb-6 text-xs" style="color:var(--text-lt)">
                     <span id="step-btn-A" class="px-3 py-1.5 rounded-full font-black transition-all cursor-pointer" onclick="scrollToStep('A')" style="background:var(--gold);color:#1a1200">A ✏️ 개인 작성</span>
@@ -801,11 +783,10 @@
                 <!-- ── 1~2학년 전용 입력 UI ── -->
                 <div id="student-input-low" class="hidden">
                     <div class="rounded-xl p-5 mb-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
-                        <p class="text-sm font-bold mb-1" style="color:var(--text)">🖐️ 1~2학년 전용 모드</p>
-                        <p class="text-sm" style="color:var(--text-md)">모둠 구분 없이 전체 학급 단위로 진행합니다. 생활 장면 카드를 보여주고 "이럴 때 어떤 기분이에요?" 를 물어보세요. 예상 찬성 수를 입력하면 집계됩니다.</p>
+                        <p class="text-sm" style="color:var(--text-md)"><b style="color:var(--text)">🖐️ 1~2학년 전용 모드</b> — 모둠 없이 전체 학급 단위로 진행합니다.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">생활 장면 카드를 보여주고 "이럴 때 어떤 기분이에요?"를 물어보세요. 예상 찬성 수를 입력하면 집계됩니다.</span></span></p>
                     </div>
-                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                        <div class="xl:col-span-5 space-y-4">
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="space-y-4">
                             <div class="rounded-xl p-5" style="background:var(--card);border:1px solid var(--border)">
                                 <h3 class="font-bold text-lg mb-1">① 장면 카드 선택</h3>
                                 <p class="text-sm mb-3" style="color:var(--text-md)">아이들에게 보여줄 생활 장면을 고르세요. "이럴 때 어떤 기분이에요?" 를 물어보며 학생 반응을 이끌어내세요.</p>
@@ -820,7 +801,7 @@
                                     <button onclick="setLowFilter('장소')" data-filter="장소" class="low-filter-btn text-xs font-bold px-3 py-1.5 rounded-full transition-all" style="background:var(--card-lt);color:var(--text-md);border:1px solid var(--border)">🏫 장소별</button>
                                 </div>
 
-                                <div id="low-scene-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                                <div id="low-scene-cards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3"></div>
 
                                 <!-- 직접 추가 -->
                                 <div class="mt-4 pt-4" style="border-top:1px solid var(--border)">
@@ -843,7 +824,7 @@
                                 <div id="low-vote-inputs" class="space-y-3"></div>
                             </div>
                         </div>
-                        <div class="xl:col-span-7 space-y-4">
+                        <div class="space-y-4">
                             <div class="rounded-xl p-5" style="background:var(--gold-dim);border:1px solid rgba(201,168,76,.25)">
                                 <h3 class="font-bold text-lg mb-3">집계 결과</h3>
                                 <div id="low-result-summary" class="space-y-3 text-sm"></div>
@@ -998,8 +979,7 @@
 
             <section id="tab-values" class="tab-content hidden">
                 <div class="pb-5 mb-6" style="border-bottom:2px solid var(--border)">
-                    <h2 class="text-2xl font-black" style="color:var(--text)">📊 핵심 가치 정하기</h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
-                    <p class="text-base mt-2" style="color:var(--text-md)">집계 결과를 확인하고 예상 TOP3 가치를 검토하세요.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">교사가 혼자 가치를 정하지 않습니다. 집계 결과를 확인하고 예상 TOP3 가치를 검토하세요. 교실에서는 학생들의 문장을 묶고 그 묶음에 아이들이 이름을 붙이게 합니다.</span></span></p>
+                    <h2 class="text-2xl font-black" style="color:var(--text)">📊 핵심 가치 정하기<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">교사가 혼자 가치를 정하지 않습니다. 집계 결과를 확인하고 예상 TOP3 가치를 검토하세요. 교실에서는 학생들의 문장을 묶고 그 묶음에 아이들이 이름을 붙이게 합니다.</span></span></h2><span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full mt-1" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
                 </div>
 
                 <!-- ▶ 지금 할 일 카드 -->
@@ -1050,8 +1030,7 @@
             <section id="tab-rules" class="tab-content hidden">
                 <div class="pb-5 mb-4 flex flex-col xl:flex-row xl:justify-between xl:items-start gap-2" style="border-bottom:2px solid var(--border)">
                     <div>
-                        <h2 class="text-2xl font-black" style="color:var(--text)">✏️ 약속 문장 검토</h2>
-                        <p class="text-sm mt-1" style="color:var(--text-md)">학생 발언 기록 → 교사 검토 → 5단계 투표 준비.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 약속 표현을 검토하고 학년·발달 수준에 맞는지 확인하세요. 수업은 활동지로 진행하고, 여기서는 어떤 표현이 나올지 미리 가늠합니다. 판단 기준은 「📚 학습 모드 → 문장 검토 학습기」에 있습니다.</span></span></p>
+                        <h2 class="text-2xl font-black" style="color:var(--text)">✏️ 약속 문장 검토<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 약속 표현을 검토하고 학년·발달 수준에 맞는지 확인하세요. 수업은 활동지로 진행하고, 여기서는 어떤 표현이 나올지 미리 가늠합니다. 판단 기준은 「📚 학습 모드 → 문장 검토 학습기」에 있습니다.</span></span></h2>
                     </div>
                     <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#a5b4fc">🎲 시뮬레이션 단계</span>
                 </div>
@@ -1136,8 +1115,7 @@
                 <div class="pb-5 mb-4" style="border-bottom:2px solid var(--border)">
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <h2 class="text-2xl font-black" style="color:var(--text)">🗳️ 함께 투표하기</h2>
-                            <p class="text-sm mt-1" style="color:var(--text-md)">약속별 토론 → 찬성 수 입력 → 2/3 이상 합의 확정.<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 찬성률을 입력하거나 자동 추정값을 확인하세요. 3분의 2에 못 미칠 것 같은 문장을 미리 찾아 두는 것이 이 단계의 목적입니다.</span></span></p>
+                            <h2 class="text-2xl font-black" style="color:var(--text)">🗳️ 함께 투표하기<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">예상 찬성률을 입력하거나 자동 추정값을 확인하세요. 3분의 2에 못 미칠 것 같은 문장을 미리 찾아 두는 것이 이 단계의 목적입니다.</span></span></h2>
                         </div>
                         <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0" style="background:rgba(52,211,153,.12);color:var(--success)">🎲 시뮬레이션 단계</span>
                     </div>
@@ -2300,7 +2278,7 @@ function onStudentCountChange(){
 function updateAll(doSave=true){ updateDiagnosis(false); updateSimChecks(); renderGroupInput(); renderStudentVoices(); renderValueAnalysis(); renderLibraryPool(); updateMyRulesView(); renderWorksheet(); renderVoteBoard(); renderLessonPlan(); renderConstitution(); renderWishPanel(); updateLessonHints(); renderDirectVoiceList(); updateStudentFlowGuide(); updateStepAHint(); if(doSave) saveToStorage(); }
 function renderConcernChecks(){ const el=document.getElementById('concern-checks'); el.innerHTML=concerns.map(c=>`<label class="flex items-center gap-3 rounded-lg p-3 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><input type="checkbox" value="${c.id}" onchange="toggleConcern('${c.id}', this.checked)"><span class="text-sm font-medium">${c.label}</span><span class="ml-auto text-xs px-2 py-1 rounded" style="background:var(--gold-dim);color:var(--gold)">${c.value}</span></label>`).join(''); }
 function toggleConcern(id, checked){ selectedConcerns = checked ? [...new Set([...selectedConcerns,id])] : selectedConcerns.filter(x=>x!==id); _userActed.diagnosis=true; updateAll(); }
-function updateDiagnosis(doSave=true){ currentGrade=parseInt(document.getElementById('grade-select').value||currentGrade); document.querySelectorAll('#concern-checks input').forEach(i=>i.checked=selectedConcerns.includes(i.value)); const picked=concerns.filter(c=>selectedConcerns.includes(c.id)); const priority=[...new Set([...picked.map(c=>c.value), ...topValues(3)])].slice(0,3); const count=document.getElementById('student-count').value||24; const type=document.getElementById('class-type').value||'일반학급'; document.getElementById('diagnosis-summary').innerHTML=`<div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>${currentGrade}학년 ${count}명 · ${type}</b><br><span class="text-mid-a">발달 단계: ${gradeDevelopmentText(currentGrade)}</span></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>우선 가치 TOP3</b><div class="mt-2 flex flex-wrap gap-2">${priority.map(v=>`<span class="px-2 py-1 rounded-full text-xs font-bold" style="background:var(--gold-dim);color:var(--gold)">${v}</span>`).join('')||'<span class="text-lt-a">선택된 걱정 장면 없음</span>'}</div></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>학년별 추천 명칭</b><p class="mt-2 text-mid-a">${currentGrade<=2?'우리 반 약속 · 그림/카드 중심':currentGrade<=4?'우리 반 약속 · 토론/합의 중심':'학급헌법 · 자치/책임 중심'}</p></div><div class="p-4 rounded-lg" style="background:var(--card-lt);border:1px solid var(--border)"><b>추천 흐름</b><ol class="list-decimal ml-5 mt-2 text-mid-a leading-7"><li>모둠 토의 결과를 교사가 입력</li><li>핵심 가치를 3개 이하로 압축</li><li>약속은 5개 이하로 합의</li><li>위반 시 처벌보다 회복 책임 연결</li></ol></div>`; if(doSave) saveToStorage(); }
+function updateDiagnosis(doSave=true){ currentGrade=parseInt(document.getElementById('grade-select').value||currentGrade); document.querySelectorAll('#concern-checks input').forEach(i=>i.checked=selectedConcerns.includes(i.value)); const picked=concerns.filter(c=>selectedConcerns.includes(c.id)); const priority=[...new Set([...picked.map(c=>c.value), ...topValues(3)])].slice(0,3); const count=document.getElementById('student-count').value||24; const type=document.getElementById('class-type').value||'일반학급'; document.getElementById('diagnosis-summary').innerHTML=`<div class="p-4 rounded-lg space-y-2.5" style="background:var(--card-lt);border:1px solid var(--border)"><div class="flex flex-wrap items-baseline gap-x-2"><b style="color:var(--text)">${currentGrade}학년 ${count}명 · ${type}</b><span class="text-xs text-mid-a">${gradeDevelopmentText(currentGrade)}</span></div><div class="flex flex-wrap items-center gap-2"><span class="text-xs font-bold text-mid-a">우선 가치</span>${priority.map(v=>`<span class="px-2 py-0.5 rounded-full text-xs font-bold" style="background:var(--gold-dim);color:var(--gold)">${v}</span>`).join('')||'<span class="text-xs text-lt-a">걱정 장면을 체크하면 나타납니다</span>'}</div><div class="text-xs text-mid-a"><b class="text-mid-a">결과물</b> ${currentGrade<=2?'우리 반 약속 · 그림/카드 중심':currentGrade<=4?'우리 반 약속 · 토론/합의 중심':'학급헌법 · 자치/책임 중심'}</div><div class="text-xs text-mid-a"><b class="text-mid-a">흐름</b> 모둠 결과 입력 → 가치 3개 이하 → 약속 5개 이하 → 회복 책임 연결<span class="tip-wrap"><span class="tip-icon">ⓘ</span><span class="tip-box">약속을 어겼을 때 벌이 아니라 회복 책임을 씁니다. 자세한 내용은 「📚 학습 모드 → 흔한 실패」 4번을 보세요.</span></span></div></div>`; if(doSave) saveToStorage(); }
 function gradeDevelopmentText(g){ return g<=1?'그림·행동 중심, 짧고 긍정적인 문장 필요':g==2?'그림과 간단한 이유 설명 병행':g==3?'모둠 토론과 공동체 개념 시작':g==4?'합의와 책임 개념을 구체화 가능':g==5?'자치와 디지털 시민성 규칙 필요':'학급헌법형 규칙과 학생 자치 운영 가능'; }
 function defaultTitle(){ return currentGrade<=2?'행복한 우리 반 약속':currentGrade<=4?'서로 존중하는 우리 반 약속':'서로 존중하고 책임지는 우리 반 학급헌법'; }
 function applyGradeTexts(){ const title=document.getElementById('constitution-title-control'); if(title && (!title.value || /학급헌법|우리 반 약속/.test(title.value))) title.value=defaultTitle(); }
@@ -3430,7 +3408,6 @@ setGrade=function(g){
     updateGradeValueNotice();
     updateGroupOpsGuide();
     updateVoteBanner();
-    renderGroupInputList();
 };
 
 // ===== v49: 2순위 — 1~2학년 전용 입력 UI =====
