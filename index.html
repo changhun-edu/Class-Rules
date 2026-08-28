@@ -366,6 +366,10 @@
                            background: var(--card); margin: 0 -8px 16px; padding-left: 8px; padding-right: 8px; }
         }
         #tab-learn table              { border-collapse: collapse; }
+        /* STEP 카드 설명이 눌리지 않도록 */
+        .now-task-card .first-visit-desc { min-width: 220px; }
+        /* 1단계 선택 입력 항목 접기 */
+        body:not(.sim-fields-open) .sim-optional-field { display: none !important; }
 
         /* ── 가독성: 본문 폭 제한 + 글자·행간 확대 ── */
         #tab-learn .learn-panel > *    { max-width: 46em; }
@@ -421,19 +425,26 @@
 
         <!-- ── 학습 모드 목차 ── -->
         <div class="learn-nav px-1 mb-3">
-            <p class="text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5" style="color:rgba(255,255,255,.35)">
-                <span style="display:inline-block;width:16px;height:1px;background:var(--gold);opacity:.5"></span>
-                학습 목차
-                <span style="display:inline-block;flex:1;height:1px;background:var(--gold);opacity:.5"></span>
-            </p>
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-[10px] font-black uppercase tracking-widest" style="color:rgba(255,255,255,.35)">학습 목차</p>
+                <span id="learn-step-indicator" class="text-xs font-bold px-2 py-0.5 rounded-full" style="background:var(--gold-dim);color:var(--gold)"></span>
+            </div>
+            <div class="flex gap-1 mb-3" id="learn-nav-bar">
+                <div data-lseg="0" class="learn-seg flex-1 h-1.5 rounded-full transition-all" style="background:var(--border)"></div>
+                <div data-lseg="1" class="learn-seg flex-1 h-1.5 rounded-full transition-all" style="background:var(--border)"></div>
+                <div data-lseg="2" class="learn-seg flex-1 h-1.5 rounded-full transition-all" style="background:var(--border)"></div>
+                <div data-lseg="3" class="learn-seg flex-1 h-1.5 rounded-full transition-all" style="background:var(--border)"></div>
+                <div data-lseg="4" class="learn-seg flex-1 h-1.5 rounded-full transition-all" style="background:var(--border)"></div>
+                <div data-lseg="5" class="learn-seg flex-1 h-1.5 rounded-full transition-all" style="background:var(--border)"></div>
+            </div>
             <div class="space-y-1">
-                <button onclick="learnGo('home')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2" style="color:rgba(255,255,255,.75);background:rgba(255,255,255,.05)"><span>🏠</span><span class="flex-1">학습 목차</span></button>
-                <button onclick="learnGo('p1')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>🧩</span><span class="flex-1">단계별 원리</span></button>
-                <button onclick="learnGo('p2')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>📏</span><span class="flex-1">학년 발달 비교</span></button>
-                <button onclick="learnGo('p3')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>✏️</span><span class="flex-1">문장 검토 학습기</span></button>
-                <button onclick="learnGo('p4')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>⚠️</span><span class="flex-1">흔한 실패 6가지</span></button>
-                <button onclick="learnGo('p5')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>✅</span><span class="flex-1">자가 점검 5문항</span></button>
-                <button onclick="learnGo('p6')" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span>⚖️</span><span class="flex-1">규정 근거 정리</span></button>
+                <button onclick="learnGo('home')" id="lbtn-home" class="learn-btn tab-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span class="text-sm">🏠</span><span class="flex-1 tab-label">학습 목차</span></button>
+                <button onclick="learnGo('p1')" id="lbtn-p1" class="learn-btn tab-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span class="learn-num w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0" style="background:var(--border);color:var(--text-lt)">1</span><span class="flex-1 tab-label">단계별 원리</span></button>
+                <button onclick="learnGo('p2')" id="lbtn-p2" class="learn-btn tab-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span class="learn-num w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0" style="background:var(--border);color:var(--text-lt)">2</span><span class="flex-1 tab-label">학년 발달 비교</span></button>
+                <button onclick="learnGo('p3')" id="lbtn-p3" class="learn-btn tab-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span class="learn-num w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0" style="background:var(--border);color:var(--text-lt)">3</span><span class="flex-1 tab-label">문장 검토 학습기</span></button>
+                <button onclick="learnGo('p4')" id="lbtn-p4" class="learn-btn tab-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span class="learn-num w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0" style="background:var(--border);color:var(--text-lt)">4</span><span class="flex-1 tab-label">흔한 실패 6가지</span></button>
+                <button onclick="learnGo('p5')" id="lbtn-p5" class="learn-btn tab-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span class="learn-num w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0" style="background:var(--border);color:var(--text-lt)">5</span><span class="flex-1 tab-label">자가 점검 5문항</span></button>
+                <button onclick="learnGo('p6')" id="lbtn-p6" class="learn-btn tab-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2" style="color:rgba(255,255,255,.65)"><span class="learn-num w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0" style="background:var(--border);color:var(--text-lt)">6</span><span class="flex-1 tab-label">규정 근거 정리</span></button>
             </div>
             <div class="mt-3 rounded-lg p-3" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25)">
                 <p class="text-[11px] leading-5" style="color:rgba(240,224,168,.85)">이 모드에는 입력 칸이 없습니다. 다 읽고 나면 시뮬레이션에서 우리 반 수업안을 만드세요.</p>
@@ -4689,6 +4700,36 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
 
 const cardStyle = 'background:var(--card-lt);border:1px solid var(--border)';
 
+/* 사이드바: 지금 보는 항목 표시 + 읽음 표시 + 진도 바 */
+function paintLearnNav(active){
+    const visited = getVisited();
+    const ids = ['home', ...LEARN_MENU.map(m=>m.id)];
+    ids.forEach(id=>{
+        const btn = document.getElementById('lbtn-'+id);
+        if(!btn) return;
+        const on = id === active;
+        btn.classList.toggle('active-tab', on);
+        btn.classList.toggle('tab-done', !on && !!visited[id]);
+        btn.style.color = on ? '' : 'rgba(255,255,255,.65)';
+        btn.style.fontWeight = on ? '800' : '';
+        const num = btn.querySelector('.learn-num');
+        if(num){
+            num.style.background = on ? 'var(--gold)' : (visited[id] ? 'var(--success)' : 'var(--border)');
+            num.style.color      = on ? '#1a1200'    : (visited[id] ? '#052e21'       : 'var(--text-lt)');
+        }
+    });
+    // 상단 배지 + 진도 바
+    const i = LEARN_MENU.findIndex(m=>m.id===active);
+    const ind = document.getElementById('learn-step-indicator');
+    if(ind) ind.textContent = i >= 0 ? `${i+1} / 6` : '목차';
+    document.querySelectorAll('.learn-seg').forEach((seg,k)=>{
+        const id = LEARN_MENU[k].id;
+        seg.style.background = (k === i) ? 'var(--gold)'
+                             : visited[id] ? 'var(--success)'
+                             : 'var(--border)';
+    });
+}
+
 function renderPills(active){
     const el = document.getElementById('learn-pills'); if(!el) return;
     const visited = getVisited();
@@ -5252,6 +5293,7 @@ window.learnGo = function(id){
     if(id==='home') renderHome();
     markVisited(id);
     renderPills(id);
+    paintLearnNav(id);
 
     // 하단 이동 버튼
     const nav = document.getElementById('learn-footer-nav');
@@ -5340,6 +5382,7 @@ function initLearn(){
 
     renderHome();
     renderPills('home');
+    paintLearnNav('home');
 
     const saved = (function(){ try { return localStorage.getItem('uiMode'); } catch(e){ return null; } })();
     // 처음 오는 사람은 학습 모드부터
@@ -5348,6 +5391,610 @@ function initLearn(){
 
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ()=>setTimeout(initLearn, 60));
 else setTimeout(initLearn, 60);
+
+})();
+
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   시뮬레이션 모드 — 클릭으로 진행하기
+   5단계 투표 · 2단계 카드 손들기 · 4단계 문장 고르기 · 1단계 입력 축소
+   ────────────────────────────────────────────────────────────────
+   기존 입력 UI는 지우지 않고 「직접 입력」 아래로 접어 둡니다.
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+
+/* ── 학년별 약속 문장 60개 (6학년 × 10장) ────────────────────── */
+const PROMISE_DB = {
+1: [
+ {t:'선생님과 친구가 말할 때 눈을 보고 들어요.', v:'배움', c:'class',       w:'듣는 것이 배움의 첫 약속이에요.'},
+ {t:'교실과 복도에서는 걸어 다녀요.',            v:'안전', c:'safety',      w:'뛰다가 부딪히는 일을 줄일 수 있어요.'},
+ {t:'친구를 이름으로 불러요.',                   v:'존중', c:'relation',    w:'이름을 불러 주면 친구가 기분이 좋아져요.'},
+ {t:'쓴 물건은 제자리에 놓아요.',                v:'책임', c:'environment', w:'다음 친구도 바로 찾아 쓸 수 있어요.'},
+ {t:'말하고 싶을 때는 손을 들어요.',             v:'배움', c:'class',       w:'차례를 지키면 모두 말할 기회를 얻어요.'},
+ {t:'가위와 풀은 조심해서 건네줘요.',            v:'안전', c:'safety',      w:'뾰족한 물건은 다칠 수 있어요.'},
+ {t:'친구가 넘어지면 일으켜 줘요.',              v:'배려', c:'relation',    w:'도와주면 우리 반이 따뜻해져요.'},
+ {t:'급식은 줄을 서서 받아요.',                  v:'책임', c:'environment', w:'차례를 지키면 모두 편하게 먹을 수 있어요.'},
+ {t:'놀고 난 자리는 같이 치워요.',               v:'책임', c:'environment', w:'같이 쓴 자리는 같이 치우는 거예요.'},
+ {t:'미안한 일이 있으면 먼저 말해요.',           v:'존중', c:'relation',    w:'먼저 말하면 마음이 빨리 풀려요.'},
+],
+2: [
+ {t:'친구가 말할 때는 끝까지 들어요.',           v:'배움', c:'class',       w:'끝까지 들어야 무슨 말인지 알 수 있어요.'},
+ {t:'계단에서는 오른쪽으로 한 줄로 걸어요.',     v:'안전', c:'safety',      w:'서로 부딪히지 않고 지나갈 수 있어요.'},
+ {t:'별명 대신 이름을 불러요.',                  v:'존중', c:'relation',    w:'별명은 듣는 친구가 싫을 수 있어요.'},
+ {t:'내 사물함과 책상은 내가 정리해요.',         v:'책임', c:'environment', w:'내 자리는 내가 챙기는 연습이에요.'},
+ {t:'수업 시작 전에 책을 꺼내 놓아요.',          v:'배움', c:'class',       w:'미리 준비하면 수업이 편해져요.'},
+ {t:'문을 열 때 뒤에 친구가 있는지 봐요.',       v:'안전', c:'safety',      w:'문에 부딪히면 많이 아파요.'},
+ {t:'혼자 있는 친구에게 같이 놀자고 해요.',      v:'배려', c:'relation',    w:'같이 놀자는 말 한마디가 큰 힘이 돼요.'},
+ {t:'급식은 먹을 만큼만 받아요.',                v:'책임', c:'environment', w:'남기면 음식이 버려져요.'},
+ {t:'빌린 물건은 그날 돌려줘요.',                v:'책임', c:'environment', w:'빌려준 친구가 기다리지 않아도 돼요.'},
+ {t:'잘못했을 때는 “미안해”라고 말해요.',        v:'존중', c:'relation',    w:'사과는 관계를 다시 이어 줘요.'},
+],
+3: [
+ {t:'친구가 발표할 때는 끝까지 듣고 박수를 쳐요.', v:'배움', c:'class',       w:'발표하는 친구가 용기를 얻습니다.'},
+ {t:'복도와 계단에서는 걸어서 이동합니다.',        v:'안전', c:'safety',      w:'뛰다가 부딪히거나 넘어지는 일을 줄입니다.'},
+ {t:'장난이라도 몸을 밀거나 잡지 않아요.',         v:'안전', c:'safety',      w:'장난으로 시작해도 다칠 수 있습니다.'},
+ {t:'모둠 활동에서는 모두 한 번씩 말해요.',        v:'배려', c:'relation',    w:'말수가 적은 친구도 기회를 얻습니다.'},
+ {t:'친구의 물건은 물어보고 사용합니다.',          v:'존중', c:'relation',    w:'허락을 받는 것이 존중의 시작입니다.'},
+ {t:'우리 모둠 자리는 우리가 정리하고 갑니다.',    v:'책임', c:'environment', w:'다음 시간에 쓸 친구를 위한 일입니다.'},
+ {t:'수업 종이 치기 전에 자리에 앉습니다.',        v:'배움', c:'class',       w:'제시간에 시작해야 모두의 시간이 지켜집니다.'},
+ {t:'놀이에 끼고 싶어 하는 친구를 넣어 줍니다.',   v:'배려', c:'relation',    w:'끼워 달라는 말은 용기가 필요한 말입니다.'},
+ {t:'청소 당번은 서로 미루지 않습니다.',           v:'책임', c:'environment', w:'미루면 결국 한 사람이 다 하게 됩니다.'},
+ {t:'화가 나면 세 걸음 떨어졌다가 말합니다.',      v:'존중', c:'relation',    w:'잠깐 멈추면 말이 달라집니다.'},
+],
+4: [
+ {t:'다른 의견도 끝까지 듣고 나서 말합니다.',        v:'존중', c:'relation',    w:'끊지 않고 듣는 것이 토의의 기본입니다.'},
+ {t:'교실 안에서는 걸어서 이동합니다.',              v:'안전', c:'safety',      w:'좁은 공간에서는 작은 충돌도 크게 다칩니다.'},
+ {t:'이름을 부르고 고운 말로 이야기합니다.',         v:'존중', c:'relation',    w:'말투가 그 반의 분위기를 만듭니다.'},
+ {t:'모둠 역할은 돌아가며 맡습니다.',                v:'배려', c:'relation',    w:'같은 사람만 맡으면 배울 기회가 한쪽으로 쏠립니다.'},
+ {t:'빌린 물건은 그날 안에 돌려줍니다.',             v:'책임', c:'environment', w:'약속한 시간을 지키는 연습입니다.'},
+ {t:'발표하는 친구를 바라보고 듣습니다.',            v:'배움', c:'class',       w:'듣는 태도가 발표의 질을 바꿉니다.'},
+ {t:'다툼이 생기면 몸이 아니라 말로 이야기합니다.',  v:'존중', c:'relation',    w:'말로 푸는 연습이 필요합니다.'},
+ {t:'공용 물건은 쓴 뒤 제자리에 둡니다.',            v:'책임', c:'environment', w:'다음 사람이 찾느라 시간을 쓰지 않습니다.'},
+ {t:'급식실과 특별실에서는 차례를 지킵니다.',        v:'안전', c:'safety',      w:'여러 반이 함께 쓰는 공간입니다.'},
+ {t:'사과할 일이 있으면 그날 안에 말합니다.',        v:'존중', c:'relation',    w:'미루면 사과하기가 더 어려워집니다.'},
+],
+5: [
+ {t:'반대할 때는 이유를 함께 말합니다.',                     v:'존중', c:'relation',    w:'이유가 있어야 토의가 이어집니다.'},
+ {t:'학급 회의에서 정한 일은 다 함께 지킵니다.',             v:'자치', c:'digital',     w:'스스로 정한 것을 지키는 것이 자치입니다.'},
+ {t:'단체 대화방에서는 얼굴을 보고 할 수 있는 말만 합니다.', v:'자치', c:'digital',     w:'화면 뒤에서도 상대는 사람입니다.'},
+ {t:'모둠 과제는 맡은 부분을 기한 안에 끝냅니다.',           v:'책임', c:'environment', w:'한 사람이 늦으면 모둠 전체가 기다립니다.'},
+ {t:'실수한 친구에게는 웃지 않고 기다려 줍니다.',            v:'배려', c:'relation',    w:'웃음 한 번이 발표를 그만두게 만듭니다.'},
+ {t:'수업 준비물은 쉬는 시간에 미리 챙깁니다.',              v:'배움', c:'class',       w:'수업 시간을 준비에 쓰지 않게 됩니다.'},
+ {t:'복도와 계단에서는 오른쪽으로 걸어 다닙니다.',           v:'안전', c:'safety',      w:'서로 마주쳐도 부딪히지 않습니다.'},
+ {t:'사진이나 영상은 찍히는 사람의 허락을 받고 찍습니다.',   v:'자치', c:'digital',     w:'내 모습이 어디에 남는지는 내가 정합니다.'},
+ {t:'교실 공용 물품은 사용한 사람이 정리합니다.',            v:'책임', c:'environment', w:'주인이 없는 물건일수록 규칙이 필요합니다.'},
+ {t:'갈등이 풀리지 않으면 학급 회의 안건으로 올립니다.',     v:'자치', c:'digital',     w:'둘이 못 푸는 일을 함께 푸는 자리가 회의입니다.'},
+],
+6: [
+ {t:'반대 의견을 말할 때는 사람이 아니라 내용을 말합니다.',   v:'존중', c:'relation',    w:'사람을 겨누면 토의가 다툼이 됩니다.'},
+ {t:'약속을 고칠 때에도 학급 회의를 거칩니다.',               v:'자치', c:'digital',     w:'고칠 수 있다는 것을 아는 것이 자치입니다.'},
+ {t:'온라인에서 나눈 대화도 교실과 같은 기준으로 씁니다.',    v:'자치', c:'digital',     w:'장소가 달라도 상대는 같은 사람입니다.'},
+ {t:'모둠에서 맡은 역할은 끝까지 책임집니다.',                v:'책임', c:'environment', w:'중간에 놓으면 남은 사람이 떠안습니다.'},
+ {t:'도움이 필요해 보이는 친구에게 먼저 말을 겁니다.',        v:'배려', c:'relation',    w:'먼저 말 걸기는 배울 수 있는 기술입니다.'},
+ {t:'수업 시작 전에 다음 시간 준비를 마칩니다.',              v:'배움', c:'class',       w:'준비된 40분과 아닌 40분은 다릅니다.'},
+ {t:'위험해 보이는 상황은 어른에게 바로 알립니다.',           v:'안전', c:'safety',      w:'알리는 것은 고자질이 아니라 보호입니다.'},
+ {t:'다른 사람의 사진이나 글은 동의를 받고 옮깁니다.',        v:'자치', c:'digital',     w:'옮기는 순간 되돌리기 어렵습니다.'},
+ {t:'우리가 쓴 공간은 우리가 정리하고 나갑니다.',             v:'책임', c:'environment', w:'다음에 쓸 사람도 우리와 같습니다.'},
+ {t:'잘못했을 때는 변명보다 회복 방법을 먼저 말합니다.',      v:'존중', c:'relation',    w:'회복이 앞서면 관계가 남습니다.'},
+],
+};
+
+/* ── 공통 도우미 ─────────────────────────────────────────────── */
+const CARD = 'background:var(--card-lt);border:1px solid var(--border)';
+function G(){ return (typeof currentGrade!=='undefined' && currentGrade) ? currentGrade : 3; }
+function total(){ return parseInt(document.getElementById('student-count')?.value || 24); }
+function passLine(){ return Math.ceil(total()*2/3); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function score(text){
+    try { if(typeof estimatePassQuality==='function') return estimatePassQuality({text:text, value:'존중'}, G()).score; }
+    catch(e){}
+    return 70;
+}
+function collapse(id, label, host, before){
+    // 기존 입력 UI를 지우지 않고 접어 둔다
+    const el = document.getElementById(id); if(!el) return;
+    if(document.getElementById('fold-'+id)) return;
+    const btn = document.createElement('button');
+    btn.id = 'fold-'+id;
+    btn.className = 'flex items-center gap-1.5 mb-3 text-xs font-bold';
+    btn.style.color = 'var(--text-lt)';
+    btn.innerHTML = '<span class="chev">▾</span><span>'+label+'</span>';
+    btn.onclick = function(){
+        const hid = el.classList.toggle('sim-folded');
+        el.style.display = hid ? 'none' : '';
+        btn.querySelector('.chev').textContent = hid ? '▾' : '▴';
+    };
+    el.classList.add('sim-folded'); el.style.display='none';
+    (host||el.parentElement).insertBefore(btn, before||el);
+}
+
+/* ════════════════════════════════════════════════════════════
+   5단계 — 투표를 눌러서 본다
+   ════════════════════════════════════════════════════════════ */
+let _voteBusy = false;
+
+function buildVotePanel(){
+    const board = document.getElementById('vote-board'); if(!board) return;
+    if(document.getElementById('sim-vote-panel')) return;
+    const p = document.createElement('div');
+    p.id = 'sim-vote-panel';
+    p.className = 'rounded-xl p-5 mb-5';
+    p.style.cssText = 'background:linear-gradient(135deg,rgba(201,168,76,.13),rgba(201,168,76,.04));border:1.5px solid rgba(201,168,76,.4)';
+    p.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div class="flex-1">
+                <p class="font-black text-base" style="color:var(--gold-lt)">🗳️ 투표 진행</p>
+                <p class="text-sm mt-1" style="color:var(--text-md)">약속 하나씩 손들기를 진행합니다. 학생 <b id="sim-vote-total">24</b>명 중 <b id="sim-vote-pass">16</b>명이 찬성해야 우리 반 약속이 됩니다.</p>
+            </div>
+            <button id="sim-vote-btn" onclick="simRunVote()" class="flex-shrink-0 px-6 py-3 rounded-xl font-black text-sm" style="background:var(--gold);color:#1a1200">🗳️ 투표 시작</button>
+        </div>
+        <div id="sim-vote-stage" class="mt-4 space-y-3"></div>
+        <div id="sim-vote-after" class="mt-4"></div>`;
+    board.parentElement.insertBefore(p, board);
+    collapse('vote-board', '숫자로 직접 입력하기');
+    syncVoteHeader();
+}
+function syncVoteHeader(){
+    const a=document.getElementById('sim-vote-total'), b=document.getElementById('sim-vote-pass');
+    if(a) a.textContent = total();
+    if(b) b.textContent = passLine();
+}
+
+function dotsRow(id, n, filled){
+    let s='';
+    for(let i=0;i<n;i++){
+        s += `<span id="${id}-d${i}" style="display:inline-block;width:11px;height:11px;border-radius:50%;margin:2px;background:${i<filled?'var(--gold)':'transparent'};border:1.5px solid ${i<filled?'var(--gold)':'var(--border-lt)'};transition:all .12s"></span>`;
+    }
+    return s;
+}
+
+window.simRunVote = function(){
+    if(_voteBusy) return;
+    const rules = (typeof selectedRules!=='undefined') ? selectedRules : [];
+    if(!rules.length){
+        if(typeof showToast==='function') showToast('4단계에서 약속을 먼저 골라 주세요.', 'warn', 3000);
+        return;
+    }
+    syncVoteHeader();
+    const T = total(), P = passLine();
+    // 가장 표현이 약한 약속 하나는 반드시 부결시킨다 — 이 도구가 보여 주려는 장면
+    let weakIdx = 0, low = 999;
+    rules.forEach((r,i)=>{ const s = score(r.studentText||r.text); if(s < low){ low = s; weakIdx = i; } });
+    const targets = rules.map((r,i)=> i===weakIdx ? Math.max(2, P-3) : Math.min(T, P + 1 + (i % 3)));
+
+    const stage = document.getElementById('sim-vote-stage');
+    const after = document.getElementById('sim-vote-after');
+    after.innerHTML = '';
+    stage.innerHTML = rules.map((r,i)=>`
+        <div id="sv-row-${i}" class="rounded-lg p-3.5" style="${CARD}">
+            <p class="text-sm font-bold" style="color:var(--text)">${esc(r.studentText||r.text)}</p>
+            <div class="mt-2 leading-none">${dotsRow('sv-'+i, T, 0)}</div>
+            <p id="sv-st-${i}" class="text-xs mt-2 font-bold" style="color:var(--text-lt)">대기 중</p>
+        </div>`).join('');
+
+    _voteBusy = true;
+    document.getElementById('sim-vote-btn').disabled = true;
+    document.getElementById('sim-vote-btn').textContent = '투표 중…';
+
+    let ri = 0;
+    (function nextRule(){
+        if(ri >= rules.length){ finishVote(rules, targets, weakIdx); return; }
+        const i = ri, tgt = targets[i];
+        document.getElementById(`sv-st-${i}`).textContent = '손드는 중…';
+        let k = 0;
+        (function tick(){
+            if(k >= tgt){
+                const ok = tgt >= P;
+                const st = document.getElementById(`sv-st-${i}`);
+                st.textContent = ok ? `찬성 ${tgt}명 — 통과` : `찬성 ${tgt}명 — ${P-tgt}명 모자라 부결`;
+                st.style.color = ok ? 'var(--success)' : '#fca5a5';
+                document.getElementById(`sv-row-${i}`).style.borderColor = ok ? 'rgba(52,211,153,.4)' : 'rgba(239,68,68,.4)';
+                try { syncVote(rules[i].id, tgt, 'input'); } catch(e){}
+                ri++; setTimeout(nextRule, 260); return;
+            }
+            const d = document.getElementById(`sv-${i}-d${k}`);
+            if(d){ d.style.background='var(--gold)'; d.style.borderColor='var(--gold)'; }
+            k++; setTimeout(tick, 45);
+        })();
+    })();
+};
+
+function finishVote(rules, targets, weakIdx){
+    _voteBusy = false;
+    const btn = document.getElementById('sim-vote-btn');
+    btn.disabled = false; btn.textContent = '🗳️ 다시 투표';
+    const P = passLine();
+    const failed = rules.map((r,i)=>({r,i,t:targets[i]})).filter(x=>x.t < P);
+    const after = document.getElementById('sim-vote-after');
+    if(!failed.length){ after.innerHTML = ''; return; }
+    const f = failed[0];
+    const alt = suggestRewrite(f.r);
+    after.innerHTML = `
+        <div class="rounded-xl p-4" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.35)">
+            <p class="font-black text-sm" style="color:#c7d2fe">📌 부결된 약속이 하나 있습니다 — 여기가 중요한 장면입니다</p>
+            <p class="text-xs mt-2 leading-6" style="color:rgba(199,210,254,.9)">
+            부결은 실패가 아니라 <b>정보</b>입니다. 지우지 말고 “왜 반대했는지”를 물은 뒤 표현을 고쳐 다시 묻습니다.
+            교실에서 이 순간을 어떻게 넘기느냐가 그 반의 투표가 형식인지 아닌지를 정합니다.</p>
+            <div class="mt-3 rounded-lg p-3" style="background:rgba(0,0,0,.2)">
+                <p class="text-xs" style="color:var(--text-lt)">부결된 문장</p>
+                <p class="text-sm mt-0.5" style="color:var(--text-md);text-decoration:line-through">${esc(f.r.studentText||f.r.text)}</p>
+                <p class="text-xs mt-2" style="color:var(--text-lt)">고쳐 볼 문장</p>
+                <p class="text-sm mt-0.5 font-bold" style="color:var(--text)">${esc(alt.text)}</p>
+                <p class="text-xs mt-1.5" style="color:var(--text-md)">${alt.why}</p>
+            </div>
+            <button onclick="simRewriteAndRevote(${f.i})" class="mt-3 px-5 py-2.5 rounded-lg font-black text-sm" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:1px solid rgba(99,102,241,.8)">✏️ 표현 고쳐서 다시 묻기</button>
+        </div>`;
+    after.dataset.alt = alt.text;
+}
+
+function suggestRewrite(rule){
+    const cur = rule.studentText || rule.text || '';
+    // ① 같은 가치의 다른 문장 가운데 표현이 더 나은 것
+    const pool = (PROMISE_DB[G()]||PROMISE_DB[3]).filter(p=>p.v===rule.value && p.t!==cur);
+    const chosen = pool.filter(p=>score(p.t) > score(cur)).sort((a,b)=>score(b.t)-score(a.t))[0];
+    if(chosen) return { text: chosen.t, why: '같은 가치를 지키면서 무엇을 하면 되는지가 분명한 문장입니다.' };
+    // ② 규칙 기반 다듬기
+    let t = cur;
+    if(/않|말자|말기|금지/.test(t)) return { text: t.replace(/(하지 )?않(기|아요|습니다|는다)|말자|말기/g,'대신 무엇을 할지 적기'),
+        why: '금지형은 무엇을 하면 되는지 알려 주지 않습니다. 긍정형으로 바꿉니다.' };
+    return { text: t + ' (언제·무엇을 넣어 더 구체적으로)', why: '지켰는지 확인할 수 있도록 시점과 행동을 넣습니다.' };
+}
+
+window.simRewriteAndRevote = function(idx){
+    const rules = selectedRules; const r = rules[idx]; if(!r) return;
+    const alt = document.getElementById('sim-vote-after').dataset.alt;
+    if(!alt) return;
+    r.studentText = alt;
+    const P = passLine(), T = total(), tgt = Math.min(T, P + 2);
+    const row = document.getElementById(`sv-row-${idx}`);
+    if(row){
+        row.querySelector('p').textContent = alt;
+        row.children[1].innerHTML = dotsRow('sv-'+idx, T, 0);
+        const st = document.getElementById(`sv-st-${idx}`);
+        st.textContent = '다시 손드는 중…'; st.style.color = 'var(--text-lt)';
+        let k=0;
+        (function tick(){
+            if(k>=tgt){
+                st.textContent = `찬성 ${tgt}명 — 통과`; st.style.color='var(--success)';
+                row.style.borderColor='rgba(52,211,153,.4)';
+                try { syncVote(r.id, tgt, 'input'); } catch(e){}
+                document.getElementById('sim-vote-after').innerHTML =
+                    `<div class="rounded-xl p-4" style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35)">
+                        <p class="font-black text-sm" style="color:var(--success)">✅ 다섯 약속이 모두 우리 반 약속이 되었습니다</p>
+                        <p class="text-xs mt-2 leading-6" style="color:var(--text-md)">문장을 고치자 통과했습니다. 반대하던 아이들이 반대한 것은 <b>내용이 아니라 표현</b>이었던 셈입니다. 이제 출력 탭에서 학급헌법과 학부모 안내문을 뽑을 수 있습니다.</p>
+                        <button onclick="switchTab('constitution')" class="mt-3 px-5 py-2.5 rounded-lg font-black text-sm" style="background:var(--gold);color:#1a1200">📜 학급헌법 보기 →</button>
+                    </div>`;
+                try { updateAll(); } catch(e){}
+                return;
+            }
+            const d=document.getElementById(`sv-${idx}-d${k}`);
+            if(d){ d.style.background='var(--gold)'; d.style.borderColor='var(--gold)'; }
+            k++; setTimeout(tick,45);
+        })();
+    }
+};
+
+/* ════════════════════════════════════════════════════════════
+   2단계 — 예상 발언 카드를 한 장씩 넘기며 손들기
+   ════════════════════════════════════════════════════════════ */
+let _deck = [], _deckIdx = 0, _deckYes = [], _deckTally = {};
+
+function buildVoicePanel(){
+    const host = document.getElementById('tab-student'); if(!host) return;
+    if(document.getElementById('sim-voice-panel')) return;
+    const p = document.createElement('div');
+    p.id = 'sim-voice-panel';
+    p.className = 'rounded-xl p-5 mb-5';
+    p.style.cssText = 'background:linear-gradient(135deg,rgba(99,102,241,.13),rgba(99,102,241,.04));border:1.5px solid rgba(99,102,241,.4)';
+    p.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-start gap-3">
+            <div class="flex-1">
+                <p class="font-black text-base" style="color:#c7d2fe">🙋 예상 발언 손들기</p>
+                <p class="text-sm mt-1" style="color:var(--text-md)">이 학년 아이들이 할 법한 말이 한 장씩 나옵니다. <b>우리 반에도 나올 것 같은지</b>만 고르세요. 고른 말이 3단계 가치 집계로 넘어갑니다.</p>
+            </div>
+            <button onclick="simStartDeck()" class="flex-shrink-0 px-5 py-2.5 rounded-lg font-black text-sm" style="background:rgba(99,102,241,.7);color:#e0e7ff;border:1px solid rgba(99,102,241,.8)">카드 넘기기 시작</button>
+        </div>
+        <div id="sim-voice-stage" class="mt-4"></div>`;
+    host.insertBefore(p, host.children[1] || null);
+    // 기존 A·B·C 입력 UI 전체를 하나의 토글 아래로
+    const groups = ['student-input-normal','student-input-low','step-panel-A','step-panel-B','step-panel-C']
+        .map(id=>document.getElementById(id)).filter(Boolean);
+    const pillBar = host.querySelector('.flex.items-center.gap-2.mb-6.text-xs');
+    if(pillBar) groups.push(pillBar);
+    if(groups.length && !document.getElementById('fold-step2-manual')){
+        const btn = document.createElement('button');
+        btn.id = 'fold-step2-manual';
+        btn.className = 'flex items-center gap-1.5 mb-3 text-xs font-bold';
+        btn.style.color = 'var(--text-lt)';
+        btn.innerHTML = '<span class="chev">▾</span><span>A·B·C 단계로 직접 입력하기 (실제 수업 진행용 화면)</span>';
+        let open = false;
+        btn.onclick = function(){
+            open = !open;
+            groups.forEach(g=>{ g.style.display = open ? '' : 'none'; });
+            btn.querySelector('.chev').textContent = open ? '▴' : '▾';
+        };
+        groups.forEach(g=>{ g.style.display = 'none'; });
+        // student-input-normal 등은 tab-student 의 직속 자식이 아닐 수 있으므로
+        // 안전하게 새로 만든 패널 바로 뒤에 버튼을 둔다
+        const p2 = document.getElementById('sim-voice-panel');
+        host.insertBefore(btn, p2 ? p2.nextSibling : host.children[2] || null);
+    }
+}
+
+window.simStartDeck = function(){
+    const band = (typeof gradeBand==='function') ? gradeBand() : 'mid';
+    const pool = (typeof simulationVoiceDB!=='undefined' ? (simulationVoiceDB[band]||simulationVoiceDB.mid) : []) || [];
+    const picked = (typeof selectedConcerns!=='undefined') ? selectedConcerns : [];
+    const pri = pool.filter(v=>picked.includes(v.concern));
+    const rest = pool.filter(v=>!picked.includes(v.concern));
+    _deck = [...pri.sort(()=>Math.random()-.5), ...rest.sort(()=>Math.random()-.5)].slice(0, 12);
+    _deckIdx = 0; _deckYes = []; _deckTally = {};
+    if(typeof studentVoices!=='undefined') studentVoices = [];
+    paintDeck();
+};
+
+function paintDeck(){
+    const st = document.getElementById('sim-voice-stage'); if(!st) return;
+    if(_deckIdx >= _deck.length){
+        st.innerHTML = `
+            <div class="rounded-xl p-4 text-center" style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35)">
+                <p class="font-black text-sm" style="color:var(--success)">${_deckYes.length}개를 “우리 반에도 나올 것 같다”로 골랐습니다</p>
+                <p class="text-xs mt-1.5" style="color:var(--text-md)">고른 말이 가치별로 묶였습니다. 어떤 가치가 많이 나왔는지 3단계에서 확인하세요.</p>
+                <div class="flex justify-center gap-2 mt-3">
+                    <button onclick="simStartDeck()" class="px-4 py-2 rounded-lg font-bold text-xs" style="background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)">다시 넘기기</button>
+                    <button onclick="switchTab('values')" class="px-5 py-2 rounded-lg font-black text-xs" style="background:var(--gold);color:#1a1200">3. 핵심 가치 정하기 →</button>
+                </div>
+            </div>`;
+        return;
+    }
+    const v = _deck[_deckIdx];
+    st.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold" style="color:var(--text-lt)">${_deckIdx+1} / ${_deck.length}</span>
+            <span class="text-xs font-bold" style="color:var(--gold)">고른 말 ${_deckYes.length}개</span>
+        </div>
+        <div class="rounded-xl p-6 text-center" style="${CARD}">
+            <p class="text-lg font-bold leading-8" style="color:var(--text)">“${esc(v.text)}”</p>
+            <p class="text-xs mt-2" style="color:var(--text-lt)">이 말은 <b style="color:var(--gold)">${v.value}</b> 가치로 묶입니다</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+            <button onclick="simDeckPick(false)" class="py-3 rounded-xl font-black text-sm" style="background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)">아닐 것 같다</button>
+            <button onclick="simDeckPick(true)" class="py-3 rounded-xl font-black text-sm" style="background:var(--gold);color:#1a1200">🙋 나올 것 같다</button>
+        </div>`;
+}
+
+window.simDeckPick = function(yes){
+    const v = _deck[_deckIdx];
+    if(yes && v){
+        _deckYes.push(v);
+        if(typeof studentVoices!=='undefined' && !studentVoices.includes(v.text)) studentVoices.push(v.text);
+        _deckTally[v.value] = (_deckTally[v.value]||0) + 1;
+        if(typeof _userActed!=='undefined'){ _userActed.student = true; _userActed.values = true; }
+    }
+    _deckIdx++;
+    paintDeck();
+    if(_deckIdx >= _deck.length){ try { updateAll(); } catch(e){} }
+};
+
+/* ════════════════════════════════════════════════════════════
+   4단계 — 문장 카드 10장 중 5장 고르기
+   ════════════════════════════════════════════════════════════ */
+function buildPromisePanel(){
+    const host = document.getElementById('tab-rules'); if(!host) return;
+    if(document.getElementById('sim-promise-panel')) return;
+    const p = document.createElement('div');
+    p.id = 'sim-promise-panel';
+    p.className = 'rounded-xl p-5 mb-5';
+    p.style.cssText = 'background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(99,102,241,.04));border:1.5px solid rgba(99,102,241,.4)';
+    p.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-start gap-3">
+            <div class="flex-1">
+                <p class="font-black text-base" style="color:#c7d2fe">📝 약속 문장 고르기 <span id="sim-promise-count" class="text-xs font-bold px-2 py-0.5 rounded-full ml-1" style="background:var(--gold-dim);color:var(--gold)">0 / 5</span></p>
+                <p class="text-sm mt-1" style="color:var(--text-md)">이 학년에서 나올 만한 문장 10장입니다. <b>다섯 장</b>을 고르세요. 배지는 4단계 화면이 문장에 붙이는 판정과 같습니다.</p>
+            </div>
+            <button onclick="simClearPromises()" class="flex-shrink-0 px-4 py-2 rounded-lg font-bold text-xs" style="background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)">고른 것 비우기</button>
+        </div>
+        <div id="sim-promise-note" class="mt-4"></div>
+        <div id="sim-promise-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        <div id="sim-promise-after" class="mt-3"></div>`;
+    const anchor = host.querySelector('.now-task-card');
+    host.insertBefore(p, anchor ? anchor.nextSibling : host.children[1]);
+
+    // 기존 직접 입력 UI(학생 문장 작성 · 참고 예시 · 내 DB)는 토글 아래로
+    const manual = host.querySelector('.grid.grid-cols-1.xl\\:grid-cols-12');
+    if(manual && !document.getElementById('fold-step4-manual')){
+        const btn = document.createElement('button');
+        btn.id = 'fold-step4-manual';
+        btn.className = 'flex items-center gap-1.5 mb-3 text-xs font-bold';
+        btn.style.color = 'var(--text-lt)';
+        btn.innerHTML = '<span class="chev">▾</span><span>문장을 직접 쓰거나 고치기 (참고 예시 · 내 DB)</span>';
+        let open = false;
+        btn.onclick = function(){
+            open = !open;
+            manual.style.display = open ? '' : 'none';
+            btn.querySelector('.chev').textContent = open ? '▴' : '▾';
+        };
+        manual.style.display = 'none';
+        manual.parentElement.insertBefore(btn, manual);
+    }
+    paintPromises();
+}
+
+function promiseId(g,i){ return 'pd_' + g + '_' + i; }
+
+function paintPromises(){
+    const grid = document.getElementById('sim-promise-grid'); if(!grid) return;
+    const g = G();
+    const list = PROMISE_DB[g] || PROMISE_DB[3];
+    const chosen = (typeof selectedRules!=='undefined') ? selectedRules.map(r=>r.id) : [];
+    grid.innerHTML = list.map((p,i)=>{
+        const id = promiseId(g,i);
+        const on = chosen.includes(id);
+        const s = score(p.t);
+        const badge = s>=80 ? ['✅','구체적인 행동','var(--success)']
+                    : s>=60 ? ['💬','한 번 더 볼 문장','var(--gold)']
+                            : ['⚠️','표현 수정 권장','#fca5a5'];
+        return `<button onclick="simTogglePromise(${i})" class="text-left rounded-xl p-4 transition-all" style="background:${on?'rgba(201,168,76,.14)':'var(--card-lt)'};border:1.5px solid ${on?'var(--gold)':'var(--border)'}">
+            <div class="flex items-start gap-2">
+                <span class="text-sm flex-shrink-0" style="color:${on?'var(--gold)':'var(--text-lt)'}">${on?'☑':'☐'}</span>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold leading-7" style="color:var(--text)">${esc(p.t)}</p>
+                    <p class="text-xs mt-1.5" style="color:var(--text-md)">${p.w}</p>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="text-[10px] font-black px-1.5 py-0.5 rounded" style="background:var(--gold-dim);color:var(--gold)">${p.v}</span>
+                        <span class="text-[10px] font-bold" style="color:${badge[2]}">${badge[0]} ${badge[1]}</span>
+                    </div>
+                </div>
+            </div>
+        </button>`;
+    }).join('');
+    const n = (typeof selectedRules!=='undefined') ? selectedRules.length : 0;
+    // 카드에서 고른 것이 아닌 약속이 이미 담겨 있으면 알려 준다
+    const outsiders = (typeof selectedRules!=='undefined') ? selectedRules.filter(r=>!String(r.id).startsWith('pd_')) : [];
+    const note = document.getElementById('sim-promise-note');
+    if(note) note.innerHTML = outsiders.length
+        ? `<div class="rounded-lg p-3 mb-3 flex flex-col sm:flex-row sm:items-center gap-2" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3)">
+             <p class="flex-1 text-xs" style="color:var(--text-md)">아래 카드에서 고르지 않은 약속 <b style="color:var(--gold)">${outsiders.length}개</b>가 이미 담겨 있습니다(자동 추천 또는 이전 작업). 카드에서 새로 고르려면 비우세요.</p>
+             <button onclick="simClearPromises()" class="flex-shrink-0 px-4 py-1.5 rounded-lg font-bold text-xs" style="background:var(--gold);color:#1a1200">비우고 시작</button>
+           </div>` : '';
+    const cnt = document.getElementById('sim-promise-count');
+    if(cnt){ cnt.textContent = n + ' / 5';
+        cnt.style.background = n===5 ? 'rgba(52,211,153,.15)' : 'var(--gold-dim)';
+        cnt.style.color      = n===5 ? 'var(--success)' : 'var(--gold)'; }
+    const after = document.getElementById('sim-promise-after');
+    if(after) after.innerHTML = n>=5
+        ? `<div class="rounded-lg p-3 flex flex-col sm:flex-row sm:items-center gap-3" style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35)">
+             <p class="flex-1 text-xs" style="color:var(--text-md)">다섯 장을 골랐습니다. 이제 투표로 넘어갑니다.</p>
+             <button onclick="switchTab('agreement')" class="px-5 py-2 rounded-lg font-black text-xs" style="background:var(--gold);color:#1a1200">5. 함께 투표하기 →</button>
+           </div>` : '';
+}
+
+window.simTogglePromise = function(i){
+    const g = G(), p = (PROMISE_DB[g]||PROMISE_DB[3])[i], id = promiseId(g,i);
+    const at = selectedRules.findIndex(r=>r.id===id);
+    if(at > -1){ selectedRules.splice(at,1); }
+    else {
+        if(selectedRules.length >= 5){
+            if(typeof showToast==='function') showToast('다섯 개까지만 고릅니다. 하나를 빼고 다시 고르세요.', 'warn', 2600);
+            return;
+        }
+        const rule = (typeof ruleWithRestorative==='function')
+            ? ruleWithRestorative({ id:id, value:p.v, category:p.c, text:p.t, rule:p.t, why:p.w, teacherReviewed:true })
+            : { id:id, value:p.v, category:p.c, text:p.t, why:p.w, recovery:'회복 대화하기', teacherReviewed:true };
+        rule.teacherReviewed = true;
+        selectedRules.push(rule);
+    }
+    if(typeof _userActed!=='undefined') _userActed.rules = true;
+    try { updateAll(); } catch(e){}
+    paintPromises();
+};
+window.simClearPromises = function(){
+    selectedRules = [];
+    try { updateAll(); } catch(e){}
+    paintPromises();
+};
+
+/* ════════════════════════════════════════════════════════════
+   1단계 — 입력 줄이기 (선택 항목 접기 · 걱정 장면 3개 제한)
+   ════════════════════════════════════════════════════════════ */
+function slimStep1(){
+    // 반·담임·작성일·학급 특성은 출력할 때 채우면 되는 값이다
+    ['class-num','teacher-name','doc-date','class-type'].forEach(id=>{
+        const el = document.getElementById(id);
+        const label = el && el.closest('label');
+        if(label) label.classList.add('sim-optional-field');
+    });
+    if(!document.getElementById('sim-optional-toggle')){
+        const first = document.querySelector('.sim-optional-field');
+        if(first && first.parentElement){
+            const btn = document.createElement('button');
+            btn.id = 'sim-optional-toggle';
+            btn.type = 'button';
+            btn.className = 'text-xs font-bold mt-1';
+            btn.style.color = 'var(--text-lt)';
+            btn.innerHTML = '<span class="chev">▾</span> 반·담임·작성일·학급 특성 <span style="opacity:.7">(출력할 때 넣어도 됩니다)</span>';
+            btn.onclick = function(){
+                const hid = document.body.classList.toggle('sim-fields-open');
+                btn.querySelector('.chev').textContent = hid ? '▴' : '▾';
+            };
+            first.parentElement.insertBefore(btn, first);
+        }
+    }
+    // 걱정 장면은 3개까지
+    const box = document.getElementById('concern-checks');
+    if(box && !box.dataset.simLimit){
+        box.dataset.simLimit = '1';
+        box.addEventListener('change', function(e){
+            const t = e.target;
+            if(t && t.type==='checkbox' && t.checked){
+                const on = box.querySelectorAll('input[type=checkbox]:checked');
+                if(on.length > 3){
+                    t.checked = false;
+                    if(typeof toggleConcern==='function') { /* 상태 복원은 아래 updateAll로 */ }
+                    const i = (typeof selectedConcerns!=='undefined') ? selectedConcerns.indexOf(t.value) : -1;
+                    if(i>-1) selectedConcerns.splice(i,1);
+                    if(typeof showToast==='function') showToast('걱정 장면은 세 개까지 고릅니다. 40분 안에 다룰 수 있는 만큼만 정하세요.', 'warn', 3200);
+                    try { updateAll(); } catch(err){}
+                }
+            }
+        });
+    }
+}
+
+/* 카드 손들기 결과를 가치 집계에 유지 — 모둠 결과가 하던 역할을 대신한다.
+   updateAll() 안에서 renderGroupInput() 이 valueVotes 를 groupRows 기준으로 되돌리므로,
+   집계를 그리기 직전에 groupRows 기준값 + 카드 결과로 다시 계산한다(누적되지 않음). */
+function wrapValueAnalysis(){
+    if(window._simVAWrapped || typeof window.renderValueAnalysis !== 'function') return;
+    const base = window.renderValueAnalysis;
+    window.renderValueAnalysis = function(){
+        try {
+            const g = {};
+            (typeof groupRows !== 'undefined' ? groupRows : []).forEach(row=>{
+                if(row.value1) g[row.value1] = (g[row.value1]||0)+1;
+                if(row.value2) g[row.value2] = (g[row.value2]||0)+1;
+            });
+            Object.keys(_deckTally).forEach(k=>{ g[k] = (g[k]||0) + _deckTally[k]; });
+            if(typeof valueVotes !== 'undefined') valueVotes = g;
+        } catch(e){}
+        return base.apply(this, arguments);
+    };
+    window._simVAWrapped = true;
+}
+
+/* ── 초기화 ─────────────────────────────────────────────────── */
+function initSimClick(){
+    try { buildVotePanel(); } catch(e){ console.warn('vote panel', e); }
+    try { buildVoicePanel(); } catch(e){ console.warn('voice panel', e); }
+    try { buildPromisePanel(); } catch(e){ console.warn('promise panel', e); }
+    try { slimStep1(); } catch(e){ console.warn('step1', e); }
+    try { wrapValueAnalysis(); } catch(e){ console.warn('value wrap', e); }
+
+    // 탭을 옮길 때마다 카드 상태를 새로 그린다
+    if(typeof window.switchTab === 'function' && !window._simTabWrapped){
+        const base = window.switchTab;
+        window.switchTab = function(id){
+            base(id);
+            if(id==='rules') { try{ paintPromises(); }catch(e){} }
+            if(id==='agreement') { try{ syncVoteHeader(); }catch(e){} }
+        };
+        window._simTabWrapped = true;
+    }
+    // 학년을 바꾸면 문장 카드도 바뀐다
+    if(typeof window.setGrade === 'function' && !window._simGradeWrapped){
+        const baseG = window.setGrade;
+        window.setGrade = function(g){
+            baseG(g);
+            try{ paintPromises(); }catch(e){}
+        };
+        window._simGradeWrapped = true;
+    }
+}
+
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ()=>setTimeout(initSimClick, 140));
+else setTimeout(initSimClick, 140);
 
 })();
 
