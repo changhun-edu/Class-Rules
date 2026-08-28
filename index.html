@@ -366,6 +366,21 @@
                            background: var(--card); margin: 0 -8px 16px; padding-left: 8px; padding-right: 8px; }
         }
         #tab-learn table              { border-collapse: collapse; }
+
+        /* ── 가독성: 본문 폭 제한 + 글자·행간 확대 ── */
+        #tab-learn .learn-panel > *    { max-width: 46em; }
+        #tab-learn .learn-wide,
+        #tab-learn .learn-panel > .learn-wide { max-width: none !important; }
+        #tab-learn .text-xs           { font-size: 13px;   line-height: 2.05; }
+        #tab-learn .text-sm           { font-size: 14.5px; line-height: 1.95; }
+        #tab-learn .text-base         { font-size: 16px;   line-height: 1.8; }
+        #tab-learn .text-\[11px\]      { font-size: 12px;   line-height: 1.8; }
+        #tab-learn .text-\[10px\]      { font-size: 11px; }
+        #tab-learn td, #tab-learn th  { font-size: 13px !important; line-height: 1.8 !important; }
+        #tab-learn input[type=text]   { font-size: 14px; }
+        @media (max-width: 767px) {
+            #tab-learn .learn-panel > * { max-width: none; }
+        }
         #tab-learn input[type=checkbox]{ accent-color: #c9a84c; }
         @media print { #tab-learn { display: none !important; } }
     </style>
@@ -2491,7 +2506,7 @@ function renderLibraryPool(){ document.querySelectorAll('.grade-chip').forEach(b
     const pool = pickedValues.length
         ? [...rawPool.filter(r=>pickedValues.includes(r.value)), ...rawPool.filter(r=>!pickedValues.includes(r.value))]
         : rawPool;
-    container.innerHTML=pool.map(rule=>{ const added=selectedRules.some(r=>r.id===rule.id); const m=valueMeta[rule.value]||valueMeta['존중']; return `<div class="rounded-xl p-4 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><div class="flex justify-between gap-3"><div><div class="text-2xl mb-1">${m.emoji}</div><h4 class="font-black text-base leading-snug">${rule.text}</h4><p class="text-xs mt-2 opacity-80"><b>왜 필요할까요?</b><br>${rule.why}</p><p class="text-[11px] mt-2 opacity-70">가치: ${rule.value} · 참고 근거: ${rule.law}</p>${rule.devNote?`<p class='text-[11px] mt-1 font-bold' style='color:var(--gold);opacity:.8'>📐 ${rule.devNote}</p>`:''}</div><button onclick="toggleRule('${rule.id}')" class="self-start px-3 py-1.5 text-xs font-bold rounded-md whitespace-nowrap transition-all ${added?'text-red-700 border border-red-200':'border text-green-800'}" style="background:${added?'#fff':'#fff'}">>${added?'— 제거':'💡 이 문장으로 시작'}</button></div></div>`; }).join('') + `<div class="md:col-span-2 rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)"><h4 class="font-black mb-3">📊 교사 추천 베스트 규칙 DB 예시</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${bestPracticeRules.map((r,i)=>`<div class="rounded-lg p-3" style="background:var(--card-lt);border:1px solid var(--border)"><b>${i+1}. ${r.text}</b><p class="text-xs text-mid-a mt-1">${r.grade} · ${r.reason}</p></div>`).join('')}</div></div>`; }
+    container.innerHTML=pool.map(rule=>{ const added=selectedRules.some(r=>r.id===rule.id); const m=valueMeta[rule.value]||valueMeta['존중']; return `<div class="rounded-xl p-4 card-hover" style="background:var(--card-lt);border:1px solid var(--border)"><div class="flex justify-between gap-3"><div><div class="text-2xl mb-1">${m.emoji}</div><h4 class="font-black text-base leading-snug">${rule.text}</h4><p class="text-xs mt-2 opacity-80"><b>왜 필요할까요?</b><br>${rule.why}</p><p class="text-[11px] mt-2 opacity-70">가치: ${rule.value}</p>${rule.devNote?`<p class='text-[11px] mt-1 font-bold' style='color:var(--gold);opacity:.8'>📐 ${rule.devNote}</p>`:''}</div><button onclick="toggleRule('${rule.id}')" class="self-start px-3 py-1.5 text-xs font-bold rounded-md whitespace-nowrap transition-all ${added?'text-red-700 border border-red-200':'border text-green-800'}" style="background:${added?'#fff':'#fff'}">>${added?'— 제거':'💡 이 문장으로 시작'}</button></div></div>`; }).join('') + `<div class="md:col-span-2 rounded-xl p-4" style="background:var(--card);border:1px solid var(--border)"><h4 class="font-black mb-3">📊 교사 추천 베스트 규칙 DB 예시</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">${bestPracticeRules.map((r,i)=>`<div class="rounded-lg p-3" style="background:var(--card-lt);border:1px solid var(--border)"><b>${i+1}. ${r.text}</b><p class="text-xs text-mid-a mt-1">${r.grade} · ${r.reason}</p></div>`).join('')}</div></div>`; }
 function toggleRule(id){
     const idx = selectedRules.findIndex(r=>r.id===id);
     if(idx>-1){
@@ -2935,7 +2950,7 @@ function renderLessonPlan(){ const view=document.getElementById('lesson-plan-vie
         '서명식 10분: 제정된 학급헌법에 전원 서명',
         '선포 5분: 학급헌법 선포 및 전시'
     ]; view.innerHTML=`<div class="text-gray-800">${printClassInfoHeader()}<div class="text-center border-b border-gray-200 pb-5 mb-6"><h3 class="text-2xl font-black text-gray-900">${title}</h3><p class="text-sm mt-2 text-gray-500">대상: ${info.gradeLabel||currentGrade+'학년'}${info.teacher?' · '+info.teacher+' 선생님 담임':''} · 1차시 40분 + 2차시 40분 · 학생 참여형 학급규칙 수립 수업</p></div><div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6"><div class="rounded-xl p-4" style="background:#f1f5f9;border:1px solid #e2e8f0"><b style="color:#334155">수업 목표</b><ul class="list-disc ml-5 mt-2 text-sm leading-7 text-gray-800"><li>우리 반이 되고 싶은 모습을 자신의 말로 표현할 수 있다.</li><li>친구들의 의견에서 공통 가치를 찾을 수 있다.</li><li>학생이 직접 작성한 약속 문장을 민주적 투표로 합의할 수 있다.</li></ul></div><div class="rounded-xl p-4 bg-gray-50 border border-gray-200"><b class="text-gray-800">준비물</b><p class="text-sm mt-2 leading-7 text-gray-700">${materials}</p><b class="block mt-3 text-gray-800">핵심 가치</b><p class="text-sm mt-1 text-gray-700">${topValues(3).join(', ')}</p></div></div><div class="space-y-4"><div class="border border-gray-200 rounded-xl p-4 bg-white"><h4 class="font-black" style="color:#334155">1차시 40분 · 가치 찾기와 의견 수집</h4><ol class="list-decimal ml-5 mt-2 text-sm leading-8 text-gray-800"><li>${scenario1.join("</li><li>")}</li></ol></div><div class="border border-gray-200 rounded-xl p-4 bg-white"><h4 class="font-black" style="color:#334155">2차시 40분 · 약속 만들기와 합의</h4><ol class="list-decimal ml-5 mt-2 text-sm leading-8 text-gray-800">${scenario2.map(s=>`<li>${s}</li>`).join("")}</ol></div><div class="rounded-xl p-4 text-sm" style="background:#f8fafc;border:1px solid #e2e8f0"><b style="color:#475569">교사 발문 예시</b><p class="mt-2 leading-7" style="color:#64748b">"이런 반이 되면 어떤 기분일 것 같아요?" (1차시 — 학생 상상 유도)<br>"이 가치를 지키려면 우리가 어떻게 행동하면 될까요?" (2차시 — 약속 도출)<br>"이 약속을 지키지 못했을 때 어떻게 하면 다시 좋아질 수 있을까요?" (회복 책임)</p></div></div></div>`; }
-function renderConstitution(){ const view=document.getElementById('constitution-view'); if(!view) return; const total=parseInt(document.getElementById('student-count')?.value||24); const pass=Math.ceil(total*2/3); const approved=selectedRules.filter(r=>(votes[r.id]??pass)>=pass); const theme=document.getElementById('theme-select')?.value||'indigo'; const themeMap={indigo:{border:'border-indigo-600',accent:'text-indigo-700',accentHex:'#3730a3',badge:'bg-indigo-100',badgeText:'text-indigo-700',preambleBg:'#eef2ff',preambleBorder:'#c7d2fe'},emerald:{border:'border-emerald-600',accent:'text-emerald-700',accentHex:'#065f46',badge:'bg-emerald-100',badgeText:'text-emerald-700',preambleBg:'#ecfdf5',preambleBorder:'#a7f3d0'},amber:{border:'border-amber-500',accent:'text-amber-800',accentHex:'#92400e',badge:'bg-amber-100',badgeText:'text-amber-700',preambleBg:'#fffbeb',preambleBorder:'#fde68a'},rose:{border:'border-rose-500',accent:'text-rose-700',accentHex:'#9f1239',badge:'bg-rose-100',badgeText:'text-rose-700',preambleBg:'#fff1f2',preambleBorder:'#fecdd3'}}; const t=themeMap[theme]; const label=currentGrade<=2?'우리 반 약속':currentGrade<=4?'우리 반 약속':'학급헌법'; document.getElementById('constitution-heading').innerText=`📜 ${label} 자동 생성`; view.className=`bg-white shadow-xl border-4 ${t.border} p-8 w-full max-w-[760px] min-h-[820px]`; const title=document.getElementById('constitution-title-control')?.value||defaultTitle(); const info2=getClassInfo(); const headerMeta2=[info2.gradeLabel,info2.teacher?(info2.teacher+' 선생님 담임'):'',info2.dateLabel].filter(Boolean).join(' · '); view.innerHTML=`<div class="text-center"><div class="text-sm font-black ${t.accent} tracking-widest">${currentGrade<=2?'CLASS PROMISE':currentGrade<=4?'CLASS AGREEMENT':'CLASS CONSTITUTION'}</div><h2 class="text-2xl font-black text-gray-900 mt-2 pb-4 border-b-2 ${t.border}">${title}</h2>${headerMeta2?`<p class="text-xs ${t.accent} font-bold mt-2">${headerMeta2}</p>`:''}<p class="text-xs text-gray-400 mt-1">학생 의견 수집과 토론·투표를 거쳐 합의한 ${label}입니다.</p></div><div class="mt-6 rounded-lg p-4 text-sm leading-relaxed text-gray-800 font-medium" style="background:${t.preambleBg};border:1px solid ${t.preambleBorder}"><b class="${t.accent}">전문</b><br>${document.getElementById('value-statement')?.value||'우리 반은 서로의 배움과 안전을 지키기 위해 함께 정한 약속을 실천합니다.'}</div><div class="mt-6 space-y-4">${approved.map((r,i)=>`<div class="pb-3 border-b border-gray-200"><div class="flex gap-3"><span class="w-7 h-7 rounded-full ${t.badge} ${t.badgeText} font-black text-xs flex items-center justify-center flex-shrink-0">${i+1}</span><div><p class="font-black text-gray-900">${currentGrade<=4?`${i+1}번째 약속`:`제${i+1}조 ${r.value}`}</p><p class="text-sm mt-1 text-gray-800">${r.studentText||r.text}</p>${r.studentWhy?`<p class="text-xs mt-1 italic" style="color:#4b5563;border-left:2px solid #d1d5db;padding-left:6px">"${r.studentWhy}"</p>`:''}<p class="text-xs text-gray-500 mt-1">왜 필요할까요? ${r.why||''}</p><p class="text-xs text-amber-700 mt-1">실수했을 때의 회복 책임: ${r.studentRecovery||r.recovery}</p><p class="text-[11px] text-gray-400 mt-1">참고 근거: ${r.law}</p></div></div></div>`).join('')||'<p class="text-center text-gray-400 py-10">합의된 약속이 없습니다.</p>'}</div><div class="mt-8 pt-4 border-t border-gray-200 text-center"><p class="text-sm font-bold text-gray-800">우리 반 모두는 위 약속을 함께 만들었으며, 서로의 성장을 위해 실천합니다.</p><div class="mt-6 grid grid-cols-3 gap-3 text-xs text-gray-400">${Array.from({length:9}).map(()=>'<div class="border-b border-gray-300 pb-6">서명</div>').join('')}</div></div>`; }
+function renderConstitution(){ const view=document.getElementById('constitution-view'); if(!view) return; const total=parseInt(document.getElementById('student-count')?.value||24); const pass=Math.ceil(total*2/3); const approved=selectedRules.filter(r=>(votes[r.id]??pass)>=pass); const theme=document.getElementById('theme-select')?.value||'indigo'; const themeMap={indigo:{border:'border-indigo-600',accent:'text-indigo-700',accentHex:'#3730a3',badge:'bg-indigo-100',badgeText:'text-indigo-700',preambleBg:'#eef2ff',preambleBorder:'#c7d2fe'},emerald:{border:'border-emerald-600',accent:'text-emerald-700',accentHex:'#065f46',badge:'bg-emerald-100',badgeText:'text-emerald-700',preambleBg:'#ecfdf5',preambleBorder:'#a7f3d0'},amber:{border:'border-amber-500',accent:'text-amber-800',accentHex:'#92400e',badge:'bg-amber-100',badgeText:'text-amber-700',preambleBg:'#fffbeb',preambleBorder:'#fde68a'},rose:{border:'border-rose-500',accent:'text-rose-700',accentHex:'#9f1239',badge:'bg-rose-100',badgeText:'text-rose-700',preambleBg:'#fff1f2',preambleBorder:'#fecdd3'}}; const t=themeMap[theme]; const label=currentGrade<=2?'우리 반 약속':currentGrade<=4?'우리 반 약속':'학급헌법'; document.getElementById('constitution-heading').innerText=`📜 ${label} 자동 생성`; view.className=`bg-white shadow-xl border-4 ${t.border} p-8 w-full max-w-[760px] min-h-[820px]`; const title=document.getElementById('constitution-title-control')?.value||defaultTitle(); const info2=getClassInfo(); const headerMeta2=[info2.gradeLabel,info2.teacher?(info2.teacher+' 선생님 담임'):'',info2.dateLabel].filter(Boolean).join(' · '); view.innerHTML=`<div class="text-center"><div class="text-sm font-black ${t.accent} tracking-widest">${currentGrade<=2?'CLASS PROMISE':currentGrade<=4?'CLASS AGREEMENT':'CLASS CONSTITUTION'}</div><h2 class="text-2xl font-black text-gray-900 mt-2 pb-4 border-b-2 ${t.border}">${title}</h2>${headerMeta2?`<p class="text-xs ${t.accent} font-bold mt-2">${headerMeta2}</p>`:''}<p class="text-xs text-gray-400 mt-1">학생 의견 수집과 토론·투표를 거쳐 합의한 ${label}입니다.</p></div><div class="mt-6 rounded-lg p-4 text-sm leading-relaxed text-gray-800 font-medium" style="background:${t.preambleBg};border:1px solid ${t.preambleBorder}"><b class="${t.accent}">전문</b><br>${document.getElementById('value-statement')?.value||'우리 반은 서로의 배움과 안전을 지키기 위해 함께 정한 약속을 실천합니다.'}</div><div class="mt-6 space-y-4">${approved.map((r,i)=>`<div class="pb-3 border-b border-gray-200"><div class="flex gap-3"><span class="w-7 h-7 rounded-full ${t.badge} ${t.badgeText} font-black text-xs flex items-center justify-center flex-shrink-0">${i+1}</span><div><p class="font-black text-gray-900">${currentGrade<=4?`${i+1}번째 약속`:`제${i+1}조 ${r.value}`}</p><p class="text-sm mt-1 text-gray-800">${r.studentText||r.text}</p>${r.studentWhy?`<p class="text-xs mt-1 italic" style="color:#4b5563;border-left:2px solid #d1d5db;padding-left:6px">"${r.studentWhy}"</p>`:''}<p class="text-xs text-gray-500 mt-1">왜 필요할까요? ${r.why||''}</p><p class="text-xs text-amber-700 mt-1">실수했을 때의 회복 책임: ${r.studentRecovery||r.recovery}</p></div></div></div>`).join('')||'<p class="text-center text-gray-400 py-10">합의된 약속이 없습니다.</p>'}</div><div class="mt-8 pt-4 border-t border-gray-200 text-center"><p class="text-sm font-bold text-gray-800">우리 반 모두는 위 약속을 함께 만들었으며, 서로의 성장을 위해 실천합니다.</p><div class="mt-6 grid grid-cols-3 gap-3 text-xs text-gray-400">${Array.from({length:9}).map(()=>'<div class="border-b border-gray-300 pb-6">서명</div>').join('')}</div></div>`; }
 function generateGuidanceRecord(){ const text=document.getElementById('incident-input').value.trim(); if(!text){alert('상황을 입력해 주세요.');return;} const category=/폰|스마트|SNS|온라인|기기/.test(text)?'digital':/욕|놀림|비웃|따돌|친구|폭력/.test(text)?'relation':/뛰|밀|위험|안전/.test(text)?'safety':/청소|정리|물건|파손/.test(text)?'environment':'class'; const related=selectedRules.find(r=>r.category===category)||selectedRules[0]; const recovery=related?.recovery || (restorativeOptions[category]||restorativeOptions.class)[0]; document.getElementById('guidance-result').innerHTML=`<h3 class="font-black text-lg mb-4" style="color:var(--text)">생활지도 지원 문안</h3><div class="space-y-4 text-sm"><div class="rounded-lg p-4" style="background:var(--card-lt);border:1px solid var(--border)"><b>관련 약속</b><p class="mt-1 text-dark-a">${related?related.text:'관련 약속을 먼저 설정하세요.'}</p></div><div class="rounded-lg p-4" style="background:var(--card-lt);border:1px solid var(--border)"><b>권장 발화</b><p class="mt-1 text-dark-a">“우리가 함께 만든 약속을 기억해 보자. 지금 행동은 어떤 친구의 배움이나 안전에 영향을 주었을까? 어떻게 회복하면 좋을까?”</p></div><div class="rounded-lg p-4" style="background:var(--card-lt);border:1px solid var(--border)"><b>복원 질문</b><ol class="list-decimal ml-5 mt-1 leading-7"><li>누가 영향을 받았나요?</li><li>어떤 불편이나 피해가 생겼나요?</li><li>다시 공동체로 돌아오기 위해 어떤 책임을 실천할 수 있나요?</li></ol></div><div class="rounded-lg p-4" style="background:var(--card-lt);border:1px solid var(--border)"><b>권장 회복 책임</b><p class="mt-1 text-amber-700 font-bold">${recovery}</p></div><div class="bg-slate-800 text-white rounded-lg p-4"><b>기록 예시</b><p class="mt-2 leading-relaxed">${new Date().toLocaleDateString('ko-KR')} 생활지도 상황: ${text}. 학생에게 학급에서 합의한 약속을 상기시키고, 행위가 공동체에 미친 영향을 확인하도록 조언함. 학생은 회복 책임으로 ‘${recovery}’을(를) 안내받았으며, 이후 동일 상황 예방을 위한 약속을 확인함.</p></div></div>`; }
 function switchTab(tabId){
     // 확실한 페이지 상단 이동 (모든 브라우저 대응)
@@ -4514,27 +4529,32 @@ const LEARN_MENU = [
 const PRINCIPLES = [
 {
     step:'1단계 · 수업 준비하기', title:'약속 문장은 준비 단계에서 정하지 않는다',
-    why:'준비 단계에서 정할 것은 <b>문장</b>이 아니라 <b>어떤 장면을 다룰지</b>입니다. 교사가 문장을 미리 써 두면 수업은 만드는 시간이 아니라 동의를 받는 절차로 줄어듭니다. 학생은 그 차이를 정확히 알아챕니다.',
+    lead:'준비 단계에서 정할 것은 <b>문장</b>이 아니라 <b>다룰 장면</b>입니다.',
+    why:'교사가 문장을 미리 써 두면 수업은 만드는 시간이 아니라 동의를 받는 절차로 줄어듭니다. 학생은 그 차이를 정확히 알아챕니다.',
     wrong:'걱정되는 장면을 체크한 뒤, 그 자리에서 “복도에서 뛰지 않기” 같은 문장까지 적어 두고 교실에 들어간다.',
     right:'걱정 장면은 세 개 이내로 좁히고, 그 장면을 <b>보여 줄 방법</b>(카드·사진·상황 묘사)만 준비한다. 문장 칸은 비워 둔다.',
     say:'“오늘은 선생님이 정해 온 규칙이 없어요. 여러분이 만들 거예요.”'
 },
 {
     step:'2단계 · 학생 의견 모으기', title:'손들기 전에 혼자 쓰는 시간을 먼저 준다',
-    why:'가장 먼저 말한 아이의 의견이 나머지 아이들의 기준이 됩니다. 3~5분의 개인 작성 시간은 이 쏠림을 막습니다. 말이 빠른 아이와 느린 아이가 같은 출발선에 서는 유일한 장치이기도 합니다.',
+    lead:'개인 작성 <b>3~5분</b>이 의견의 다양성을 지킵니다.',
+    why:'가장 먼저 말한 아이의 의견이 나머지 아이들의 기준이 됩니다. 말이 빠른 아이와 느린 아이가 같은 출발선에 서는 유일한 장치이기도 합니다.',
     wrong:'“어떤 반이 되면 좋을까요?” 하고 바로 손들기를 받는다. 다섯 명쯤 발표하면 나머지는 “저도요”가 된다.',
     right:'개인 작성(A) → 전체 수집(B) → 모둠 토의(C)의 순서를 지킨다. A를 건너뛰면 C에서 회복되지 않는다.',
-    say:'“먼저 3분 동안 혼자 적어 봅니다. 아직 발표하지 않아요.”'
+    say:'“먼저 3분 동안 혼자 적어 봅니다. 아직 발표하지 않아요.”',
+    svg:'FLOW'
 },
 {
     step:'2단계 · 학생 의견 모으기', title:'“하지 말 것”이 아니라 “되고 싶은 모습”을 묻는다',
-    why:'무엇을 묻느냐가 무엇이 나오느냐를 결정합니다. 금지 목록을 물으면 금지 목록이 나오고, 그 목록은 서로를 감시하는 도구가 됩니다. 바라는 모습을 물으면 지킬 수 있는 행동이 나옵니다.',
+    lead:'무엇을 묻느냐가 <b>무엇이 나오느냐</b>를 정합니다.',
+    why:'금지 목록을 물으면 금지 목록이 나오고, 그 목록은 서로를 감시하는 도구가 됩니다. 바라는 모습을 물으면 지킬 수 있는 행동이 나옵니다.',
     wrong:'“우리 반에서 없어졌으면 하는 행동을 적어 보세요.” → 특정 학생을 가리키는 문장이 쏟아진다.',
     right:'“기분 좋게 지낸 날”을 떠올리게 하고, 그날 교실이 어땠는지를 적게 한다. 불편했던 장면은 <b>상황 카드</b>로 교사가 제시한다.',
     say:'“우리 반이 이랬으면 좋겠다 싶은 장면을 하나 떠올려 보세요.”'
 },
 {
     step:'3단계 · 핵심 가치 정하기', title:'교사가 가치를 먼저 정하지 않는다 — 집계에서 나오게 한다',
+    lead:'가치는 교사가 꺼내는 것이 아니라 <b>집계에서 올라오는 것</b>입니다.',
     why:'존중·안전·배움은 어느 교실에나 맞는 말이라, 교사가 먼저 꺼내면 학생 의견은 그 아래에 끼워 맞춰집니다. 아이들의 문장을 묶어 올라온 가치라야 “우리가 정했다”가 성립합니다.',
     wrong:'“우리 반 가치는 존중, 배려, 책임이에요. 여기에 맞는 약속을 만들어 봅시다.”',
     right:'수집한 문장을 칠판에서 비슷한 것끼리 묶고, 묶음에 <b>아이들이</b> 이름을 붙이게 한다. 그 이름이 가치가 된다.',
@@ -4542,17 +4562,20 @@ const PRINCIPLES = [
 },
 {
     step:'4단계 · 약속 문장 만들기', title:'학생의 표현을 살리고, 교사는 검토만 한다',
-    why:'교사가 다듬은 문장은 어법에 맞지만 아무도 외우지 못합니다. 어색해도 아이들의 말이 남아야 9월에도 기억됩니다. 교사가 손댈 자리는 <b>세 가지</b>뿐입니다 — 금지형, 대상이 특정되는 표현, 지킬 수 없는 약속.',
+    lead:'교사가 손댈 자리는 <b>금지형 · 특정 대상 · 못 지킬 약속</b> 셋뿐입니다.',
+    why:'교사가 다듬은 문장은 어법에 맞지만 아무도 외우지 못합니다. 어색해도 아이들의 말이 남아야 9월에도 기억됩니다.',
     wrong:'“의자에 앉을 때 뒤로 안 젖히기”를 “바른 자세로 앉는다”로 고친다. 뜻은 정확해졌지만 그 반의 문장이 아니게 된다.',
     right:'금지형만 되물어 바꾼다. “뒤로 안 젖히기” → “의자는 네 다리를 다 붙이고 앉아요”. 어휘는 그대로 둔다.',
     say:'“이걸 하지 말자는 말이지요? 그럼 대신 뭘 하자는 걸까요?”'
 },
 {
     step:'5단계 · 함께 투표하기', title:'다수결이 아니라 3분의 2, 그리고 부결도 결과다',
-    why:'과반은 절반 가까운 반대를 남긴 채 통과시킵니다. 남은 아이들은 그 약속을 지킬 이유가 없습니다. 3분의 2는 “반대하는 사람이 몇 명 이하일 때만 우리 약속”이라는 뜻입니다. 그래서 <b>부결은 실패가 아니라 정보</b>입니다.',
+    lead:'3분의 2를 넘지 못한 문장은 <b>실패가 아니라 정보</b>입니다.',
+    why:'과반은 절반 가까운 반대를 남긴 채 통과시킵니다. 남은 아이들은 그 약속을 지킬 이유가 없습니다. 3분의 2는 “반대하는 사람이 몇 명 이하일 때만 우리 약속”이라는 뜻입니다.',
     wrong:'찬성이 적게 나온 약속을 “그래도 필요하니까” 하고 교사 권한으로 넣는다. 그 순간 투표가 형식이 된다.',
     right:'부결된 문장은 지우지 말고 남긴다. “왜 반대했는지”를 듣고 표현을 고쳐 다시 묻는다. 두 번째도 안 되면 <b>다음에 다시 이야기하기로</b> 하고 넘어간다.',
-    say:'“이 약속은 아직 우리 약속이 아니에요. 무엇이 걸렸는지 들어 볼게요.”'
+    say:'“이 약속은 아직 우리 약속이 아니에요. 무엇이 걸렸는지 들어 볼게요.”',
+    svg:'VOTE'
 },
 ];
 
@@ -4597,31 +4620,37 @@ const SENTENCE_PAIRS = [
 /* ── ④ 흔한 실패 여섯 가지 ──────────────────────────────────── */
 const PITFALLS = [
 { n:'1', title:'작년 것을 몇 줄만 고쳐 붙인다',
+  lead:'빠르지만, 올해 아이들이 <b>한 번도 말한 적 없는</b> 문장이 됩니다.',
   looks:'지난해 학급 파일을 열어 학년만 바꾸고, 어색한 두어 줄을 손본 뒤 코팅해서 뒤판에 붙인다. 3월 첫 주에 30분이면 끝난다.',
   why:'빠르지만, 그 문장은 올해 아이들이 한 번도 입에 올린 적 없는 문장입니다. 지도할 때 “우리가 정했잖아”라고 말할 근거가 없습니다.',
   instead:'작년 문장은 <b>참고 자료로만</b> 씁니다. 올해 아이들의 말로 문장을 다시 만들고, 작년과 겹치는 문장이 나오면 그때 반가워하면 됩니다.',
   here:'이 사이트의 「내 DB」는 작년 문장을 <b>그대로 쓰기 위해서가 아니라</b>, 아이들이 말한 뒤 비교해 보기 위해 저장하는 칸입니다.' },
 { n:'2', title:'교사가 미리 써 두고 투표만 시킨다',
+  lead:'반대할 수 없는 자리에서 받은 찬성은 <b>합의가 아닙니다</b>.',
   looks:'다섯 문장을 띄워 놓고 “이거 어때요? 찬성하는 사람 손” 하고 묻는다. 전원 찬성으로 5분 만에 끝난다.',
   why:'반대할 수 없는 자리에서 받은 찬성은 합의가 아닙니다. 아이들은 이것이 “정해진 걸 확인하는 시간”이라는 것을 첫 문장에서 압니다. 두 번째 학급회의부터 손이 잘 올라오지 않습니다.',
   instead:'문장은 비워 두고 갑니다. 시간이 없으면 <b>가짓수를 줄이되</b>(3개), 만드는 과정은 줄이지 않습니다.',
   here:'시뮬레이션 모드는 “아이들이 어떤 말을 할지” 미리 보는 곳이지, 그 문장을 그대로 쓰는 곳이 아닙니다.' },
 { n:'3', title:'스무 개를 나열한다',
+  lead:'스무 개는 아무도 외우지 못합니다. <b>버리는 게 아니라 묶는 것</b>입니다.',
   looks:'나온 의견을 하나도 빠뜨리지 않고 다 적는다. 아이들이 “제 것도 넣어 주세요” 하면 거절하기 어렵다.',
   why:'스무 개는 아무도 외우지 못합니다. 기억되지 않는 약속은 지도할 때 쓸 수 없고, 결국 벽 장식이 됩니다.',
   instead:'다섯 개로 압축합니다. 버리는 게 아니라 <b>묶는 것</b>입니다. “복도에서 걷기”와 “계단에서 뛰지 않기”는 한 문장으로 합칩니다. 빠진 의견은 “회복 책임” 칸이나 학급회의 안건으로 옮겨 살립니다.',
   here:'4단계의 「✂️ 5개 핵심 약속으로 압축」이 이 일을 합니다. 압축 과정을 아이들과 함께 하면 그 자체가 좋은 토의가 됩니다.' },
 { n:'4', title:'벌칙 중심으로 만든다',
+  lead:'벌은 “걸리지 않으면 된다”를 가르칩니다. 대신 <b>회복 책임</b>을 씁니다.',
   looks:'“어기면 ○○한다”가 문장마다 붙는다. 상벌점표를 함께 만들기도 한다.',
   why:'벌칙은 “걸리지 않으면 된다”를 가르칩니다. 그리고 상벌점·연대책임·신체적 제재는 <b>학급이 정할 수 있는 범위를 벗어납니다</b>(⑥ 규정 근거 참고).',
   instead:'벌 대신 <b>회복 책임</b>을 씁니다. 어긴 사람이 아니라 <b>깨진 것</b>에 초점을 둡니다 — 누가 불편했는지, 어떻게 되돌릴지.',
   here:'모든 약속에 「실수했을 때의 회복 책임」 칸이 붙어 있는 이유가 이것입니다. 비워 두지 마세요.' },
 { n:'5', title:'3월에 붙인 뒤로 다시 보지 않는다',
+  lead:'약속은 만든 날이 아니라 <b>다시 꺼낸 날</b>에 힘이 생깁니다.',
   looks:'4월이 되면 아무도 그 종이를 읽지 않는다. 다툼이 생겼을 때도 약속을 꺼내지 않고 그때그때 지도한다.',
   why:'약속은 만든 날이 아니라 <b>다시 꺼낸 날</b>에 힘이 생깁니다. 한 번도 꺼내지 않은 약속은 처음부터 없었던 것과 같습니다.',
   instead:'만드는 날에 <b>다시 볼 날짜를 함께 정합니다.</b> 1학기 중간, 2학기 초, 학기말. 점검에서 “못 지키는 약속”이 나오면 그 문장을 고칩니다. 고칠 수 있다는 걸 아는 것이 자치입니다.',
   here:'「🔎 중간점검」 탭이 이때 쓰는 화면입니다. 점검지를 인쇄해 손가락 투표나 스티커로 표시하면 됩니다.' },
 { n:'6', title:'학부모에게 알리지 않는다',
+  lead:'학부모가 신뢰하는 것은 문장이 아니라 <b>절차</b>입니다.',
   looks:'교실 안에서만 정하고 끝낸다. 학부모는 학기말에 아이 말로 처음 듣는다.',
   why:'가정에서 다른 기준이 적용되면 아이가 두 기준 사이에서 흔들립니다. 생활지도 상황이 생겼을 때 “그런 약속이 있는 줄 몰랐다”는 말이 나옵니다.',
   instead:'만든 <b>그 주에</b> 안내합니다. 문장만 보내지 말고 <b>어떻게 만들었는지</b>를 함께 적습니다. 학부모가 신뢰하는 것은 문장이 아니라 절차입니다.',
@@ -4730,28 +4759,159 @@ function sectionHead(icon, title, lead){
     </div>`;
 }
 
+/* ── 도해 ─────────────────────────────────────────────────── */
+const SVG_FLOW = `
+<svg viewBox="0 0 660 178" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="개인 작성에서 전체 수집, 모둠 토의로 이어지는 순서">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="var(--text-lt)"/></marker>
+    <marker id="arX" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker></defs>
+  <text x="14" y="20" font-size="13" font-weight="700" fill="#f87171">✗ 바로 손들기 — A를 건너뛰면 C에서 회복되지 않습니다</text>
+  <path d="M40 58 C 40 36, 300 36, 300 54" stroke="#f87171" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#arX)"/>
+  <g>
+    <rect x="15" y="58" width="185" height="70" rx="12" fill="var(--card-lt)" stroke="var(--gold)" stroke-width="2"/>
+    <text x="107" y="86" text-anchor="middle" font-size="15" font-weight="800" fill="var(--gold-lt)">A. 개인 작성</text>
+    <text x="107" y="108" text-anchor="middle" font-size="13" fill="var(--text-md)">혼자 3~5분 · 발표 없음</text>
+  </g>
+  <line x1="205" y1="93" x2="230" y2="93" stroke="var(--text-lt)" stroke-width="2" marker-end="url(#ar)"/>
+  <g>
+    <rect x="237" y="58" width="185" height="70" rx="12" fill="var(--card-lt)" stroke="var(--border-lt)" stroke-width="1.5"/>
+    <text x="329" y="86" text-anchor="middle" font-size="15" font-weight="800" fill="var(--text)">B. 전체 수집</text>
+    <text x="329" y="108" text-anchor="middle" font-size="13" fill="var(--text-md)">쓴 것을 발표 · 칠판 기록</text>
+  </g>
+  <line x1="427" y1="93" x2="452" y2="93" stroke="var(--text-lt)" stroke-width="2" marker-end="url(#ar)"/>
+  <g>
+    <rect x="459" y="58" width="185" height="70" rx="12" fill="var(--card-lt)" stroke="var(--border-lt)" stroke-width="1.5"/>
+    <text x="551" y="86" text-anchor="middle" font-size="15" font-weight="800" fill="var(--text)">C. 모둠 토의</text>
+    <text x="551" y="108" text-anchor="middle" font-size="13" fill="var(--text-md)">3학년 이상 · 대표 의견</text>
+  </g>
+  <text x="330" y="158" text-anchor="middle" font-size="13" fill="var(--text-lt)">1~2학년은 A·C 없이 장면 카드 손들기로 대신합니다</text>
+</svg>`;
+
+const SVG_VOTE = (function(){
+    const total = 24, half = 13, twoThird = 16;
+    let dots = '';
+    for(let i=0;i<total;i++){
+        const x = 24 + i*26, on = i < twoThird;
+        dots += `<circle cx="${x}" cy="74" r="9" fill="${on?'var(--gold)':'none'}" stroke="${on?'var(--gold)':'var(--border-lt)'}" stroke-width="2"/>`;
+    }
+    const halfX = 24 + (half-1)*26 + 13, twoX = 24 + (twoThird-1)*26 + 13;
+    return `
+<svg viewBox="0 0 660 150" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="24명 학급의 과반과 3분의 2 기준 비교">
+  <text x="14" y="26" font-size="13" font-weight="700" fill="var(--text-md)">학생 24명일 때</text>
+  ${dots}
+  <line x1="${halfX}" y1="52" x2="${halfX}" y2="96" stroke="var(--text-lt)" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="${halfX-6}" y="46" text-anchor="end" font-size="13" fill="var(--text-lt)">과반 13명</text>
+  <line x1="${twoX}" y1="46" x2="${twoX}" y2="102" stroke="var(--gold)" stroke-width="2.5"/>
+  <text x="${twoX+8}" y="42" font-size="13" font-weight="800" fill="var(--gold)">3분의 2 = 16명</text>
+  <text x="14" y="126" font-size="13" fill="var(--text-md)">과반으로 통과시키면 <tspan font-weight="800" fill="#f87171">11명</tspan>이 반대한 채로 우리 반 약속이 됩니다.</text>
+</svg>`;
+})();
+const SVG_HIER = (function(){
+    const rows = [
+        ['법령',          '초·중등교육법 · 시행령 · 교육부 고시', 0],
+        ['학칙(학교규칙)', '포상 · 징계 · 학생생활지도',          1],
+        ['학교생활규정',   '등교 · 복장 · 휴대전화 · 상벌 절차',   2],
+        ['학년 공통 약속', '학년 특별실 · 학년 행사',             3],
+        ['학급 약속',      '우리 반 다섯 가지 약속과 회복 책임',   4],
+    ];
+    let g = '';
+    rows.forEach((r,i)=>{
+        const y = 12 + i*50, x = 12 + i*34, w = 636 - i*68, last = i===rows.length-1;
+        g += `<rect x="${x}" y="${y}" width="${w}" height="42" rx="8"
+                fill="${last?'rgba(201,168,76,.18)':'var(--card-lt)'}"
+                stroke="${last?'var(--gold)':'var(--border-lt)'}" stroke-width="${last?2:1.5}"/>
+              <text x="${x+14}" y="${y+27}" font-size="14" font-weight="800" fill="${last?'var(--gold)':'var(--text)'}">${r[0]}</text>
+              <text x="${x+w-14}" y="${y+27}" text-anchor="end" font-size="12.5" fill="var(--text-md)">${r[1]}</text>`;
+    });
+    return `
+<svg viewBox="0 0 660 296" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="법령에서 학급 약속까지 다섯 층의 규정 위계">
+  ${g}
+  <text x="330" y="286" text-anchor="middle" font-size="12.5" fill="var(--text-lt)">아래로 갈수록 정할 수 있는 범위가 좁아집니다 · 위층이 이미 정한 것은 학급이 다시 정할 수 없습니다</text>
+</svg>`;
+})();
+const SVG_MAP = { FLOW: SVG_FLOW, VOTE: SVG_VOTE, HIER: SVG_HIER };
+
+/* ── 카드 넘기기 공통 ─────────────────────────────────────── */
+const STEP_STATE = { p1:0, p4:0 };
+
+function chipRow(kind, titles){
+    const cur = STEP_STATE[kind];
+    return `<div class="learn-wide flex flex-wrap gap-1.5 mb-4">${titles.map((t,i)=>`
+        <button onclick="learnStep('${kind}',${i})" class="text-[11px] font-bold px-2.5 py-1.5 rounded-lg text-left transition-all"
+            style="${i===cur
+                ? 'background:var(--gold);color:#1a1200'
+                : 'background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)'}">${i+1}. ${t}</button>`).join('')}</div>`;
+}
+function stepperBar(kind, total){
+    const i = STEP_STATE[kind];
+    const btn = 'padding:8px 16px;border-radius:10px;font-weight:900;font-size:13px;';
+    const dots = Array.from({length:total}).map((_,k)=>`<span style="width:${k===i?'22px':'8px'};height:8px;border-radius:99px;background:${k===i?'var(--gold)':'var(--border-lt)'};display:inline-block;transition:all .2s"></span>`).join('');
+    return `<div class="flex items-center justify-between gap-3 mt-4">
+        <button onclick="learnStep('${kind}',${i-1})" ${i===0?'disabled':''}
+            style="${btn}background:${i===0?'transparent':'var(--neutral)'};color:${i===0?'var(--border-lt)':'var(--neutral-text)'};border:1px solid ${i===0?'transparent':'var(--neutral-border)'};cursor:${i===0?'default':'pointer'}">← 이전</button>
+        <div class="flex items-center gap-1.5">${dots}<span class="text-[11px] ml-2" style="color:var(--text-lt)">${i+1} / ${total}</span></div>
+        <button onclick="learnStep('${kind}',${i+1})" ${i===total-1?'disabled':''}
+            style="${btn}background:${i===total-1?'transparent':'var(--gold)'};color:${i===total-1?'var(--border-lt)':'#1a1200'};border:1px solid transparent;cursor:${i===total-1?'default':'pointer'}">다음 →</button>
+    </div>`;
+}
+window.learnStep = function(kind, i){
+    const total = kind==='p1' ? PRINCIPLES.length : PITFALLS.length;
+    if(i < 0 || i > total-1) return;
+    STEP_STATE[kind] = i;
+    if(kind==='p1') paintP1(); else paintP4();
+    const a = document.getElementById(kind+'-card');
+    if(a) a.scrollIntoView({ block:'nearest', behavior:'smooth' });
+};
+window.learnToggle = function(id, btn){
+    const el = document.getElementById(id); if(!el) return;
+    const hid = el.classList.toggle('hidden');
+    if(btn) btn.querySelector('.chev').textContent = hid ? '▾' : '▴';
+};
+
 /* ① */
 function renderP1(){
     const el = document.getElementById('learn-p1-body'); if(!el) return;
     el.innerHTML = sectionHead('🧩','단계별 원리',
-        '다섯 단계에는 각각 <b>하지 말아야 할 일</b>이 하나씩 있습니다. 그것이 이 도구가 단계를 나눈 이유입니다. 여섯 장을 읽고 나면 화면의 💡 안내가 왜 그렇게 쓰였는지 알게 됩니다.')
-    + PRINCIPLES.map((p,i)=>`
-        <div class="rounded-xl p-5" style="${cardStyle}">
-            <span class="inline-block text-[10px] font-black px-2 py-0.5 rounded-full mb-2" style="background:var(--gold-dim);color:var(--gold)">${p.step}</span>
-            <p class="font-black text-base leading-6" style="color:var(--text)">${i+1}. ${p.title}</p>
-            <p class="text-sm mt-2.5 leading-7" style="color:var(--text-md)">${p.why}</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                <div class="rounded-lg p-3" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25)">
-                    <p class="text-[11px] font-black mb-1" style="color:#fca5a5">✗ 이렇게 하면 어긋납니다</p>
-                    <p class="text-xs leading-6" style="color:var(--text-md)">${p.wrong}</p>
-                </div>
-                <div class="rounded-lg p-3" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25)">
-                    <p class="text-[11px] font-black mb-1" style="color:var(--success)">✓ 대신 이렇게</p>
-                    <p class="text-xs leading-6" style="color:var(--text-md)">${p.right}</p>
-                </div>
+        '다섯 단계에는 각각 <b>하지 말아야 할 일</b>이 하나씩 있습니다. 그것이 이 도구가 단계를 나눈 이유입니다. 한 장씩 넘겨 가며 읽으십시오.')
+        + `<div id="p1-chips"></div><div id="p1-card"></div><div id="p1-nav" class="learn-wide"></div>`;
+    paintP1();
+}
+function paintP1(){
+    const i = STEP_STATE.p1, p = PRINCIPLES[i];
+    const chips = document.getElementById('p1-chips');
+    if(chips) chips.outerHTML = `<div id="p1-chips">${chipRow('p1', PRINCIPLES.map(x=>x.title.length>16?x.title.slice(0,15)+'…':x.title))}</div>`;
+    const el = document.getElementById('p1-card'); if(!el) return;
+    el.innerHTML = `
+    <div class="rounded-xl p-5" style="${cardStyle}">
+        <span class="inline-block text-[10px] font-black px-2 py-0.5 rounded-full mb-2" style="background:var(--gold-dim);color:var(--gold)">${p.step}</span>
+        <p class="font-black text-base leading-7" style="color:var(--text)">${i+1}. ${p.title}</p>
+        <p class="text-sm mt-2 leading-7" style="color:var(--gold-lt)">${p.lead}</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+            <div class="rounded-lg p-3.5" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25)">
+                <p class="text-[11px] font-black mb-1" style="color:#fca5a5">✗ 이렇게 하면 어긋납니다</p>
+                <p class="text-xs" style="color:var(--text-md)">${p.wrong}</p>
             </div>
-            <p class="text-sm mt-3 pl-3" style="border-left:3px solid var(--gold);color:var(--gold-lt)">🗣️ ${p.say}</p>
-        </div>`).join('');
+            <div class="rounded-lg p-3.5" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25)">
+                <p class="text-[11px] font-black mb-1" style="color:var(--success)">✓ 대신 이렇게</p>
+                <p class="text-xs" style="color:var(--text-md)">${p.right}</p>
+            </div>
+        </div>
+
+        <p class="text-sm mt-4 pl-3 py-1" style="border-left:3px solid var(--gold);color:var(--gold-lt)">🗣️ ${p.say}</p>
+
+        <button onclick="learnToggle('p1-why-${i}', this)" class="flex items-center gap-1.5 mt-4 text-xs font-bold" style="color:var(--text-lt)">
+            <span class="chev">▾</span><span>왜 그런가</span>
+        </button>
+        <div id="p1-why-${i}" class="hidden mt-2 rounded-lg p-3.5" style="background:rgba(0,0,0,.18)">
+            <p class="text-xs" style="color:var(--text-md)">${p.why}</p>
+        </div>
+
+        ${p.svg ? `<div class="learn-wide mt-4 rounded-lg p-3" style="background:rgba(0,0,0,.18);border:1px solid var(--border)">${SVG_MAP[p.svg]}</div>` : ''}
+    </div>`;
+    const nav = document.getElementById('p1-nav');
+    if(nav) nav.innerHTML = stepperBar('p1', PRINCIPLES.length);
 }
 
 /* ② */
@@ -4823,7 +4983,7 @@ function renderP3(){
 
     <p class="font-black text-sm mb-3" style="color:var(--text)">📚 고쳐 쓴 예시 ${SENTENCE_PAIRS.length}가지</p>
     <div class="space-y-3">
-    ${SENTENCE_PAIRS.map(p=>`
+    ${SENTENCE_PAIRS.slice(0,3).map(p=>`
         <div class="rounded-xl p-4" style="${cardStyle}">
             <div class="flex items-start gap-3 flex-wrap">
                 <span class="text-[10px] font-black px-2 py-0.5 rounded-full flex-shrink-0" style="background:rgba(239,68,68,.15);color:#fca5a5">${p.tag}</span>
@@ -4834,6 +4994,23 @@ function renderP3(){
                 <p class="text-sm px-3 py-2 rounded-lg font-bold" style="background:rgba(52,211,153,.1);color:var(--text)">${p.good}</p>
             </div>
             <p class="text-xs mt-2.5 leading-6" style="color:var(--text-md)">${p.note}</p>
+        </div>`).join('')}
+    </div>
+    <button onclick="learnToggle('p3-more', this)" class="flex items-center gap-1.5 mt-3 text-xs font-bold" style="color:var(--gold)">
+        <span class="chev">▾</span><span>나머지 ${SENTENCE_PAIRS.length - 3}가지 더 보기 — 추상 표현 · 벌칙 · 저학년 어휘</span>
+    </button>
+    <div id="p3-more" class="hidden space-y-3 mt-3">
+    ${SENTENCE_PAIRS.slice(3).map(p=>`
+        <div class="rounded-xl p-4" style="${cardStyle}">
+            <div class="flex items-start gap-3 flex-wrap">
+                <span class="text-[10px] font-black px-2 py-0.5 rounded-full flex-shrink-0" style="background:rgba(239,68,68,.15);color:#fca5a5">${p.tag}</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-2 items-center mt-3">
+                <p class="text-sm px-3 py-2 rounded-lg" style="background:rgba(239,68,68,.08);color:var(--text-md);text-decoration:line-through;text-decoration-color:rgba(239,68,68,.5)">${p.bad}</p>
+                <span class="text-center" style="color:var(--text-lt)">→</span>
+                <p class="text-sm px-3 py-2 rounded-lg font-bold" style="background:rgba(52,211,153,.1);color:var(--text)">${p.good}</p>
+            </div>
+            <p class="text-xs mt-2.5" style="color:var(--text-md)">${p.note}</p>
         </div>`).join('')}
     </div>
     <div class="rounded-xl p-4 mt-5" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3)">
@@ -4924,23 +5101,48 @@ function renderP4(){
     const el = document.getElementById('learn-p4-body'); if(!el) return;
     el.innerHTML = sectionHead('⚠️','흔한 실패 여섯 가지',
         '학급규칙 수업이 무너지는 자리는 대체로 정해져 있습니다. 여섯 가지 모두 <b>나쁜 의도에서 나오지 않는다</b>는 점이 공통점입니다. 시간이 없어서, 아이들을 아껴서, 공평하려고 하다가 그렇게 됩니다.')
-    + PITFALLS.map(p=>`
-        <div class="rounded-xl p-5" style="${cardStyle}">
-            <div class="flex items-start gap-3">
-                <span class="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs flex-shrink-0" style="background:rgba(239,68,68,.15);color:#fca5a5">${p.n}</span>
-                <p class="font-black text-base leading-6 flex-1" style="color:var(--text)">${p.title}</p>
+        + `<div id="p4-chips"></div><div id="p4-card"></div><div id="p4-nav" class="learn-wide"></div>`;
+    paintP4();
+}
+function paintP4(){
+    const i = STEP_STATE.p4, p = PITFALLS[i];
+    const chips = document.getElementById('p4-chips');
+    if(chips) chips.outerHTML = `<div id="p4-chips">${chipRow('p4', PITFALLS.map(x=>x.title.length>16?x.title.slice(0,15)+'…':x.title))}</div>`;
+    const el = document.getElementById('p4-card'); if(!el) return;
+    el.innerHTML = `
+    <div class="rounded-xl p-5" style="${cardStyle}">
+        <div class="flex items-start gap-3">
+            <span class="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs flex-shrink-0" style="background:rgba(239,68,68,.15);color:#fca5a5">${p.n}</span>
+            <div class="flex-1">
+                <p class="font-black text-base leading-7" style="color:var(--text)">${p.title}</p>
+                <p class="text-sm mt-1.5 leading-7" style="color:var(--gold-lt)">${p.lead}</p>
             </div>
-            <div class="mt-3 space-y-2.5 pl-10">
-                <div><p class="text-[11px] font-black" style="color:var(--text-lt)">이런 모습</p>
-                     <p class="text-sm leading-7" style="color:var(--text-md)">${p.looks}</p></div>
-                <div><p class="text-[11px] font-black" style="color:#fca5a5">무엇이 문제인가</p>
-                     <p class="text-sm leading-7" style="color:var(--text-md)">${p.why}</p></div>
-                <div><p class="text-[11px] font-black" style="color:var(--success)">대신 이렇게</p>
-                     <p class="text-sm leading-7" style="color:var(--text-md)">${p.instead}</p></div>
-                <div class="rounded-lg p-3 mt-1" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
-                     <p class="text-xs leading-6" style="color:rgba(199,210,254,.85)"><b>이 사이트에서는</b> — ${p.here}</p></div>
+        </div>
+
+        <div class="mt-4 rounded-lg p-3.5" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25)">
+            <p class="text-[11px] font-black mb-1" style="color:var(--success)">✓ 대신 이렇게</p>
+            <p class="text-xs" style="color:var(--text-md)">${p.instead}</p>
+        </div>
+
+        <button onclick="learnToggle('p4-more-${i}', this)" class="flex items-center gap-1.5 mt-4 text-xs font-bold" style="color:var(--text-lt)">
+            <span class="chev">▾</span><span>이런 모습 · 무엇이 문제인가 · 이 사이트에서는</span>
+        </button>
+        <div id="p4-more-${i}" class="hidden mt-2 space-y-3">
+            <div class="rounded-lg p-3.5" style="background:rgba(0,0,0,.18)">
+                <p class="text-[11px] font-black" style="color:var(--text-lt)">이런 모습</p>
+                <p class="text-xs mt-0.5" style="color:var(--text-md)">${p.looks}</p>
             </div>
-        </div>`).join('');
+            <div class="rounded-lg p-3.5" style="background:rgba(0,0,0,.18)">
+                <p class="text-[11px] font-black" style="color:#fca5a5">무엇이 문제인가</p>
+                <p class="text-xs mt-0.5" style="color:var(--text-md)">${p.why}</p>
+            </div>
+            <div class="rounded-lg p-3.5" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
+                <p class="text-xs" style="color:rgba(199,210,254,.85)"><b>이 사이트에서는</b> — ${p.here}</p>
+            </div>
+        </div>
+    </div>`;
+    const nav = document.getElementById('p4-nav');
+    if(nav) nav.innerHTML = stepperBar('p4', PITFALLS.length);
 }
 
 /* ⑤ */
@@ -5018,7 +5220,9 @@ function renderP6(){
     el.innerHTML = sectionHead('⚖️','규정 근거 정리',
         '학급 약속은 규정 체계의 <b>가장 아래층</b>에 놓입니다. 위층에서 이미 정한 것은 학급이 다시 정할 수 없고, 위층이 정하지 않은 자리에서만 학급의 결정이 효력을 가집니다. 이 경계를 모르면 아이들과 정성껏 만든 약속이 “그건 학급에서 정할 수 없습니다”라는 말로 무너집니다.')
     + `<p class="font-black text-sm mb-2" style="color:var(--text)">🗂️ 어디에 놓이는가</p>
-    <div class="rounded-xl overflow-x-auto mb-5" style="border:1px solid var(--border)">
+    <div class="learn-wide rounded-xl p-4 mb-3" style="background:rgba(0,0,0,.18);border:1px solid var(--border)">${SVG_HIER}</div>
+    <button onclick="learnToggle('p6-table', this)" class="flex items-center gap-1.5 mb-2 text-xs font-bold" style="color:var(--text-lt)"><span class="chev">▾</span><span>정하는 주체까지 표로 보기</span></button>
+    <div id="p6-table" class="hidden learn-wide rounded-xl overflow-x-auto mb-5" style="border:1px solid var(--border)">
         <table style="width:100%;min-width:640px;border-collapse:collapse">
         <thead><tr><th style="${th};width:120px">층</th><th style="${th}">여기서 정하는 것</th><th style="${th};width:150px">정하는 주체</th><th style="${th};width:180px">학급과의 관계</th></tr></thead>
         <tbody>${LEGAL_HIERARCHY.map((h,i)=>`<tr style="${i===LEGAL_HIERARCHY.length-1?'background:rgba(201,168,76,.07)':''}">
@@ -5038,23 +5242,17 @@ function renderP6(){
         </div>
     </div>
 
-    <p class="font-black text-sm mb-2" style="color:var(--text)">📖 관련 법령</p>
+    <p class="font-black text-sm mb-2" style="color:var(--text)">📖 관련 법령 <span class="text-[11px] font-normal" style="color:var(--text-lt)">— 제목을 눌러 펼치세요</span></p>
     <div class="space-y-2 mb-5">
-        ${LEGAL_REFS.map(r=>`<div class="rounded-lg p-3.5" style="${cardStyle}">
-            <p class="text-sm font-black" style="color:var(--gold-lt)">${r.t}</p>
-            <p class="text-xs mt-1 leading-6" style="color:var(--text-md)">${r.d}</p>
+        ${LEGAL_REFS.map((r,i)=>`<div class="rounded-lg" style="${cardStyle}">
+            <button onclick="learnToggle('p6-ref-${i}', this)" class="w-full text-left px-3.5 py-3 flex items-start gap-2">
+                <span class="chev text-xs mt-0.5" style="color:var(--text-lt)">▾</span>
+                <span class="text-sm font-black flex-1" style="color:var(--gold-lt)">${r.t}</span>
+            </button>
+            <div id="p6-ref-${i}" class="hidden px-3.5 pb-3.5 pl-9">
+                <p class="text-xs" style="color:var(--text-md)">${r.d}</p>
+            </div>
         </div>`).join('')}
-    </div>
-
-    <div class="rounded-xl p-4 mb-5" style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3)">
-        <p class="font-black text-sm" style="color:var(--gold)">⚠️ 조문 번호는 학교마다 다릅니다</p>
-        <p class="text-xs mt-1.5 leading-6" style="color:var(--text-md)">
-        출력물의 약속마다 붙는 「참고 근거: 제○조 ○○」는 이 사이트가 붙여 주는 <b>예시 조문 번호</b>입니다.
-        학교생활규정은 학교마다 조문 순서가 다르므로, 학부모 안내문이나 학급헌법을 내보내기 전에
-        <b>우리 학교 학교생활규정과 대조해</b> 번호를 바꾸거나 지우십시오. 아래 칸에 적어 두면 이 화면에서 다시 확인할 수 있습니다.</p>
-        <div class="mt-3 space-y-2" id="learn-law-map"></div>
-        <button onclick="learnSaveLawMap()" class="mt-3 px-4 py-2 rounded-lg text-xs font-bold" style="background:var(--gold);color:#1a1200">우리 학교 조문으로 저장</button>
-        <span id="learn-law-saved" class="text-xs ml-2" style="color:var(--success)"></span>
     </div>
 
     <div class="rounded-xl p-4" style="${cardStyle}">
@@ -5065,30 +5263,7 @@ function renderP6(){
         학생회에 안건으로 올려 볼까요?” — 그 한마디가 자치를 학급 밖으로 넓힙니다.
         규정 개정이 필요한 사안이면 학년 협의회나 학생회 안건으로 옮겨 적어 두십시오.</p>
     </div>`;
-    renderLawMap();
 }
-const DEFAULT_LAWS = ['제7조 학업 분위기','제8조 안전','제10조 조언·주의','제10조 품위·존중','제11조 물품 관리'];
-function renderLawMap(){
-    const box = document.getElementById('learn-law-map'); if(!box) return;
-    let saved = {};
-    try { saved = JSON.parse(localStorage.getItem('learnLawMap')||'{}'); } catch(e){}
-    box.innerHTML = DEFAULT_LAWS.map((l,i)=>`
-        <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs w-40 flex-shrink-0" style="color:var(--text-lt)">${l}</span>
-            <span style="color:var(--text-lt)">→</span>
-            <input type="text" class="learn-law-input flex-1 rounded px-2 py-1.5 text-xs" data-i="${i}"
-                placeholder="우리 학교 규정의 해당 조문 (없으면 '해당 없음')" value="${saved[i]?esc(saved[i]):''}"
-                style="min-width:180px;background:var(--card);border:1px solid var(--border-lt);color:var(--text)">
-        </div>`).join('');
-}
-window.learnSaveLawMap = function(){
-    const o = {};
-    document.querySelectorAll('.learn-law-input').forEach(inp=>{ if(inp.value.trim()) o[inp.dataset.i]=inp.value.trim(); });
-    try { localStorage.setItem('learnLawMap', JSON.stringify(o)); } catch(e){}
-    const s = document.getElementById('learn-law-saved');
-    if(s){ s.textContent = '저장했습니다'; setTimeout(()=>{ s.textContent=''; }, 2500); }
-};
-
 /* ══ 패널 전환 ═══════════════════════════════════════════════ */
 const RENDERERS = { p1:renderP1, p2:renderP2, p3:renderP3, p4:renderP4, p5:renderP5, p6:renderP6 };
 
