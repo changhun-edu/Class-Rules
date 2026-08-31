@@ -553,6 +553,9 @@
             <button onclick="_toggleStepDesc()" class="step-desc-toggle-btn w-full flex items-center justify-center gap-2 font-bold px-4 py-2.5 rounded-lg transition-all text-sm" style="background:rgba(255,255,255,.04);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.08)">
                 단계 설명 보기
             </button>
+            <button onclick="simRestart()" class="w-full flex items-center justify-center gap-2 font-bold px-4 py-2.5 rounded-lg transition-all text-sm" style="background:rgba(255,255,255,.04);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.08)">
+                <span>↺</span><span>처음부터 다시</span>
+            </button>
         </div>
     </aside>
 
@@ -1099,25 +1102,7 @@
                         <div class="mt-5 pt-4 border-t border-slate-200">
                             <div class="flex gap-2"><input type="text" id="custom-rule-input" placeholder="직접 약속 입력" class="flex-1 text-sm border rounded-lg px-3 py-2.5"><button onclick="addCustomRule()" class="px-4 py-2.5 rounded-md text-sm font-bold" style="background:var(--neutral);border:1px solid var(--neutral-border);color:var(--neutral-text)" title="직접 입력한 약속 문장을 목록에 추가합니다">직접 추가</button></div>
                             <button onclick="confirmCompressRules()" class="mt-3 w-full rounded-md py-2.5 font-bold text-sm transition-all" style="background:var(--gold);color:#1a1200" title="현재 약속 목록을 5개로 압축합니다. 일부 약속이 제거될 수 있습니다.">✂️ 5개 핵심 약속으로 압축</button>
-                            <button onclick="toggleMyDB(); setTimeout(()=>document.getElementById('my-db-panel')?.scrollIntoView({behavior:'smooth',block:'nearest'}),100)" class="mt-2 w-full rounded-md py-2 font-bold text-xs transition-all" style="background:var(--neutral);border:1px solid var(--neutral-border);color:var(--neutral-text)">📁 내 DB에서 약속 추가</button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- 📁 내 DB — 하단 접힘 (처음 사용자는 건너뛰어도 됨) -->
-                <div class="mt-6 rounded-xl overflow-hidden" style="border:1px solid var(--border)">
-                    <button onclick="toggleMyDB()" class="w-full flex items-center justify-between px-5 py-3 text-sm font-bold transition-all" style="background:var(--card-lt);color:var(--text-lt)">
-                        <span>📁 내 DB <span class="text-xs font-normal opacity-60">— 매년 재사용 가능한 나만의 약속 저장소</span></span>
-                        <span id="my-db-chevron" class="text-xs">▶</span>
-                    </button>
-                    <div id="my-db-panel" class="hidden px-5 pb-5 pt-4" style="background:var(--card)">
-                        <div class="flex gap-2 mb-4">
-                            <input id="my-db-input" type="text" placeholder="나만의 약속 문장 입력 (예: 발표 후 박수로 응원해요)" class="flex-1 border rounded-lg px-3 py-2 text-sm">
-                            <select id="my-db-value" class="border rounded-lg px-3 py-2 text-sm"><option>존중</option><option>안전</option><option>배움</option><option>책임</option><option>배려</option><option>자치</option></select>
-                            <button onclick="addToMyDB()" class="px-4 py-2 rounded-md text-sm font-bold" style="background:var(--neutral);color:var(--neutral-text);border:1px solid var(--neutral-border)" title="내 DB에 저장합니다 (매년 재사용 가능)">내 DB에 저장</button>
-                        </div>
-                        <div id="my-db-list" class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1"></div>
-                        <p class="text-xs mt-3" style="color:var(--text-lt)">내 DB는 브라우저에 영구 저장됩니다. JSON 내보내기에도 포함됩니다.</p>
                     </div>
                 </div>
             </section>
@@ -1375,21 +1360,6 @@
 
 <div id="print-area" class="hidden"></div>
 
-<!-- 불러오기 확인 모달 -->
-<div id="import-confirm-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
-  <div class="rounded-2xl shadow-2xl max-w-sm w-full p-7" style="background:var(--card);border:1px solid var(--border)">
-    <div class="text-center mb-5">
-      <div class="text-4xl mb-3">⚠️</div>
-      <h2 class="text-xl font-black" style="color:var(--text)">파일 불러오기</h2>
-      <p class="text-color-md mt-2 text-sm leading-relaxed">현재 작업 중인 데이터가 <b class="text-rose-600">모두 교체</b>됩니다.<br>진행하기 전에 내보내기로 백업을 권장합니다.</p>
-    </div>
-    <div class="flex gap-3">
-      <button onclick="closeImportConfirm()" class="flex-1 font-bold py-2.5 rounded-md transition-all" style="background:var(--card-lt);border:1px solid var(--border);color:var(--text-md)">취소</button>
-      <button onclick="triggerImportFile()" class="flex-1 text-white font-bold py-2.5 rounded-md transition-all" style="background:var(--danger)">계속 불러오기</button>
-    </div>
-  </div>
-</div>
-
 <!-- 빠른 시작 모달 -->
 <div id="quickstart-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden" style="background:rgba(10,12,20,.85);backdrop-filter:blur(6px)">
   <div class="rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden" style="background:var(--card);border:1px solid rgba(201,168,76,.3)">
@@ -1460,10 +1430,8 @@
         <button onclick="switchTab('guidance');closeMobileMore()" class="rounded-xl p-3 text-center text-xs font-bold transition-all" style="background:var(--card-lt);color:var(--text)">🛡️<br>생활지도</button>
         <button onclick="switchTab('situation');closeMobileMore()" class="rounded-xl p-3 text-center text-xs font-bold transition-all" style="background:var(--card-lt);color:var(--text)">🎭<br>상황카드</button>
     </div>
-    <!-- 빠른 저장 -->
     <div class="flex gap-2 pt-2" style="border-top:1px solid var(--border)">
-        <button onclick="exportData();closeMobileMore()" class="flex-1 py-2 rounded-lg text-xs font-bold" style="background:var(--gold);color:#1a1200">💾 JSON 내보내기</button>
-        <button onclick="closeMobileMore()" class="px-4 py-2 rounded-lg text-xs font-bold" style="background:var(--neutral);color:var(--neutral-text)">닫기</button>
+        <button onclick="closeMobileMore()" class="flex-1 py-2 rounded-lg text-xs font-bold" style="background:var(--neutral);color:var(--neutral-text)">닫기</button>
     </div>
 </div>
 
@@ -4413,7 +4381,7 @@ function confirmCompressRules(){
         return;
     }
     const removed = selectedRules.length - 5;
-    if(!confirm(`현재 ${selectedRules.length}개 약속 중 5개를 남기고 ${removed}개를 제거합니다.\n\n제거 기준: 같은 가치 중복 → 나중에 추가된 약속 순으로 제거\n\n계속할까요?\n(취소하려면 먼저 💾 내보내기로 백업을 권장합니다)`)) return;
+    if(!confirm(`현재 ${selectedRules.length}개 약속 중 5개를 남기고 ${removed}개를 제거합니다.\n\n제거 기준: 같은 가치 중복 → 나중에 추가된 약속 순으로 제거\n\n계속할까요?`)) return;
     _compressBackup = [...selectedRules];
     compressRules();
     showToast(`5개로 정리되었습니다. <button onclick="undoCompress()" class="ml-2 underline font-bold">실행취소</button>`, 'warn', 6000);
@@ -5802,14 +5770,14 @@ function buildPromisePanel(){
     const anchor = host.querySelector('.now-task-card');
     host.insertBefore(p, anchor ? anchor.nextSibling : host.children[1]);
 
-    // 기존 직접 입력 UI(학생 문장 작성 · 참고 예시 · 내 DB)는 토글 아래로
+    // 기존 직접 입력 UI(학생 문장 작성 · 참고 예시)는 토글 아래로
     const manual = host.querySelector('.grid.grid-cols-1.xl\\:grid-cols-12');
     if(manual && !document.getElementById('fold-step4-manual')){
         const btn = document.createElement('button');
         btn.id = 'fold-step4-manual';
         btn.className = 'flex items-center gap-1.5 mb-3 text-xs font-bold';
         btn.style.color = 'var(--text-lt)';
-        btn.innerHTML = '<span class="chev">▾</span><span>문장을 직접 쓰거나 고치기 (참고 예시 · 내 DB)</span>';
+        btn.innerHTML = '<span class="chev">▾</span><span>문장을 직접 쓰거나 고치기 (참고 예시)</span>';
         let open = false;
         btn.onclick = function(){
             open = !open;
@@ -5942,6 +5910,50 @@ function slimStep1(){
         });
     }
 }
+
+/* ════════════════════════════════════════════════════════════
+   처음부터 다시 — 페이지를 새로 고치지 않고 그 자리에서 비운다
+   (beforeunload 경고가 걸려 있어 reload 는 쓰지 않는다)
+   ════════════════════════════════════════════════════════════ */
+window.simRestart = function(){
+    const n = (typeof selectedRules!=='undefined') ? selectedRules.length : 0;
+    const msg = '처음부터 다시 시작합니다.\n\n'
+              + '· 고른 예상 발언, 약속 ' + n + '개, 투표 결과가 모두 지워집니다\n'
+              + '· 학년과 걱정 장면은 그대로 둡니다\n\n계속할까요?';
+    if(!confirm(msg)) return;
+
+    try {
+        selectedRules = [];
+        studentVoices = [];
+        groupRows = [];
+        valueVotes = {};
+        votes = {};
+        if(typeof _userActed !== 'undefined'){
+            Object.keys(_userActed).forEach(k=>{ _userActed[k] = false; });
+        }
+    } catch(e){}
+
+    // 카드 손들기 상태
+    _deck = []; _deckIdx = 0; _deckYes = []; _deckTally = {};
+    const vs = document.getElementById('sim-voice-stage'); if(vs) vs.innerHTML = '';
+
+    // 투표 화면
+    _voteBusy = false;
+    const st = document.getElementById('sim-vote-stage'); if(st) st.innerHTML = '';
+    const af = document.getElementById('sim-vote-after'); if(af){ af.innerHTML = ''; delete af.dataset.alt; }
+    const vb = document.getElementById('sim-vote-btn'); if(vb){ vb.disabled = false; vb.textContent = '🗳️ 투표 시작'; }
+
+    // 3단계 선언문 등 입력칸
+    ['value-statement','student-voice-input','student-rule-input','custom-rule-input'].forEach(id=>{
+        const el = document.getElementById(id); if(el) el.value = '';
+    });
+
+    try { updateAll(); } catch(e){}
+    try { saveToStorage(); } catch(e){}
+    try { paintPromises(); } catch(e){}
+    try { switchTab('diagnosis'); } catch(e){}
+    if(typeof showToast === 'function') showToast('↺ 처음 상태로 되돌렸습니다. 1단계부터 다시 해 보세요.', 'success', 3000);
+};
 
 /* 카드 손들기 결과를 가치 집계에 유지 — 모둠 결과가 하던 역할을 대신한다.
    updateAll() 안에서 renderGroupInput() 이 valueVotes 를 groupRows 기준으로 되돌리므로,
