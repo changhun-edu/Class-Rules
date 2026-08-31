@@ -550,9 +550,6 @@
             <button onclick="showQuickStart()" class="w-full flex items-center justify-center gap-2 font-bold px-4 py-2.5 rounded-lg transition-all text-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:1px solid var(--border)">
                 <span>❓</span><span>처음 사용 안내</span>
             </button>
-            <button onclick="_toggleStepDesc()" class="step-desc-toggle-btn w-full flex items-center justify-center gap-2 font-bold px-4 py-2.5 rounded-lg transition-all text-sm" style="background:rgba(255,255,255,.04);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.08)">
-                단계 설명 보기
-            </button>
             <button onclick="simRestart()" class="w-full flex items-center justify-center gap-2 font-bold px-4 py-2.5 rounded-lg transition-all text-sm" style="background:rgba(255,255,255,.04);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.08)">
                 <span>↺</span><span>처음부터 다시</span>
             </button>
@@ -5880,8 +5877,9 @@ function slimStep1(){
             const btn = document.createElement('button');
             btn.id = 'sim-optional-toggle';
             btn.type = 'button';
-            btn.className = 'text-xs font-bold mt-1';
-            btn.style.color = 'var(--text-lt)';
+            btn.className = 'text-xs font-bold mt-1 text-left';
+            // 그리드 칸에 끼어 줄바꿈되지 않도록 한 행을 통째로 쓴다
+            btn.style.cssText = 'color:var(--text-lt);grid-column:1/-1;white-space:nowrap';
             btn.innerHTML = '<span class="chev">▾</span> 반·담임·작성일·학급 특성 <span style="opacity:.7">(출력할 때 넣어도 됩니다)</span>';
             btn.onclick = function(){
                 const hid = document.body.classList.toggle('sim-fields-open');
@@ -5910,6 +5908,44 @@ function slimStep1(){
         });
     }
 }
+
+/* ════════════════════════════════════════════════════════════
+   STEP 카드 설명 토글 — 설명이 나타나는 카드 안에 둔다
+   (원본은 사이드바 버튼 하나로 다섯 카드를 한꺼번에 켜고 껐고,
+    라벨이 현재 상태가 아니라 첫 방문 여부로 정해져 있었다)
+   ════════════════════════════════════════════════════════════ */
+function stepDescLabel(btn, hidden){
+    btn.innerHTML = '<span style="font-size:11px">' + (hidden ? '▾' : '▴') + '</span>'
+                  + '<span>' + (hidden ? '설명 보기' : '설명 숨기기') + '</span>';
+    btn.title = hidden ? '이 단계에서 무엇을 하는지 봅니다' : '설명을 접습니다';
+}
+window.stepDescToggle = function(btn){
+    const card = btn.closest('.now-task-card'); if(!card) return;
+    const hidden = card.classList.toggle('step-desc-hidden');
+    stepDescLabel(btn, hidden);
+};
+function buildStepDescToggles(){
+    document.querySelectorAll('.now-task-card').forEach(card=>{
+        if(card.querySelector('.step-desc-inline')) return;
+        if(!card.querySelector('.first-visit-desc')) return;   // 설명이 없는 카드는 건너뛴다
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'step-desc-inline flex items-center gap-1 flex-shrink-0 self-start rounded-lg px-2.5 py-1 text-[11px] font-bold';
+        btn.style.cssText = 'margin-left:auto;background:rgba(255,255,255,.06);color:var(--text-lt);border:1px solid rgba(255,255,255,.1)';
+        btn.onclick = function(){ stepDescToggle(btn); };
+        stepDescLabel(btn, card.classList.contains('step-desc-hidden'));
+        card.appendChild(btn);
+    });
+}
+/* 사이드바에서 부르던 전역 함수도 상태에 맞게 동작하도록 다시 정의 */
+window._toggleStepDesc = function(){
+    const anyVisible = !!document.querySelector('.now-task-card:not(.step-desc-hidden)');
+    document.querySelectorAll('.now-task-card').forEach(el=>{
+        el.classList.toggle('step-desc-hidden', anyVisible);
+        const b = el.querySelector('.step-desc-inline');
+        if(b) stepDescLabel(b, anyVisible);
+    });
+};
 
 /* ════════════════════════════════════════════════════════════
    처음부터 다시 — 페이지를 새로 고치지 않고 그 자리에서 비운다
@@ -5983,6 +6019,7 @@ function initSimClick(){
     try { buildPromisePanel(); } catch(e){ console.warn('promise panel', e); }
     try { slimStep1(); } catch(e){ console.warn('step1', e); }
     try { wrapValueAnalysis(); } catch(e){ console.warn('value wrap', e); }
+    try { buildStepDescToggles(); } catch(e){ console.warn('step desc', e); }
 
     // 탭을 옮길 때마다 카드 상태를 새로 그린다
     if(typeof window.switchTab === 'function' && !window._simTabWrapped){
